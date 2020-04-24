@@ -1,0 +1,1 @@
+cmd /v:on /c "echo !time! & windump -r test.pcap -w out.pcap ether[26]==0x4B & echo !time!"

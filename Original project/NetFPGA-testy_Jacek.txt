@@ -1,0 +1,10 @@
+Lista połączeń:
+Ethernet 4: sieć 192.168.150.0/24, można pingować np. 192.168.150.131-134
+Ethernet 7: sterownik S7-1200, 192.168.151.252
+tylko 100Mb/s
+
+Połączenia PFGA
+Ethernet 4 wpięty do portu FPGA nr. 1
+Ethernet 7 wpięty do portu FPGA nr. 3
+
+

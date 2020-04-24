@@ -1,0 +1,37 @@
+ cd C:\0_NetFPGA
+
+ tunele
+NetCon.exe bridge_on 1
+NetCon.exe bridge_off 2
+NetCon.exe bridge_all
+
+NetCon.exe eee_off  -- wyłącza opcję Energy-Efficient Ethernet 
+
+Nastawy filtrów przepuszczające wszystko
+NetCon.exe set 1 0
+NetCon.exe set 2 0
+NetCon.exe set 3 0
+NetCon.exe set 4 0
+
+NetCon.exe set 1 80 "9 192 193;10 25;11 120 150;"
+Powyższe argumenty i nastawy filtra oznaczają, że:
+•	nastawy wysłane mają być do bloku filtracyjnego 1 portu,
+•	minimalna długość ramki ma wynosić 80 bajtów,
+•	wartość bajtu ramki na pozycji 9 ma być w przedziale <192,193>,
+•	wartość bajtu na pozycji 10 ma być równa wartości 25,
+•	wartość bajtu na pozycji 11 ma znajdować się w przedziale <120;150>.
+Wartości można zapisywać w formacie heksadecymalnym (z prefiksem 0x np. 0xF9), 
+
+
+
+
+otworzyć cztery okna konsolowe oraz uruchomić program z następującymi argumentami:
+NetCon.exe capture 1
+NetCon.exe capture 2
+NetCon.exe capture 3
+NetCon.exe capture 4
+
+wygenerowanie ramek na jednym z portów karty sieciowej. Można to zrobić za pomocą pythonowego skryptu z wykorzystaniem biblioteki Scapy:
+from scapy.all import *
+sendp("abcdefghijklmnopqrstuvwxyz", iface=ifaces.dev_from_pcapname('\\Device\\NPF_{DB07413B-64B8-4005-A7B3-9F13EAB5210E}'), count=1000)
+

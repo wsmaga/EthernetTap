@@ -1,0 +1,1 @@
+cmd /v:on /c "echo !time! & "C:\Program Files\Wireshark\tshark.exe" -r bigFlows.pcap -w out.pcap "frame[26]==0x4B" & echo !time!"
