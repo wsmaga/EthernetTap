@@ -9,8 +9,18 @@ namespace NetCon.inter
 {
     class NetConImpl : INetCon
     {
+
+
+        private FrameListener fl = (char fr) => { 
+            Console.WriteLine(fr); 
+        };
+
         [DllImport(".\\..\\..\\..\\Debug\\NETCONLIB.dll",EntryPoint ="startCapture", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void _startCapture(int port, string fileName, int bufSize);
+        private static extern void _startCapture(
+            int port,
+            [MarshalAs(UnmanagedType.FunctionPtr)]
+            FrameListener listener, 
+            int bufSize);
 
         [DllImport(".\\..\\..\\..\\Debug\\NETCONLIB.dll", EntryPoint = "stopCapture")]
         private static extern int _stopCapture();
@@ -22,12 +32,12 @@ namespace NetCon.inter
 
         public void setOnFrameListener(FrameListener f)
         {
-            throw new NotImplementedException();
+            fl = f;
         }
 
         public void startCapture()
         {
-            _startCapture(1, "test.pcap", 1024 * 1024 * 16);
+            _startCapture(1, fl, 1024 * 1024 * 16);
         }
 
         public void stopCapture()

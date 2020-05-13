@@ -53,9 +53,14 @@ __declspec(dllexport) int stopCapture() {
 	return 1;
 }
 
-__declspec(dllexport) int startCapture(int port, const char* fileName, const int bufSize) {
+//modified - filename to send_callback
+__declspec(dllexport) int startCapture(int port, void (*send_callback)(char blob), const int bufSize) {
 	std::signal(SIGTERM, intHandler);
 	std::signal(SIGINT, intHandler2);
+
+	send_callback('a');
+
+	const char* fileName = "";
 
 	const char* deviceName;
 
@@ -137,6 +142,12 @@ __declspec(dllexport) int startCapture(int port, const char* fileName, const int
 	std::thread readThread(readDevice, dev, std::ref(ringBuf)); //std::ref
 	std::thread writeThread(writeToFile, file, std::ref(ringBuf));
 	std::thread reportThread(reportBuffer, std::ref(ringBuf));
+
+	//Nasz nowy w¹tek wysy³aj¹cy dane do C#
+	
+	std::thread sendToListenerThread(sendToListener, send_callback, std::ref(ringBuf));
+
+
 	//std::thread waitForKeyboardInput(keyboardInput);
 
 	sendRequest(port, CAPTURE_SWITCH, true);
@@ -154,6 +165,9 @@ __declspec(dllexport) int startCapture(int port, const char* fileName, const int
 
 	std::cout << "Zamykanie watku reportThread." << std::endl;
 	reportThread.join();
+
+	//do³¹czenie naszego w¹tku
+	sendToListenerThread.join();
 	
 	//Workaround: Czekanie z timeoutem na zamkniecie watku readThread, jednakze bedzie on praktycznie zawsze zablokowany przez blokujacego read()
 	//Problem nie jest krytyczny bo wszystko zosta³o ju¿ odczytane i zapisane

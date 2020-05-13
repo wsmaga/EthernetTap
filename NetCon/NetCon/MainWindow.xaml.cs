@@ -1,6 +1,7 @@
 ﻿using NetCon.inter;
 using NetCon.ui;
 using NetCon.viewmodel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -32,8 +33,16 @@ namespace NetCon
 
             var impl = new NetConImpl();
 
-            impl.startCapture();
-            impl.stopCapture();
+
+            Task.Run(async () =>
+            {
+                impl.startCapture();
+                await Task.Delay(10000);
+                impl.stopCapture();
+                
+            });
+
+            
 
         }
 

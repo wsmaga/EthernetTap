@@ -69,6 +69,39 @@ void writeToFile(int file, ringBuffer & rb) {
 	}
 }
 
+
+void sendToListener(void (*send)(char blob),ringBuffer& rb) {
+	rb.initSlave(0);
+
+	int variable = 0;	// TEST VARIABLE!!
+
+	while (1) {
+		auto val = rb.getSlaveMemory(0);
+
+		while (val.len == 0) { //waiting for some data to read from cyclicBuffer
+			val = rb.getSlaveMemory(0);
+			std::this_thread::sleep_for(1ms); //1ms * maxIncomingDataRate(130MB/s) = 0.13MB
+			if (exitStatus != 0 && val.len == 0) {
+				std::this_thread::sleep_for(40ms);
+				val = rb.getSlaveMemory(0);
+				if(val.len == 0)
+					return;
+			}
+		}
+
+		/*int ret = _write(file, val.ptr, val.len);
+
+		if (ret > 0) {
+			rb.updateSlave(0, ret);
+		}
+		else if (ret <= 0) {
+			exitStatus = -5;
+		}*/
+		variable++;
+		send((char)variable);
+	}
+}
+
 std::string hAlign(std::string temp, int value) {
 	temp.resize(value, ' ');
 	return temp;
