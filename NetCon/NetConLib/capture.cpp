@@ -58,9 +58,12 @@ __declspec(dllexport) int startCapture(int port, int (*send_callback)(const char
 	std::signal(SIGTERM, intHandler);
 	std::signal(SIGINT, intHandler2);
 
-	char test[] = "test_text";
+	char test[] = "test_text\n";
 
-	send_callback(test,sizeof(test));
+	for (int i = 0; i < 1000; i++) {
+		send_callback(test, sizeof(test));
+	}
+	
 
 	const char* fileName = "";
 

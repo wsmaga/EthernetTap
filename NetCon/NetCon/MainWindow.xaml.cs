@@ -1,9 +1,12 @@
 ﻿using NetCon.inter;
 using NetCon.ui;
 using NetCon.viewmodel;
+using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Markup;
 
 namespace NetCon
 {
@@ -20,45 +23,27 @@ namespace NetCon
             new TunelsPage(),
             new ExportPage()
         };
-
-
+        string retText = "";
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = mMainWindowViewModel;
-            contentFrame.Navigate(mPages[0]);
-
-
-            // test code
-
-            var impl = new NetConImpl();
-
-
-            Task.Run(async () =>
-            {
-                impl.startCapture();
-                await Task.Delay(10000);
-                impl.stopCapture();
-                
-            });
-
-            
-
+            //contentFrame.Navigate(mPages[0]);
         }
 
         private void navigateToFiltersPage(object sender, RoutedEventArgs e)
         {
-            contentFrame.Navigate(mPages[0]);
+            //contentFrame.Navigate(mPages[0]);
         }
 
         private void navigateToTunelsPage(object sender, RoutedEventArgs e)
         {
-            contentFrame.Navigate(mPages[1]);
+            //contentFrame.Navigate(mPages[1]);
         }
 
         private void navigateToExportPage(object sender, RoutedEventArgs e)
         {
-            contentFrame.Navigate(mPages[2]);
+           // contentFrame.Navigate(mPages[2]);
         }
     }
 }
