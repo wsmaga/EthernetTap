@@ -7,4 +7,4 @@ void readDevice(int dev, ringBuffer & rb);
 void writeToFile(int file, ringBuffer & rb);
 void reportBuffer(ringBuffer & rb);
 
-void sendToListener(void (*send)(char blob), ringBuffer& rb);
+void sendToListener(int (*send)(const char * blob, int blob_size), ringBuffer& rb);

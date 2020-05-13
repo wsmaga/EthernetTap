@@ -54,11 +54,13 @@ __declspec(dllexport) int stopCapture() {
 }
 
 //modified - filename to send_callback
-__declspec(dllexport) int startCapture(int port, void (*send_callback)(char blob), const int bufSize) {
+__declspec(dllexport) int startCapture(int port, int (*send_callback)(const char * blob, int blob_size), const int bufSize) {
 	std::signal(SIGTERM, intHandler);
 	std::signal(SIGINT, intHandler2);
 
-	send_callback('a');
+	char test[] = "test_text";
+
+	send_callback(test,sizeof(test));
 
 	const char* fileName = "";
 
@@ -146,7 +148,6 @@ __declspec(dllexport) int startCapture(int port, void (*send_callback)(char blob
 	//Nasz nowy w¹tek wysy³aj¹cy dane do C#
 	
 	std::thread sendToListenerThread(sendToListener, send_callback, std::ref(ringBuf));
-
 
 	//std::thread waitForKeyboardInput(keyboardInput);
 

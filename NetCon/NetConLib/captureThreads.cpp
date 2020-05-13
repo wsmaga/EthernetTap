@@ -70,10 +70,8 @@ void writeToFile(int file, ringBuffer & rb) {
 }
 
 
-void sendToListener(void (*send)(char blob),ringBuffer& rb) {
+void sendToListener(int (*send)(const char * blob, int blob_size),ringBuffer& rb) {
 	rb.initSlave(0);
-
-	int variable = 0;	// TEST VARIABLE!!
 
 	while (1) {
 		auto val = rb.getSlaveMemory(0);
@@ -89,16 +87,14 @@ void sendToListener(void (*send)(char blob),ringBuffer& rb) {
 			}
 		}
 
-		/*int ret = _write(file, val.ptr, val.len);
+		int ret = send(val.ptr, val.len);
 
 		if (ret > 0) {
 			rb.updateSlave(0, ret);
 		}
 		else if (ret <= 0) {
 			exitStatus = -5;
-		}*/
-		variable++;
-		send((char)variable);
+		}
 	}
 }
 

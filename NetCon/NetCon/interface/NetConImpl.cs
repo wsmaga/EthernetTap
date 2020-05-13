@@ -10,9 +10,13 @@ namespace NetCon.inter
     class NetConImpl : INetCon
     {
 
-
-        private FrameListener fl = (char fr) => { 
-            Console.WriteLine(fr); 
+        //Ciało callbacku
+        private FrameListener fl = (IntPtr arr, int size) => {
+            byte[] data = new byte[size];
+            Marshal.Copy(arr, data, 0, size);       //Kopiowanie danych. Może być problem z wydajnością w RT !!
+            String dataToStr = System.Text.Encoding.Default.GetString(data);
+            Console.WriteLine("");
+            return data.Length; //TODO policzyć ile faktycznie bajtów odebrano i zwrócić tu! 
         };
 
         [DllImport(".\\..\\..\\..\\Debug\\NETCONLIB.dll",EntryPoint ="startCapture", CallingConvention = CallingConvention.Cdecl)]

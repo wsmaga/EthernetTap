@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace NetCon.inter
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void FrameListener(char frame);
+    public delegate int FrameListener(IntPtr frame, int array_size);
     interface INetCon
 {
         void startCapture();
