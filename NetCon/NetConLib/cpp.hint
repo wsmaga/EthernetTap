@@ -1,0 +1,2 @@
+#define NETCONLIB_API __declspec(dllexport)
+#define NETCONLIB_API __declspec(dllimport)
