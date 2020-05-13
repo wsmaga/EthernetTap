@@ -58,11 +58,14 @@ __declspec(dllexport) int startCapture(int port, int (*send_callback)(const char
 	std::signal(SIGTERM, intHandler);
 	std::signal(SIGINT, intHandler2);
 
-	char test[] = "test_text";
+	/*char test[] = "test_text\n";
 
-	send_callback(test,sizeof(test));
+	for (int i = 0; i < 1000; i++) {
+		send_callback(test, sizeof(test));
+	}*/
+	
 
-	const char* fileName = "";
+	const char* fileName = "naszeRamki.pcap";
 
 	const char* deviceName;
 
@@ -142,7 +145,7 @@ __declspec(dllexport) int startCapture(int port, int (*send_callback)(const char
 
 	//Rozpoczynanie w¹tka odbieraj¹cego dane, zapisuj¹cego dane oraz reportuj¹cego dane
 	std::thread readThread(readDevice, dev, std::ref(ringBuf)); //std::ref
-	std::thread writeThread(writeToFile, file, std::ref(ringBuf));
+	//std::thread writeThread(writeToFile, file, std::ref(ringBuf));
 	std::thread reportThread(reportBuffer, std::ref(ringBuf));
 
 	//Nasz nowy w¹tek wysy³aj¹cy dane do C#
@@ -161,14 +164,16 @@ __declspec(dllexport) int startCapture(int port, int (*send_callback)(const char
 	std::cout << "\nZamykanie programu w toku..." << std::endl;
 
 	std::cout << "Zamykanie watku writeThread." << std::endl;
-	writeThread.join();
+	//writeThread.join();
 	_close(file);
+
+	//do³¹czenie naszego w¹tku
+	sendToListenerThread.join();
 
 	std::cout << "Zamykanie watku reportThread." << std::endl;
 	reportThread.join();
 
-	//do³¹czenie naszego w¹tku
-	sendToListenerThread.join();
+	
 	
 	//Workaround: Czekanie z timeoutem na zamkniecie watku readThread, jednakze bedzie on praktycznie zawsze zablokowany przez blokujacego read()
 	//Problem nie jest krytyczny bo wszystko zosta³o ju¿ odczytane i zapisane

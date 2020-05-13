@@ -16,7 +16,11 @@
         <Button Grid.Column="0" x:Uid="filtersButton" Content="Filtry" HorizontalAlignment="Right" Margin="0,0,12,331" VerticalAlignment="Bottom" Width="95" Height="40" Click="navigateToFiltersPage"/>
         <Button Grid.Column="0" x:Uid="TunelsButton" Content="Tunele" HorizontalAlignment="Right" Margin="0,0,12,286" VerticalAlignment="Bottom" Width="95" Height="40" Click="navigateToTunelsPage"/>
         <Button Grid.Column="0" x:Uid="ExportButton" Content="Eksport" HorizontalAlignment="Right" Margin="0,0,12,241" VerticalAlignment="Bottom" Width="95" Height="40" Click="navigateToExportPage"/>
-        <Frame  Grid.Column="1" x:Name="contentFrame" Content="Frame"  HorizontalAlignment="Left" Height="421" VerticalAlignment="Top" Width="677" NavigationUIVisibility="Hidden"/>
+        <!--<Frame  Grid.Column="1" x:Name="contentFrame" Content="Frame"  HorizontalAlignment="Left" Height="421" VerticalAlignment="Top" Width="677" NavigationUIVisibility="Hidden"/>-->
+        <TextBlock  Grid.Column="1" Text="{Binding sampleText}" FontSize="10px" Margin="404,17,172,204"/>
+        <TextBlock Grid.Column="1" Text="{Binding counter}" FontSize="10px" Margin="11,49,404,6"/>
+
+
 
     </Grid>
 </Window>

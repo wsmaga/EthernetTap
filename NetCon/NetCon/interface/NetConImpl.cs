@@ -11,13 +11,7 @@ namespace NetCon.inter
     {
 
         //Ciało callbacku
-        private FrameListener fl = (IntPtr arr, int size) => {
-            byte[] data = new byte[size];
-            Marshal.Copy(arr, data, 0, size);       //Kopiowanie danych. Może być problem z wydajnością w RT !!
-            String dataToStr = System.Text.Encoding.Default.GetString(data);
-            Console.WriteLine("");
-            return data.Length; //TODO policzyć ile faktycznie bajtów odebrano i zwrócić tu! 
-        };
+        private FrameListener fl = (IntPtr arr, int size) => { return 1; };
 
         [DllImport(".\\..\\..\\..\\Debug\\NETCONLIB.dll",EntryPoint ="startCapture", CallingConvention = CallingConvention.Cdecl)]
         private static extern void _startCapture(
@@ -41,7 +35,7 @@ namespace NetCon.inter
 
         public void startCapture()
         {
-            _startCapture(1, fl, 1024 * 1024 * 16);
+            _startCapture(3, fl, 1024 * 1024 * 16);
         }
 
         public void stopCapture()
