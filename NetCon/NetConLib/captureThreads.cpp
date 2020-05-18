@@ -60,17 +60,11 @@ void writeToFile(int file, ringBuffer & rb) {
 
 		int ret = _write(file, val.ptr, val.len);
 
-		if (ret > 0) {
-			rb.updateSlave(0, ret);
-		}
-		else if (ret <= 0) {
-			exitStatus = -5;
-		}
 	}
 }
 
 
-void sendToListener(int (*send)(const char * blob, int blob_size),ringBuffer& rb) {
+void sendToListener(int file, int (*send)(const char * blob, int blob_size),ringBuffer& rb) {
 	rb.initSlave(0);
 
 	while (1) {
@@ -88,6 +82,10 @@ void sendToListener(int (*send)(const char * blob, int blob_size),ringBuffer& rb
 		}
 
 		int ret = send(val.ptr, val.len);
+
+		_write(file, val.ptr, val.len);
+		//zapis do pliku
+
 
 		if (ret > 0) {
 			rb.updateSlave(0, ret);

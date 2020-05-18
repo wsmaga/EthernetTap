@@ -173,3 +173,50 @@ void sendSettings(int port, int minFrameLen[4], std::vector<std::string> vecStr)
 		throw "BLAD: Blad w wysylaniu ustawien filtra. Sprobuj jeszcze raz.";
 
 }
+
+void sendSettingsWrapper(int argc, char** argv)
+{
+	if (argc == 2) {
+		std::cout << "Podano zbyt malo argumentow." << std::endl;
+		std::cout << "Przyklady:" << std::endl;
+		std::cout << "NetCon.exe set nr_portu minimalna_dlugosc_ramki nastawy_filtra " << std::endl;
+		std::cout << "NetCon.exe set 1 128 ""8 120 121;9 120"" " << std::endl;
+	}
+	else if (argc > 2) {
+		int port = std::stoi(argv[2], 0, 0);
+		int minFrameLen[4] = { 0x3FFF, 0x3FFF, 0x3FFF, 0x3FFF };
+
+		std::vector<std::string> vecString;
+		if (argc == 3)
+			std::cout << "Ustawianie filtrow w trybie blokowania." << std::endl;
+
+		if (argc > 3)
+			minFrameLen[0] = std::stoi(argv[3], 0, 0);
+		if (argc > 4)
+			vecString.push_back(std::string(argv[4]));
+
+		if (argc > 5)
+			minFrameLen[1] = std::stoi(argv[5], 0, 0);
+		if (argc > 6)
+			vecString.push_back(std::string(argv[6]));
+
+		if (argc > 7)
+			minFrameLen[2] = std::stoi(argv[7], 0, 0);
+		if (argc > 8)
+			vecString.push_back(std::string(argv[8]));
+
+		if (argc > 9)
+			minFrameLen[3] = std::stoi(argv[9], 0, 0);
+		if (argc > 10)
+			vecString.push_back(std::string(argv[10]));
+
+		try {
+			sendSettings(port, minFrameLen, vecString);
+			std::cout << "Wysylanie nastaw filtrow powiodlo sie." << std::endl;
+		}
+		catch (const char e[]) {
+			std::cout << e << std::endl;
+		}
+
+	}
+}

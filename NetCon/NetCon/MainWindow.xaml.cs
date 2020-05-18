@@ -14,9 +14,12 @@ namespace NetCon
     /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
     /// 
+
+   
+
     public partial class MainWindow : Window
     {
-        private MainWindowViewModel mMainWindowViewModel = new MainWindowViewModel();
+        public MainWindowViewModel mMainWindowViewModel;
 
         private Page[] mPages ={
             new FiltersPage(),
@@ -27,7 +30,9 @@ namespace NetCon
         public MainWindow()
         {
             InitializeComponent();
+            mMainWindowViewModel = new MainWindowViewModel(this);
             this.DataContext = mMainWindowViewModel;
+            
             //contentFrame.Navigate(mPages[0]);
         }
 
@@ -43,7 +48,12 @@ namespace NetCon
 
         private void navigateToExportPage(object sender, RoutedEventArgs e)
         {
-           // contentFrame.Navigate(mPages[2]);
+
+        }
+
+        public void SetIksde(String str)
+        {
+            //this.iksde_label.Content = str;
         }
     }
 }

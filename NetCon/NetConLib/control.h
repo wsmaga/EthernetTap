@@ -5,4 +5,4 @@ enum {
 	BRIDGE_SWITCH
 };
 
-void sendRequest(int port, int function, bool state);
+extern "C" __declspec(dllexport) void sendRequest(int port, int function, bool state);

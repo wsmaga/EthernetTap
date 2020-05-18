@@ -7,7 +7,7 @@
 #include <chrono>
 #include <fcntl.h>  //for _O_RDONLY
 
-__declspec(dllexport) int open_wstream(const char* configDeviceName, int tryCount) {
+int open_wstream(const char* configDeviceName, int tryCount) {
 	using namespace std::chrono_literals;
 
 	int dev = 0;
@@ -25,7 +25,7 @@ __declspec(dllexport) int open_wstream(const char* configDeviceName, int tryCoun
 	return dev;
 }
 
-__declspec(dllexport) int open_rstream(const char* configDeviceName, int tryCount) {
+int open_rstream(const char* configDeviceName, int tryCount) {
 	using namespace std::chrono_literals;
 
 	int dev = 0;
