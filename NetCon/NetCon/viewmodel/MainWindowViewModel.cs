@@ -43,7 +43,21 @@ namespace NetCon.viewmodel
             string[] strVec = new string[] {"NetCon.exe","set","3","0"};
 
             impl.sendSettings(strVec);
+         }
 
+        public int counter { get; set; }
+
+        public MainWindow wnd;
+        //public int counter = 0;
+
+        public MainWindowViewModel(MainWindow wnd)
+        {
+            this.wnd = wnd;
+            counter = 0;
+            var impl = new NetConImpl();
+           
+            Task.Run(async () =>
+            {
                 using (BinaryWriter writer = new BinaryWriter(File.Open("capture_si_szarp.pcap", FileMode.Create)))
                 {
                    // UInt32[] header = { 0xA1B23C4D, 0x00040002, 0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000112 };
@@ -73,7 +87,6 @@ namespace NetCon.viewmodel
                     impl.stopCapture();
                     await Task.Delay(5000);
                     writer.Close();
-
                 }     
             });
         }

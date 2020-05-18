@@ -48,7 +48,7 @@ namespace NetCon
 
         private void navigateToExportPage(object sender, RoutedEventArgs e)
         {
-
+           // contentFrame.Navigate(mPages[2]);
         }
 
         public void SetIksde(String str)
