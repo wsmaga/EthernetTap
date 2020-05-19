@@ -12,7 +12,7 @@
 #include <thread>	//for sleep
 #include "open_stream.h" //for open_wstream and open_rstream
 
-__declspec(dllexport) void send_and_receive_mdio(int op_code, int phy_addr, int reg_addr, int data){
+extern "C" __declspec(dllexport) void send_and_receive_mdio(int op_code, int phy_addr, int reg_addr, int data){
 	uint32_t raw = 0;
 
 	//Tworzenie ramki

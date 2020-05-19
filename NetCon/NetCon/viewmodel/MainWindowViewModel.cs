@@ -29,6 +29,32 @@ namespace NetCon.viewmodel
             this.wnd = wnd;
             counter = 0;
             var impl = new NetConImpl();
+
+            Task.Run(async () =>
+            {
+
+            impl.sendRequest(RequestCode.BRIDGE_SWITCH, 1, true);
+            impl.sendRequest(RequestCode.BRIDGE_SWITCH, 2, true);
+            impl.sendRequest(RequestCode.BRIDGE_SWITCH, 3, true);
+            impl.sendRequest(RequestCode.BRIDGE_SWITCH, 4, true);
+
+            impl.sendAndReceiveMdio();
+
+            string[] strVec = new string[] {"NetCon.exe","set","3","0"};
+
+            impl.sendSettings(strVec);
+         }
+
+        public int counter { get; set; }
+
+        public MainWindow wnd;
+        //public int counter = 0;
+
+        public MainWindowViewModel(MainWindow wnd)
+        {
+            this.wnd = wnd;
+            counter = 0;
+            var impl = new NetConImpl();
            
             Task.Run(async () =>
             {
@@ -57,9 +83,9 @@ namespace NetCon.viewmodel
                     writer.Write(0x00000112);
 
                     Task.Run(async () =>impl.startCapture());
-                    await Task.Delay(15000);
+                    await Task.Delay(20000);
                     impl.stopCapture();
-                    await Task.Delay(1000);
+                    await Task.Delay(5000);
                     writer.Close();
                 }     
             });

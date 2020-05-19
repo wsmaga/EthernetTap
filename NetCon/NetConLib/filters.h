@@ -14,3 +14,5 @@
 //void createBuf(char* buf, int minimalFrameLen, std::vector<Filter> filters);
 
 void sendSettings(int port, int minFrameLen[4], std::vector<std::string> vecStr);
+
+extern "C" __declspec(dllexport) void sendSettingsWrapper(int argc, char**argv );

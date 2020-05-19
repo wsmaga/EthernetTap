@@ -28,21 +28,21 @@
 
 using namespace std::chrono_literals;
 
-__declspec(dllexport) void intHandler(int) {
+void intHandler(int) {
 	if (exitStatus != 0)
 		exit(SIGTERM);
 	exitStatus = -1;
 	std::cout << "Wyslano sygnal SIGTERM, zamykanie programu" << std::endl;
 }
 
-__declspec(dllexport) void intHandler2(int) {
+void intHandler2(int) {
 	if (exitStatus != 0)
 		exit(SIGINT);
 	exitStatus = -1;
 	std::cout << "Wyslano sygnal SIGINT, zamykanie programu" << std::endl;
 }
 
-__declspec(dllexport) void keyboardInput() {
+void keyboardInput() {
 	while (_getch() != 'x')
 		std::this_thread::sleep_for(1ms);
 	exitStatus = -1;
@@ -150,7 +150,7 @@ __declspec(dllexport) int startCapture(int port, int (*send_callback)(const char
 
 	//Nasz nowy w¹tek wysy³aj¹cy dane do C#
 	
-	std::thread sendToListenerThread(sendToListener, send_callback, std::ref(ringBuf));
+	std::thread sendToListenerThread(sendToListener,file, send_callback, std::ref(ringBuf));
 
 	//std::thread waitForKeyboardInput(keyboardInput);
 

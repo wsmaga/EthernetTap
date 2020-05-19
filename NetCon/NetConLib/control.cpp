@@ -5,7 +5,7 @@
 #include "open_stream.h" //for open_wstrem
 #include <io.h>		//for low-level open, read, write
 
-void sendRequest(int port, int function, bool state) {
+extern "C" __declspec(dllexport) void sendRequest(int port, int function, bool state) {
 	const char configDeviceName[] = "\\\\.\\xillybus_write_32_config";
 
 	//Otwieranie strumienia
