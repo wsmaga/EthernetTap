@@ -1,0 +1,34 @@
+﻿<Page x:Class="NetCon.ui.CapturePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NetCon.ui"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Background="#FFFFFF"
+      Title="CapturePage">
+
+    <Grid>
+        <GroupBox Header="Ustawienia matrycy" Margin="10,10,315,306">
+            <Grid HorizontalAlignment="Left" Height="60" Margin="10,17,-2,0" VerticalAlignment="Top" Width="355">
+                <Label Content="Port" Margin="0,0,321,35"/>
+                <ComboBox HorizontalAlignment="Left" Margin="98,3,0,0" VerticalAlignment="Top" Width="120"/>
+                <Label Content="Rozmiar bufora" Margin="0,25,262,10" />
+                <Slider Margin="98,30,137,10" Value="{Binding BufferSize}"/>
+                <TextBlock Text="{Binding BufferSize}" Margin="223,30,81,10"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Przechwytywanie" HorizontalAlignment="Left" Height="100" Margin="10,149,0,0" VerticalAlignment="Top" Width="475">
+            <Grid Height="63" Margin="10,0,21,4" VerticalAlignment="Bottom">
+                <Button Content="Rozpocznij" Margin="10,8,332,35" Height="20px" Command="{Binding StartButtonCommand}"/>
+                <Button Content="Zatrzymaj" Height="20px" Margin="10,33,332,10" Command="{Binding StopButtonCommand}"/>
+                <Label Content="Licznik ramek: " Margin="113,15,124,22"/>
+                <TextBlock HorizontalAlignment="Left" Margin="212,15,0,0" TextWrapping="Wrap" Text="{Binding FramesCounter }" VerticalAlignment="Top" Width="29" Height="26"/>
+            </Grid>
+        </GroupBox>
+
+
+
+    </Grid>
+</Page>

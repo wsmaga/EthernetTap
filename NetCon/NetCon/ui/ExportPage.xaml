@@ -10,6 +10,6 @@
       Background="#FFFFFF">
 
     <Grid>
-        <TextBlock Text="Eksport danych"/>
+        <TextBlock Text="{Binding HelloText}"/>
     </Grid>
 </Page>

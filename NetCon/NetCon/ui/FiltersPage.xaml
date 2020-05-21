@@ -11,6 +11,6 @@
 
     <Grid>
         <TextBlock
-          Text="Filtry"/>
+          Text="{Binding HelloText}"/>
     </Grid>
 </Page>

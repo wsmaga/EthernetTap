@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetCon.viewmodel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +17,16 @@ using System.Windows.Shapes;
 namespace NetCon.ui
 {
     /// <summary>
-    /// Logika interakcji dla klasy TunelsPage.xaml
+    /// Logika interakcji dla klasy CapturePage.xaml
     /// </summary>
-    public partial class TunelsPage : Page
+    public partial class CapturePage : Page
     {
-        public TunelsPage()
+        private CapturePageViewModel viewModel;
+        public CapturePage()
         {
             InitializeComponent();
+            viewModel = new CapturePageViewModel();
+            this.DataContext = viewModel;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NetCon.inter;
+using NetCon.viewmodel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,12 @@ namespace NetCon.ui
     /// </summary>
     public partial class FiltersPage : Page
     {
+        private FiltersPageViewModel viewModel;
         public FiltersPage()
         {
             InitializeComponent();
+            viewModel = new FiltersPageViewModel();
+            this.DataContext = viewModel;
         }
     }
 }

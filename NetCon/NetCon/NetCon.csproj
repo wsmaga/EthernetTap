@@ -65,16 +65,19 @@
     </ApplicationDefinition>
     <Compile Include="interface\INetCon.cs" />
     <Compile Include="interface\NetConImpl.cs" />
+    <Compile Include="ui\CapturePage.xaml.cs">
+      <DependentUpon>CapturePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ui\ExportPage.xaml.cs">
       <DependentUpon>ExportPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ui\FiltersPage.xaml.cs">
       <DependentUpon>FiltersPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ui\TunelsPage.xaml.cs">
-      <DependentUpon>TunelsPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="util\CommandHandler.cs" />
+    <Compile Include="viewmodel\CapturePageViewModel.cs" />
+    <Compile Include="viewmodel\ExportPageViewModel.cs" />
+    <Compile Include="viewmodel\FiltersPageViewModel.cs" />
     <Compile Include="viewmodel\MainWindowViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -88,15 +91,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ui\CapturePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ui\ExportPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ui\FiltersPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ui\TunelsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

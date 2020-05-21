@@ -22,38 +22,36 @@ namespace NetCon
         public MainWindowViewModel mMainWindowViewModel;
 
         private Page[] mPages ={
+            new CapturePage(),
             new FiltersPage(),
-            new TunelsPage(),
             new ExportPage()
         };
-        string retText = "";
+
         public MainWindow()
         {
             InitializeComponent();
-            mMainWindowViewModel = new MainWindowViewModel(this);
+            mMainWindowViewModel = new MainWindowViewModel();
             this.DataContext = mMainWindowViewModel;
             
-            //contentFrame.Navigate(mPages[0]);
+            contentFrame.Navigate(mPages[0]);
+        }
+
+        private void navigateToCapturePage(object sender, RoutedEventArgs e)
+        {
+            contentFrame.Navigate(mPages[0]);
         }
 
         private void navigateToFiltersPage(object sender, RoutedEventArgs e)
         {
-            //contentFrame.Navigate(mPages[0]);
-        }
-
-        private void navigateToTunelsPage(object sender, RoutedEventArgs e)
-        {
-            //contentFrame.Navigate(mPages[1]);
+            contentFrame.Navigate(mPages[1]);
         }
 
         private void navigateToExportPage(object sender, RoutedEventArgs e)
         {
-           // contentFrame.Navigate(mPages[2]);
+           contentFrame.Navigate(mPages[2]);
         }
 
-        public void SetIksde(String str)
-        {
-            //this.iksde_label.Content = str;
-        }
+
+
     }
 }
