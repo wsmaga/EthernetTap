@@ -6,10 +6,24 @@
       xmlns:local="clr-namespace:NetCon.ui"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ExportPage"
-      Background="#FFFFFF">
+      Title="ExportPage">
 
     <Grid>
-        <TextBlock Text="{Binding HelloText}"/>
+        <GroupBox Header="Eksport do Bazy Danych" Margin="12,10,458,340">
+            <Grid>
+                <Label Content="TODO!"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Eksport do pliku" Margin="12,115,458,235">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30*"/>
+                    <RowDefinition Height="47*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Zapisuj ramki do pliku *.pcap" Margin="0,25,147,24" Grid.RowSpan="2"/>
+                <CheckBox Margin="176,3,115,19" Grid.Row="1"/>
+            </Grid>
+        </GroupBox>
+
     </Grid>
 </Page>

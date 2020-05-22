@@ -6,11 +6,19 @@
       xmlns:local="clr-namespace:NetCon.ui"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Background="#FFFFFF"
+      Background="#606060"
       Title="CapturePage">
 
-    <Grid>
-        <GroupBox Header="Ustawienia matrycy" Margin="10,10,315,306">
+    <Grid Margin="0,0,166,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="49*"/>
+            <RowDefinition Height="101*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="549*"/>
+            <ColumnDefinition Width="85*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Ustawienia przechwytywania" Margin="10,10,5,3">
             <Grid HorizontalAlignment="Left" Height="60" Margin="10,17,-2,0" VerticalAlignment="Top" Width="355">
                 <Label Content="Port" Margin="0,0,321,35"/>
                 <ComboBox HorizontalAlignment="Left" Margin="98,3,0,0" VerticalAlignment="Top" Width="120"/>
@@ -19,12 +27,16 @@
                 <TextBlock Text="{Binding BufferSize}" Margin="223,30,81,10"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Przechwytywanie" HorizontalAlignment="Left" Height="100" Margin="10,149,0,0" VerticalAlignment="Top" Width="475">
-            <Grid Height="63" Margin="10,0,21,4" VerticalAlignment="Bottom">
-                <Button Content="Rozpocznij" Margin="10,8,332,35" Height="20px" Command="{Binding StartButtonCommand}"/>
-                <Button Content="Zatrzymaj" Height="20px" Margin="10,33,332,10" Command="{Binding StopButtonCommand}"/>
-                <Label Content="Licznik ramek: " Margin="113,15,124,22"/>
-                <TextBlock HorizontalAlignment="Left" Margin="212,15,0,0" TextWrapping="Wrap" Text="{Binding FramesCounter }" VerticalAlignment="Top" Width="29" Height="26"/>
+        <GroupBox Header="Przechwytywanie" Height="175" Margin="10,2,5,0" VerticalAlignment="Top" Grid.Row="1">
+            <Grid Margin="10,0,7,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="59*"/>
+                    <ColumnDefinition Width="113*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Rozpocznij" Command="{Binding StartButtonCommand}" Margin="10,10,5,89"/>
+                <Button Content="Zatrzymaj" Command="{Binding StopButtonCommand}" Margin="10,64,5,36"/>
+                <Label Content="Licznik ramek: " Margin="32,10,85,106" Grid.Column="1"/>
+                <TextBlock Margin="32,49,128,67" TextWrapping="Wrap" Text="{Binding FramesCounter }" Height="26" Grid.Column="1"/>
             </Grid>
         </GroupBox>
 

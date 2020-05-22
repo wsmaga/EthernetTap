@@ -19,13 +19,13 @@ namespace NetCon
 
     public partial class MainWindow : Window
     {
+
+        public const string INFO_COLOR = "#0779e4";
+        public const string ACTION_COLOR = "#ff5200";
+
         public MainWindowViewModel mMainWindowViewModel;
 
-        private Page[] mPages ={
-            new CapturePage(),
-            new FiltersPage(),
-            new ExportPage()
-        };
+        private Page[] mPages;
 
         public MainWindow()
         {
@@ -33,6 +33,13 @@ namespace NetCon
             mMainWindowViewModel = new MainWindowViewModel();
             this.DataContext = mMainWindowViewModel;
             
+            mPages = new Page[]{
+                new CapturePage(mMainWindowViewModel),
+                new FiltersPage(),
+                new ExportPage()
+            };
+
+
             contentFrame.Navigate(mPages[0]);
         }
 

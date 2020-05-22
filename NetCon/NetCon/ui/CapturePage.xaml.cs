@@ -22,10 +22,10 @@ namespace NetCon.ui
     public partial class CapturePage : Page
     {
         private CapturePageViewModel viewModel;
-        public CapturePage()
+        public CapturePage(MainWindowViewModel sharedViewModel)
         {
             InitializeComponent();
-            viewModel = new CapturePageViewModel();
+            viewModel = new CapturePageViewModel(sharedViewModel);
             this.DataContext = viewModel;
         }
     }

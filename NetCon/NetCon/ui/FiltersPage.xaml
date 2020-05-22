@@ -6,11 +6,14 @@
       xmlns:local="clr-namespace:NetCon.ui"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Page1"
-      Background="#FFFFFF">
+      Title="Page1">
 
     <Grid>
-        <TextBlock
-          Text="{Binding HelloText}"/>
+        <GroupBox Header="Nastawy filtrów" Margin="10,10,362,137">
+            <Grid>
+                <Button Content="Zastosuj filtry" HorizontalAlignment="Left" Margin="10,0,0,23" Width="114" Height="37" VerticalAlignment="Bottom"/>
+
+            </Grid>
+        </GroupBox>
     </Grid>
 </Page>

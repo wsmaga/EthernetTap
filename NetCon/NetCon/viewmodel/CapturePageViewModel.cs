@@ -13,6 +13,13 @@ namespace NetCon.viewmodel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private MainWindowViewModel mainWindowSharedViewModel;
+
+        public CapturePageViewModel(MainWindowViewModel sharedViewModel)
+        {
+            mainWindowSharedViewModel = sharedViewModel;
+        }
+
         private ICommand _startButtonCommand;
         private ICommand _stopButtonCommand;
 
@@ -25,6 +32,7 @@ namespace NetCon.viewmodel
             {
                 return _startButtonCommand ?? (_startButtonCommand = new CommandHandler(
                     () => {
+                        mainWindowSharedViewModel.setBottomInfoBar("Rozpoczęto przechwytywanie ramek", MainWindow.ACTION_COLOR);
                         startCapture();
                     },
                     () => { return !isCapturing; })) ;
@@ -37,6 +45,7 @@ namespace NetCon.viewmodel
             {
                 return _stopButtonCommand ?? (_stopButtonCommand = new CommandHandler(
                     () => {
+                        mainWindowSharedViewModel.setBottomInfoBar("Zakończono przechwytywanie ramek", MainWindow.INFO_COLOR);
                         stopCapture();
                     },
                     () => { return isCapturing; }));
@@ -47,6 +56,7 @@ namespace NetCon.viewmodel
 
         private void startCapture()
         {
+
             isCapturing = true;
             Task.Run(async () =>
             {

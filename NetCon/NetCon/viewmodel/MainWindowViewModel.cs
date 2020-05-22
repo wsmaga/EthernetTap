@@ -17,8 +17,17 @@ namespace NetCon.viewmodel
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string sampleText { get; set; }
-
         public int counter { get; set; } = 0;
+        public string bottomText { get; set; } = "Witaj w programie NetCon v2!";
+        public string bottomTextColor { get; set; } = MainWindow.INFO_COLOR;
+
+
+
+        public void setBottomInfoBar(string text, string color)
+        {
+            bottomText = text;
+            bottomTextColor = color;
+        }
 
         public MainWindowViewModel()
         {
