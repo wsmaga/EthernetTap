@@ -1,4 +1,6 @@
-﻿using NetCon.util;
+﻿using NetCon.model;
+using NetCon.repo;
+using NetCon.util;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,11 +17,12 @@ namespace NetCon.viewmodel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private MainWindowViewModel mainWindowSharedViewModel;
+        private MainWindowViewModel mMainWindowSharedViewModel;
 
+        private IFrameRepository<Frame> mFramesRepository = FrameRepositoryImpl.instance;
         public CapturePageViewModel(MainWindowViewModel sharedViewModel)
         {
-            mainWindowSharedViewModel = sharedViewModel;
+            mMainWindowSharedViewModel = sharedViewModel;
         }
 
         private int port = 0;
@@ -53,7 +56,7 @@ namespace NetCon.viewmodel
             {
                 return _startButtonCommand ?? (_startButtonCommand = new CommandHandler(
                     () => {
-                        mainWindowSharedViewModel.logAction("Rozpoczęto przechwytywanie ramek");
+                        mMainWindowSharedViewModel.logAction("Rozpoczęto przechwytywanie ramek");
                         startCapture();
                     },
                     () => { return !isCapturing; })) ;
@@ -67,7 +70,7 @@ namespace NetCon.viewmodel
             {
                 return _stopButtonCommand ?? (_stopButtonCommand = new CommandHandler(
                     () => {
-                        mainWindowSharedViewModel.logInfo("Zakończono przechwytywanie ramek");
+                        mMainWindowSharedViewModel.logInfo("Zakończono przechwytywanie ramek");
                         stopCapture();
                     },
                     () => { return isCapturing; }));
@@ -88,6 +91,12 @@ namespace NetCon.viewmodel
                     await Task.Delay(100);
                 }
             });
+
+            //TODO przeciążyć start capture o port i rozmiar bufora
+
+            Task.Run(()=>mFramesRepository.startCapture());
+
+            mFramesRepository.stopCapture();
         }
 
         private void stopCapture()

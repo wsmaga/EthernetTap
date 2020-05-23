@@ -65,6 +65,11 @@
     </ApplicationDefinition>
     <Compile Include="interface\INetCon.cs" />
     <Compile Include="interface\NetConImpl.cs" />
+    <Compile Include="model\Filter.cs" />
+    <Compile Include="model\Frame.cs" />
+    <Compile Include="repo\FiltersConfiguration.cs" />
+    <Compile Include="repo\FrameRepositoryImpl.cs" />
+    <Compile Include="repo\IFrameRepository.cs" />
     <Compile Include="ui\CapturePage.xaml.cs">
       <DependentUpon>CapturePage.xaml</DependentUpon>
     </Compile>
