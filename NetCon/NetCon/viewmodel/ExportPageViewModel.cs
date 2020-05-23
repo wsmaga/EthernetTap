@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetCon.ui;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,6 +12,28 @@ namespace NetCon.viewmodel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string HelloText { get; set; } = "Hello Export!";
+        private MainWindowViewModel mainWindowSharedViewModel;
+
+        private bool _fileExportOption = false;
+        public bool fileExportOption { get {
+                return _fileExportOption;
+            } set {
+                _fileExportOption = value;
+                if (value)
+                {
+                    mainWindowSharedViewModel.logInfo("Zaznaczono opcję eksportu do pliku *.pcap");
+                }
+                else
+                {
+                    mainWindowSharedViewModel.logInfo("Odznaczono opcję eksportu do pliku *.pcap");
+                }
+                
+            } }
+
+        public ExportPageViewModel(MainWindowViewModel sharedViewModel)
+        {
+            mainWindowSharedViewModel = sharedViewModel;
+        }
+
     }
 }

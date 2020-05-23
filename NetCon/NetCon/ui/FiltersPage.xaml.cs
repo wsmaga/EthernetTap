@@ -24,10 +24,10 @@ namespace NetCon.ui
     public partial class FiltersPage : Page
     {
         private FiltersPageViewModel viewModel;
-        public FiltersPage()
+        public FiltersPage(MainWindowViewModel sharedViewModel)
         {
             InitializeComponent();
-            viewModel = new FiltersPageViewModel();
+            viewModel = new FiltersPageViewModel(sharedViewModel);
             this.DataContext = viewModel;
         }
     }

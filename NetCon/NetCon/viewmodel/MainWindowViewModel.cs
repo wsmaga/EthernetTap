@@ -22,11 +22,16 @@ namespace NetCon.viewmodel
         public string bottomTextColor { get; set; } = MainWindow.INFO_COLOR;
 
 
-
-        public void setBottomInfoBar(string text, string color)
+        public void logAction(string actionText)
         {
-            bottomText = text;
-            bottomTextColor = color;
+            bottomText = actionText;
+            bottomTextColor = MainWindow.ACTION_COLOR;
+        }
+
+        public void logInfo(string infoText)
+        {
+            bottomText = infoText;
+            bottomTextColor = MainWindow.INFO_COLOR;
         }
 
         public MainWindowViewModel()

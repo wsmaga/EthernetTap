@@ -1,10 +1,12 @@
 ﻿using NetCon.util;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace NetCon.viewmodel
@@ -20,32 +22,52 @@ namespace NetCon.viewmodel
             mainWindowSharedViewModel = sharedViewModel;
         }
 
-        private ICommand _startButtonCommand;
-        private ICommand _stopButtonCommand;
+        private int port = 0;
+
+        public String PortText
+        {
+            get
+            {
+                return port.ToString();
+            }
+
+            set
+            {
+                try
+                {
+                    port = Int32.Parse(value);
+                }catch(Exception e) {
+                    //TODO obsługa błędów
+                }
+                
+            }
+        }
+
 
         private bool isCapturing = false;
 
-
+        private ICommand _startButtonCommand;
         public ICommand StartButtonCommand
         {
             get
             {
                 return _startButtonCommand ?? (_startButtonCommand = new CommandHandler(
                     () => {
-                        mainWindowSharedViewModel.setBottomInfoBar("Rozpoczęto przechwytywanie ramek", MainWindow.ACTION_COLOR);
+                        mainWindowSharedViewModel.logAction("Rozpoczęto przechwytywanie ramek");
                         startCapture();
                     },
                     () => { return !isCapturing; })) ;
             }
         }
 
+        private ICommand _stopButtonCommand;
         public ICommand StopButtonCommand
         {
             get
             {
                 return _stopButtonCommand ?? (_stopButtonCommand = new CommandHandler(
                     () => {
-                        mainWindowSharedViewModel.setBottomInfoBar("Zakończono przechwytywanie ramek", MainWindow.INFO_COLOR);
+                        mainWindowSharedViewModel.logInfo("Zakończono przechwytywanie ramek");
                         stopCapture();
                     },
                     () => { return isCapturing; }));

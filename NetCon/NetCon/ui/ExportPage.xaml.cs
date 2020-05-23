@@ -22,10 +22,10 @@ namespace NetCon.ui
     public partial class ExportPage : Page
     {
         private ExportPageViewModel viewModel;
-        public ExportPage()
+        public ExportPage(MainWindowViewModel sharedViewModel)
         {
             InitializeComponent();
-            viewModel = new ExportPageViewModel();
+            viewModel = new ExportPageViewModel(sharedViewModel);
             this.DataContext = viewModel;
         }
     }

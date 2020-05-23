@@ -35,8 +35,8 @@ namespace NetCon
             
             mPages = new Page[]{
                 new CapturePage(mMainWindowViewModel),
-                new FiltersPage(),
-                new ExportPage()
+                new FiltersPage(mMainWindowViewModel),
+                new ExportPage(mMainWindowViewModel)
             };
 
 
