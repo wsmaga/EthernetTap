@@ -8,20 +8,30 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ExportPage">
 
-    <Grid>
-        <GroupBox Header="Eksport do Bazy Danych" Margin="12,10,458,340">
+    <Grid Margin="10 10 0 0">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="550"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Foreground="#FFFFFF" Grid.Row="0" Header="Eksport do Bazy Danych">
             <Grid>
-                <Label Content="TODO!"/>
+                <Label Foreground="#FFFFFF" Content="TODO!"/>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Eksport do pliku" Margin="12,115,458,235">
+        <GroupBox Foreground="#FFFFFF" Height="100" Grid.Row="1" Header="Eksport do pliku">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30*"/>
                     <RowDefinition Height="47*"/>
                 </Grid.RowDefinitions>
-                <Label Content="Zapisuj ramki do pliku *.pcap" Margin="0,25,147,24" Grid.RowSpan="2"/>
-                <CheckBox Margin="176,3,115,19" Grid.Row="1"/>
+                <Label Foreground="#FFFFFF" Content="Zapisuj ramki do pliku *.pcap" Margin="37,15,239,34" Grid.RowSpan="2"/>
+                <CheckBox Margin="228,23,192,20" Grid.RowSpan="2"/>
             </Grid>
         </GroupBox>
 
