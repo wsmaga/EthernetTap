@@ -41,7 +41,7 @@ namespace NetCon.viewmodel
             {
                 Console.WriteLine(frame);
             }).Subscribe(
-            FrameRepositoryImpl.instance.subject);
+            FrameRepositoryImpl.instance.FrameSubject);
         }
 
     }

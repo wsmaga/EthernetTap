@@ -8,7 +8,22 @@ using System.Threading.Tasks;
 
 namespace NetCon.repo
 {
-    public delegate void CurrentFrameListener<T>(T frame);
+
+    public class CaptureState
+    {
+
+        public class CaptureOn: CaptureState { }
+        public class CaptureOff: CaptureState { }
+        public class CaptureError: CaptureState {
+            private Exception error;
+            public Exception Error { get { return error; } }
+            public CaptureError(Exception err)
+            {
+                error = err;
+            }
+        }
+    }
+
     interface IFrameRepository<T>
     {
 
@@ -16,6 +31,7 @@ namespace NetCon.repo
         void startCapture();
         void stopCapture();
 
-        Subject<T> subject { get; }
+        Subject<T> FrameSubject { get; }
+        Subject<CaptureState> CaptureState { get; }
     }
 }

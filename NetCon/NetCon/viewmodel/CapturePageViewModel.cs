@@ -27,8 +27,25 @@ namespace NetCon.viewmodel
             new SubjectObserver<Frame>(frame =>
             {
                 FramesCounter++;
-            }).Subscribe(mFramesRepository.subject);
+            }).Subscribe(mFramesRepository.FrameSubject);
 
+            new SubjectObserver<CaptureState>(state =>
+            {
+                if (state is CaptureState.CaptureOn)
+                {
+                    isCapturing = true;
+                    mMainWindowSharedViewModel.logAction("Rozpoczęto przechwytywanie ramek");
+                }
+                else if (state is CaptureState.CaptureOff)
+                {
+                    mMainWindowSharedViewModel.logInfo("Zakończono przechwytywanie ramek");
+                }
+                else if (state is CaptureState.CaptureError)
+                {
+                    mMainWindowSharedViewModel.logAction(((CaptureState.CaptureError)state).Error.Message);
+                    isCapturing = false;
+                }
+            }).Subscribe(mFramesRepository.CaptureState);
         }
 
         private int port = 0;
@@ -65,7 +82,6 @@ namespace NetCon.viewmodel
                 return _startButtonCommand ?? (_startButtonCommand = new CommandHandler(
                     () =>
                     {
-                        mMainWindowSharedViewModel.logAction("Rozpoczęto przechwytywanie ramek");
                         startCapture();
                     },
                     () => { return !isCapturing; }));
@@ -80,7 +96,6 @@ namespace NetCon.viewmodel
                 return _stopButtonCommand ?? (_stopButtonCommand = new CommandHandler(
                     () =>
                     {
-                        mMainWindowSharedViewModel.logInfo("Zakończono przechwytywanie ramek");
                         stopCapture();
                     },
                     () => { return isCapturing; }));
@@ -89,19 +104,16 @@ namespace NetCon.viewmodel
 
         private void startCapture()
         {
-            isCapturing = true;
-
             //TODO przeciążyć start capture o port i rozmiar bufora
-
             Task.Run(() => mFramesRepository.startCapture());
-
-            mFramesRepository.stopCapture();
         }
 
         private void stopCapture()
         {
-            isCapturing = false;
+            mFramesRepository.stopCapture();
         }
+
+
 
         public int FramesCounter { get; set; } = 0;
         public int BufferSize { get; set; } = 0;

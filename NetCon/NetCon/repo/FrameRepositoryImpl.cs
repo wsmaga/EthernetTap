@@ -18,7 +18,10 @@ namespace NetCon.repo
         public static FrameRepositoryImpl instance { get; } = new FrameRepositoryImpl();
 
         private Subject<Frame> _subject = new Subject<Frame>();
-        public Subject<Frame> subject => _subject;
+        public Subject<Frame> FrameSubject => _subject;
+
+        private Subject<CaptureState> captureState = new Subject<CaptureState>();
+        public Subject<CaptureState> CaptureState => captureState;
 
         //TODO tu można zmienić implementację przechwytywacza ramek na jakiś mock   //////////////
         private INetCon netConService = new NetConImpl();
@@ -28,8 +31,6 @@ namespace NetCon.repo
         //Konfiguracja filtrów
         FiltersConfiguration<Frame> filtersConfig = new FiltersConfiguration<Frame>();
 
-        //Callbacki "observerów"
-        private List<CurrentFrameListener<Frame>> currentFrameListeners = new List<CurrentFrameListener<Frame>>();
         private FrameRepositoryImpl()
         {
             //zadeklarowanie naszego callbacka tutaj!   /////////////
@@ -39,6 +40,15 @@ namespace NetCon.repo
                 Marshal.Copy(arr, data, 0, size);       //Kopiowanie danych. Może być problem z wydajnością w RT !!
 
                 //TODO zaimplementować konwersję byte blob do obiektu klasy Frame. Wysłać przekonwertowaną ramkę do observerów
+                //TODO przepuścić ramkę przez filtry
+                var retFrame = new Frame(data);
+
+                if (filtersConfig.pass(retFrame))
+                {
+
+                }
+
+                _subject.pushNextValue(retFrame);
 
                 return data.Length; //TODO ??? policzyć ile faktycznie bajtów odebrano i zwrócić tu! 
             });
@@ -51,9 +61,6 @@ namespace NetCon.repo
 
         public async void startCapture()
         {
-            for (int i = 0; i < 100; i++) {
-                _subject.pushNextValue(new Frame());
-            }
             try
             {
                 netConService.sendRequest(RequestCode.BRIDGE_SWITCH, 1, true);
@@ -66,26 +73,19 @@ namespace NetCon.repo
                 string[] strVec = new string[] { "NetCon.exe", "set", "3", "0" };
                 netConService.sendSettings(strVec);
                 netConService.startCapture();
+                captureState.pushNextValue(new repo.CaptureState.CaptureOn());
             }
             catch(Exception e)
             {
-                //TODO obsużyć błąd
-
+                captureState.pushNextValue(new repo.CaptureState.CaptureError(e));
             }
             
-        }
-
-        private void notifyListeners(Frame frame)
-        {
-            foreach(var listener in currentFrameListeners)
-            {
-                listener(frame);
-            }
         }
 
         public void stopCapture()
         {
             netConService.stopCapture();
+            captureState.pushNextValue(new repo.CaptureState.CaptureOff());
         }
     }
 }
