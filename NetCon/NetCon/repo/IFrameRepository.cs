@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NetCon.model;
+using NetCon.util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace NetCon.repo
 {
+    public delegate void CurrentFrameListener<T>(T frame);
     interface IFrameRepository<T>
     {
 
@@ -13,6 +16,6 @@ namespace NetCon.repo
         void startCapture();
         void stopCapture();
 
-        //TODO dodać metodę dodającą observera dla ramki 
+        Subject<T> subject { get; }
     }
 }

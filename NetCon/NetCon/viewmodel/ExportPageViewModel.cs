@@ -1,4 +1,7 @@
-﻿using NetCon.ui;
+﻿using NetCon.model;
+using NetCon.repo;
+using NetCon.ui;
+using NetCon.util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,6 +36,12 @@ namespace NetCon.viewmodel
         public ExportPageViewModel(MainWindowViewModel sharedViewModel)
         {
             mainWindowSharedViewModel = sharedViewModel;
+
+            new SubjectObserver<Frame>(frame =>
+            {
+                Console.WriteLine(frame);
+            }).Subscribe(
+            FrameRepositoryImpl.instance.subject);
         }
 
     }

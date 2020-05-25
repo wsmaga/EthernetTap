@@ -70,6 +70,7 @@
     <Compile Include="repo\FiltersConfiguration.cs" />
     <Compile Include="repo\FrameRepositoryImpl.cs" />
     <Compile Include="repo\IFrameRepository.cs" />
+    <Compile Include="util\ObservableObject.cs" />
     <Compile Include="ui\CapturePage.xaml.cs">
       <DependentUpon>CapturePage.xaml</DependentUpon>
     </Compile>
@@ -80,6 +81,8 @@
       <DependentUpon>FiltersPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="util\CommandHandler.cs" />
+    <Compile Include="util\Subject.cs" />
+    <Compile Include="util\SubjectObserver.cs" />
     <Compile Include="viewmodel\CapturePageViewModel.cs" />
     <Compile Include="viewmodel\ExportPageViewModel.cs" />
     <Compile Include="viewmodel\FiltersPageViewModel.cs" />
