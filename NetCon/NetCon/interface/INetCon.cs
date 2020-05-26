@@ -20,6 +20,8 @@ namespace NetCon.inter
         void stopCapture();
         void sendFilter();
 
+        void setCaptureState(bool state);
+
         void sendRequest(RequestCode code, int port, bool value);
 
         void sendSettings(string[] settings);

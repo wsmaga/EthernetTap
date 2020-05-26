@@ -24,6 +24,8 @@ namespace NetCon.viewmodel
         {
             mMainWindowSharedViewModel = sharedViewModel;
 
+            Task.Run(() => mFramesRepository.startCapture());
+
             new SubjectObserver<Frame>(frame =>
             {
                 FramesCounter++;
@@ -33,17 +35,18 @@ namespace NetCon.viewmodel
             {
                 if (state is CaptureState.CaptureOn)
                 {
-                    isCapturing = true;
+                  //  isCapturing = true;
                     mMainWindowSharedViewModel.logAction("Rozpoczęto przechwytywanie ramek");
                 }
                 else if (state is CaptureState.CaptureOff)
                 {
+                  //  isCapturing = false;
                     mMainWindowSharedViewModel.logInfo("Zakończono przechwytywanie ramek");
                 }
                 else if (state is CaptureState.CaptureError)
                 {
                     mMainWindowSharedViewModel.logAction(((CaptureState.CaptureError)state).Error.Message);
-                    isCapturing = false;
+                  //  isCapturing = false;
                 }
             }).Subscribe(mFramesRepository.CaptureState);
         }
@@ -98,19 +101,20 @@ namespace NetCon.viewmodel
                     {
                         stopCapture();
                     },
-                    () => { return isCapturing; }));
+                    () => { return !isCapturing; }));
             }
         }
 
         private void startCapture()
         {
             //TODO przeciążyć start capture o port i rozmiar bufora
-            Task.Run(() => mFramesRepository.startCapture());
+            mFramesRepository.resumeCapture();
         }
 
         private void stopCapture()
         {
-            mFramesRepository.stopCapture();
+            mFramesRepository.pauseCapture();
+           // mFramesRepository.stopCapture();
         }
 
 

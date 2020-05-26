@@ -72,8 +72,9 @@ namespace NetCon.repo
 
                 string[] strVec = new string[] { "NetCon.exe", "set", "3", "0" };
                 netConService.sendSettings(strVec);
-                netConService.startCapture();
                 captureState.pushNextValue(new repo.CaptureState.CaptureOn());
+                await Task.Run(()=>netConService.startCapture());
+                
             }
             catch(Exception e)
             {
@@ -84,8 +85,18 @@ namespace NetCon.repo
 
         public void stopCapture()
         {
-            netConService.stopCapture();
             captureState.pushNextValue(new repo.CaptureState.CaptureOff());
+            netConService.stopCapture();
+        }
+
+        public void resumeCapture()
+        {
+            netConService.setCaptureState(true);
+        }
+
+        public void pauseCapture()
+        {
+            netConService.setCaptureState(false);
         }
     }
 }

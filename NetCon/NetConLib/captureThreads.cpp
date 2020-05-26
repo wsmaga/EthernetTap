@@ -14,6 +14,11 @@
 using namespace std::chrono_literals;
 
 std::atomic<int> exitStatus = 0;
+std::atomic<bool> captureFlagState = false;
+
+void setCaptureState(bool state) {
+	captureFlagState = state;
+}
 
 void readDevice(int dev, ringBuffer & rb) {
 
@@ -22,22 +27,26 @@ void readDevice(int dev, ringBuffer & rb) {
 
 	while (1) {
 
-		int ret = 0;
-		auto val = rb.getMasterMemory();
+		if (captureFlagState) {
 
-		while (val.len == 0){
-			val = rb.getMasterMemory();
-			std::this_thread::sleep_for(1ms);
-		} 
+			int ret = 0;
+			auto val = rb.getMasterMemory();
 
-		ret = _read(dev, (char*)val.ptr, val.len);
+			while (val.len == 0) {
+				val = rb.getMasterMemory();
+				std::this_thread::sleep_for(1ms);
+			}
 
-		if (ret <= 0) {
-			exitStatus = -4;
-			return;
+			ret = _read(dev, (char*)val.ptr, val.len);
+
+			if (ret <= 0) {
+				exitStatus = -4;
+				return;
+			}
+
+			rb.updateMaster(ret);
 		}
-
-		rb.updateMaster(ret);
+		
 	}
 }
 

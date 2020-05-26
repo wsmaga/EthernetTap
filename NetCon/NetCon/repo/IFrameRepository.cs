@@ -30,6 +30,9 @@ namespace NetCon.repo
         void startCapture();
         void stopCapture();
 
+        void resumeCapture();
+        void pauseCapture();
+
         Subject<T> FrameSubject { get; }
         Subject<CaptureState> CaptureState { get; }
     }

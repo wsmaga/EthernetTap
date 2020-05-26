@@ -33,6 +33,8 @@ namespace NetCon.inter
         [DllImport(".\\..\\..\\..\\Debug\\NETCONLIB.dll", EntryPoint = "sendSettingsWrapper", CallingConvention = CallingConvention.Cdecl)]
         private static extern void _sendSettingsWrapper(int argc, string[] argv);
 
+        [DllImport(".\\..\\..\\..\\Debug\\NETCONLIB.dll", EntryPoint = "setCaptureState", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void _setCaptureState(bool state);
         public void sendAndReceiveMdio()
         {
             for (int i = 1; i < 5; i++)
@@ -86,6 +88,11 @@ namespace NetCon.inter
         public void stopCapture()
         {
             var ret = _stopCapture();
+        }
+
+        public void setCaptureState(bool state)
+        {
+            _setCaptureState(state);
         }
     }
 }
