@@ -50,7 +50,7 @@ namespace NetCon.repo
 
                 _subject.pushNextValue(retFrame);
 
-                return data.Length; //TODO ??? policzyć ile faktycznie bajtów odebrano i zwrócić tu! 
+                return data.Length;
             });
         }
 

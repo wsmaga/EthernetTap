@@ -11,7 +11,6 @@ namespace NetCon.repo
 
     public class CaptureState
     {
-
         public class CaptureOn: CaptureState { }
         public class CaptureOff: CaptureState { }
         public class CaptureError: CaptureState {

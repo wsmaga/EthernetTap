@@ -47,6 +47,12 @@ namespace NetCon.repo
                 filters.Add(filter);
                 return this;
             }
+
+            public FiltersConfiguration<T> Build()
+            {
+                return new FiltersConfiguration<T>(this);
+            }
         }
+
     }
 }

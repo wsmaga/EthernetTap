@@ -13,6 +13,7 @@ namespace NetCon.model
             rawData = data;
         }
 
+        //nie usuwać tego
         private byte[] rawData;
         public byte[] RawData { get { return rawData; } }
     }
