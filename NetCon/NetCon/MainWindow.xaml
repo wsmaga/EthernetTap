@@ -5,22 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetCon"
         mc:Ignorable="d"
-        Title="NetCon" Height="450" Width="800"
-        ResizeMode="CanMinimize">
+        Title="NetCon" Height="467" Width="800"
+        ResizeMode="CanMinimize"
+        Background="#202020">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40*"/>
-            <ColumnDefinition Width="232*"/>
+            <ColumnDefinition Width="150*"/>
+            <ColumnDefinition Width="648*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="NetCon v2" FontSize="20px" Margin="0,0,10,378" Height="31" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="97"/>
-        <Button Grid.Column="0" x:Uid="filtersButton" Content="Filtry" HorizontalAlignment="Right" Margin="0,0,12,331" VerticalAlignment="Bottom" Width="95" Height="40" Click="navigateToFiltersPage"/>
-        <Button Grid.Column="0" x:Uid="TunelsButton" Content="Tunele" HorizontalAlignment="Right" Margin="0,0,12,286" VerticalAlignment="Bottom" Width="95" Height="40" Click="navigateToTunelsPage"/>
-        <Button Grid.Column="0" x:Uid="ExportButton" Content="Eksport" HorizontalAlignment="Right" Margin="0,0,12,241" VerticalAlignment="Bottom" Width="95" Height="40" Click="navigateToExportPage"/>
-        <!--<Frame  Grid.Column="1" x:Name="contentFrame" Content="Frame"  HorizontalAlignment="Left" Height="421" VerticalAlignment="Top" Width="677" NavigationUIVisibility="Hidden"/>-->
-        <TextBlock  Grid.Column="1" Text="{Binding sampleText}" FontSize="10px" Margin="404,17,172,204"/>
-        <TextBlock Grid.Column="1" Text="{Binding counter}" FontSize="10px" Margin="11,49,404,6"/>
 
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
 
+        <TextBlock Text="NetCon v2" Foreground="#FFFFFF" FontFamily="Comic Sans MS" FontSize="25px" Margin="0,0,5,372" Height="39" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="125"/>
+        <Button Grid.Column="0" x:Uid="filtersButton" Content="Przechwytywanie" HorizontalAlignment="Right" Margin="0,0,23,269" VerticalAlignment="Bottom" Width="107" Height="45" Click="navigateToCapturePage"/>
+        <Button Grid.Column="0" x:Uid="filtersButton" Content="Filtry" HorizontalAlignment="Right" Margin="0,0,23,219" VerticalAlignment="Bottom" Width="107" Height="45" Click="navigateToFiltersPage"/>
+        <Button Grid.Column="0" x:Uid="ExportButton" Content="Eksport" HorizontalAlignment="Right" Margin="0,0,23,170" VerticalAlignment="Bottom" Width="107" Height="44" Click="navigateToExportPage"/>
+        <Frame  Grid.Column="1" x:Name="contentFrame" Background="#606060" Content="Frame"  HorizontalAlignment="Left" Height="408" VerticalAlignment="Top" Width="645" NavigationUIVisibility="Hidden"/>
+        <Image Source="/res/images/RJ45M8P1.png" Margin="19,54,20,336" />
+
+        <TextBlock Grid.Row="1" Padding ="5,1,1,1" Foreground="#FFFFFF" Text="{Binding bottomText}" Background="{Binding bottomTextColor}" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>

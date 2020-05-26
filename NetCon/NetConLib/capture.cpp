@@ -178,9 +178,10 @@ __declspec(dllexport) int startCapture(int port, int (*send_callback)(const char
 	//Workaround: Czekanie z timeoutem na zamkniecie watku readThread, jednakze bedzie on praktycznie zawsze zablokowany przez blokujacego read()
 	//Problem nie jest krytyczny bo wszystko zosta³o ju¿ odczytane i zapisane
 	std::cout << "Zamykanie watku readThread." << std::endl;
+
 	auto future = std::async(std::launch::async, &std::thread::join, &readThread);
 	if (future.wait_for(std::chrono::seconds(1)) == std::future_status::timeout) {
-		raise(SIGTERM);
+		//raise(SIGTERM);
 	}
 
 	free((void*)p_ringBuffer);

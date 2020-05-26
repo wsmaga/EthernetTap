@@ -19,41 +19,46 @@ namespace NetCon
 
     public partial class MainWindow : Window
     {
+
+        public const string INFO_COLOR = "#0779e4";
+        public const string ACTION_COLOR = "#ff5200";
+
         public MainWindowViewModel mMainWindowViewModel;
 
-        private Page[] mPages ={
-            new FiltersPage(),
-            new TunelsPage(),
-            new ExportPage()
-        };
-        string retText = "";
+        private Page[] mPages;
+
         public MainWindow()
         {
             InitializeComponent();
-            mMainWindowViewModel = new MainWindowViewModel(this);
+            mMainWindowViewModel = new MainWindowViewModel();
             this.DataContext = mMainWindowViewModel;
             
-            //contentFrame.Navigate(mPages[0]);
+            mPages = new Page[]{
+                new CapturePage(mMainWindowViewModel),
+                new FiltersPage(mMainWindowViewModel),
+                new ExportPage(mMainWindowViewModel)
+            };
+
+
+            contentFrame.Navigate(mPages[0]);
+        }
+
+        private void navigateToCapturePage(object sender, RoutedEventArgs e)
+        {
+            contentFrame.Navigate(mPages[0]);
         }
 
         private void navigateToFiltersPage(object sender, RoutedEventArgs e)
         {
-            //contentFrame.Navigate(mPages[0]);
-        }
-
-        private void navigateToTunelsPage(object sender, RoutedEventArgs e)
-        {
-            //contentFrame.Navigate(mPages[1]);
+            contentFrame.Navigate(mPages[1]);
         }
 
         private void navigateToExportPage(object sender, RoutedEventArgs e)
         {
-           // contentFrame.Navigate(mPages[2]);
+           contentFrame.Navigate(mPages[2]);
         }
 
-        public void SetIksde(String str)
-        {
-            //this.iksde_label.Content = str;
-        }
+
+
     }
 }

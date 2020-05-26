@@ -17,80 +17,66 @@ namespace NetCon.viewmodel
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string sampleText { get; set; }
-        private bool mCounting = false;
+        public int counter { get; set; } = 0;
+        public string bottomText { get; set; } = "Witaj w programie NetCon v2!";
+        public string bottomTextColor { get; set; } = MainWindow.INFO_COLOR;
 
-        public int counter { get; set; }
 
-        public MainWindow wnd;
-        //public int counter = 0;
-
-        public MainWindowViewModel(MainWindow wnd)
+        public void logAction(string actionText)
         {
-            this.wnd = wnd;
-            counter = 0;
-            var impl = new NetConImpl();
-
-            Task.Run(async () =>
-            {
-
-            impl.sendRequest(RequestCode.BRIDGE_SWITCH, 1, true);
-            impl.sendRequest(RequestCode.BRIDGE_SWITCH, 2, true);
-            impl.sendRequest(RequestCode.BRIDGE_SWITCH, 3, true);
-            impl.sendRequest(RequestCode.BRIDGE_SWITCH, 4, true);
-
-            impl.sendAndReceiveMdio();
-
-            string[] strVec = new string[] {"NetCon.exe","set","3","0"};
-
-            impl.sendSettings(strVec);
-         }
-
-        public int counter { get; set; }
-
-        public MainWindow wnd;
-        //public int counter = 0;
-
-        public MainWindowViewModel(MainWindow wnd)
-        {
-            this.wnd = wnd;
-            counter = 0;
-            var impl = new NetConImpl();
-           
-            Task.Run(async () =>
-            {
-                using (BinaryWriter writer = new BinaryWriter(File.Open("capture_si_szarp.pcap", FileMode.Create)))
-                {
-                   // UInt32[] header = { 0xA1B23C4D, 0x00040002, 0x00000000, 0x00000000, 0xFFFFFFFF, 0x00000112 };
-
-                    impl.setOnFrameListener((IntPtr arr, int size) => {
-                        byte[] data = new byte[size];
-                        Marshal.Copy(arr, data, 0, size);       //Kopiowanie danych. Może być problem z wydajnością w RT !!
-                        counter += 1;
-                        sampleText = System.Text.Encoding.Default.GetString(data);
-                        //sampleText = counter.ToString();
-                        //wnd.SetIksde(sampleText);
-
-                        //zapis do pliku
-                        writer.Write(data);
-                        return data.Length; //TODO policzyć ile faktycznie bajtów odebrano i zwrócić tu! 
-                    });
-
-                    writer.Write(0xA1B23C4D);
-                    writer.Write(0x00040002);
-                    writer.Write(0x00000000);
-                    writer.Write(0x00000000);
-                    writer.Write(0xFFFFFFFF);
-                    writer.Write(0x00000112);
-
-                    Task.Run(async () =>impl.startCapture());
-                    await Task.Delay(20000);
-                    impl.stopCapture();
-                    await Task.Delay(5000);
-                    writer.Close();
-                }     
-            });
+            bottomText = actionText;
+            bottomTextColor = MainWindow.ACTION_COLOR;
         }
 
+        public void logInfo(string infoText)
+        {
+            bottomText = infoText;
+            bottomTextColor = MainWindow.INFO_COLOR;
+        }
 
+        public MainWindowViewModel()
+        {
+
+ 
+        }
+
+        public MainWindowViewModel(MainWindow wnd)
+        {
+            //    counter = 0;
+            //    var impl = new NetConImpl();
+
+            //    Task.Run(async () =>
+            //    {
+            //        using (BinaryWriter writer = new BinaryWriter(File.Open("capture_si_szarp.pcap", FileMode.Create)))
+            //        {
+            //            impl.setOnFrameListener((IntPtr arr, int size) => {
+            //                byte[] data = new byte[size];
+            //                Marshal.Copy(arr, data, 0, size);       //Kopiowanie danych. Może być problem z wydajnością w RT !!
+            //                counter += 1;
+            //                sampleText = System.Text.Encoding.Default.GetString(data);
+            //                //sampleText = counter.ToString();
+
+            //                //zapis do pliku
+            //                writer.Write(data);
+            //                return data.Length; //TODO policzyć ile faktycznie bajtów odebrano i zwrócić tu! 
+            //            });
+
+            //            writer.Write(0xA1B23C4D);
+            //            writer.Write(0x00040002);
+            //            writer.Write(0x00000000);
+            //            writer.Write(0x00000000);
+            //            writer.Write(0xFFFFFFFF);
+            //            writer.Write(0x00000112);
+
+            //            Task.Run(async () =>impl.startCapture());
+            //            await Task.Delay(20000);
+            //            impl.stopCapture();
+            //            await Task.Delay(5000);
+            //            writer.Close();
+            //        }     
+            //    });
+            //}
+
+        }
     }
 }

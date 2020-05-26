@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetCon.viewmodel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,12 @@ namespace NetCon.ui
     /// </summary>
     public partial class ExportPage : Page
     {
-        public ExportPage()
+        private ExportPageViewModel viewModel;
+        public ExportPage(MainWindowViewModel sharedViewModel)
         {
             InitializeComponent();
+            viewModel = new ExportPageViewModel(sharedViewModel);
+            this.DataContext = viewModel;
         }
     }
 }

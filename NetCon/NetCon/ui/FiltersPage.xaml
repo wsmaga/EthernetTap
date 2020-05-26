@@ -6,11 +6,30 @@
       xmlns:local="clr-namespace:NetCon.ui"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Page1"
-      Background="#FFFFFF">
+      Title="Page1">
 
-    <Grid>
-        <TextBlock
-          Text="Filtry"/>
+    <Grid Margin="10 10 0 0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Foreground="#FFFFFF" Header="Nastawy filtrów" Margin="0,0,0,10">
+            <Grid Margin="0,0,0,-4">
+                <Button Content="Zastosuj filtry" HorizontalAlignment="Left" Margin="10,0,0,23" Width="114" Height="37" VerticalAlignment="Bottom"/>
+                <ListView ItemsSource="{Binding filterDefinitions}" SelectedItem="{Binding selectedFilterDefiniton}" HorizontalAlignment="Left" Height="102" Margin="10,27,0,0" VerticalAlignment="Top" Width="231"/>
+                <Button Command="{Binding ShiftUpFilterCommand}" Content="W górę" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="64" Height="24"/>
+                <Button Command="{Binding ShiftDownFilterCommand}" Content="W dół" HorizontalAlignment="Left" Margin="79,134,0,0" VerticalAlignment="Top" Width="74" Height="24"/>
+                <TextBox  HorizontalAlignment="Left" Height="23" Margin="10,177,0,0" TextWrapping="Wrap" Text="{Binding newFilterText}" VerticalAlignment="Top" Width="168"/>
+                <Label Foreground="#FFFFFF" Content="Filtry:" HorizontalAlignment="Left" Margin="10,1,0,0" VerticalAlignment="Top"/>
+                <Button Command="{Binding AddFilterCommand}" Content="Dodaj" HorizontalAlignment="Left" Margin="183,177,0,0" VerticalAlignment="Top" Width="58" Height="23"/>
+                <Button Command ="{Binding DeleteFilterCommand}" Content="Usuń" HorizontalAlignment="Left" Margin="158,134,0,0" VerticalAlignment="Top" Width="83" Height="24"/>
+
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="1" Foreground="#FFFFFF" Header="Dostępne filtry" Margin="28,0,43,10">
+            <TextBlock>
+                TODO - napisać help-a z listą filtrów i  <LineBreak/> sposobem ich aplikowania
+            </TextBlock>
+        </GroupBox>
     </Grid>
 </Page>
