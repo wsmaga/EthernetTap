@@ -1,4 +1,5 @@
-﻿using NetCon.model;
+﻿using NetCon.export;
+using NetCon.model;
 using NetCon.repo;
 using NetCon.ui;
 using NetCon.util;
@@ -16,19 +17,30 @@ namespace NetCon.viewmodel
         public event PropertyChangedEventHandler PropertyChanged;
 
         private MainWindowViewModel mainWindowSharedViewModel;
+        private IPcapWriter<Frame> mPcapWriter = new PcapWriterImpl();
+
+        private IFrameRepository<Frame> mFramesRepository = FrameRepositoryImpl.instance;
 
         private bool _fileExportOption = false;
-        public bool fileExportOption { get {
-                return _fileExportOption;
-            } set {
+        public bool FileExportOption
+        { 
+            get => _fileExportOption; 
+            set 
+            {
                 _fileExportOption = value;
                 if (value)
                 {
                     mainWindowSharedViewModel.logInfo("Zaznaczono opcję eksportu do pliku *.pcap");
+
+                    if (!mPcapWriter.isInitialized)
+                        mPcapWriter.InitWrite("myFrames.pcap");
                 }
                 else
                 {
                     mainWindowSharedViewModel.logInfo("Odznaczono opcję eksportu do pliku *.pcap");
+
+                    if (mPcapWriter.isInitialized)
+                        mPcapWriter.EndWrite();
                 }
                 
             } }
@@ -39,9 +51,11 @@ namespace NetCon.viewmodel
 
             new SubjectObserver<Frame>(frame =>
             {
-                Console.WriteLine(frame);
-            }).Subscribe(
-            FrameRepositoryImpl.instance.FrameSubject);
+                if (mPcapWriter.isInitialized)
+                {
+                    mPcapWriter.WriteFrame(frame);
+                }
+            }).Subscribe(mFramesRepository.FrameSubject);
         }
 
     }

@@ -2,13 +2,9 @@
 using NetCon.repo;
 using NetCon.util;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Data;
+using System.Windows;
 using System.Windows.Input;
 
 namespace NetCon.viewmodel
@@ -24,8 +20,7 @@ namespace NetCon.viewmodel
         {
             mMainWindowSharedViewModel = sharedViewModel;
 
-            Task.Run(() => mFramesRepository.startCapture());
-
+            //Observing subjects
             new SubjectObserver<Frame>(frame =>
             {
                 FramesCounter++;
@@ -49,28 +44,41 @@ namespace NetCon.viewmodel
                   //  isCapturing = false;
                 }
             }).Subscribe(mFramesRepository.CaptureState);
+
+
+            //Setup capture 
+
+            ApplicationConfig config = ConfigFileHandler<ApplicationConfig>.ReadSettings();
+
+            if(config == null)
+            {
+                mMainWindowSharedViewModel.logAction("Błąd podczas wczytywania ustawień. Załadowano wartości domyślne");
+                config = new ApplicationConfig
+                {
+                    port = 3,
+                    bufferSize = 16
+                };
+            }
+
+            BufferSize = config.bufferSize;
+            port = config.port;
+
+            Task.Run(() => mFramesRepository.startCapture());
+
         }
 
         private int port = 0;
 
         public String PortText
         {
-            get
-            {
-                return port.ToString();
-            }
-
+            get => port.ToString();
             set
             {
                 try
                 {
                     port = Int32.Parse(value);
                 }
-                catch (Exception e)
-                {
-                    //TODO obsługa błędów
-                }
-
+                catch (Exception e){}
             }
         }
 
@@ -80,30 +88,46 @@ namespace NetCon.viewmodel
         private ICommand _startButtonCommand;
         public ICommand StartButtonCommand
         {
-            get
-            {
-                return _startButtonCommand ?? (_startButtonCommand = new CommandHandler(
+            get => _startButtonCommand ?? (_startButtonCommand = new CommandHandler(
                     () =>
                     {
                         startCapture();
                     },
                     () => { return !isCapturing; }));
-            }
         }
 
         private ICommand _stopButtonCommand;
         public ICommand StopButtonCommand
         {
-            get
-            {
-                return _stopButtonCommand ?? (_stopButtonCommand = new CommandHandler(
+            get => _stopButtonCommand ?? (_stopButtonCommand = new CommandHandler(
                     () =>
                     {
                         stopCapture();
                     },
                     () => { return !isCapturing; }));
-            }
         }
+
+        private ICommand _saveChangesButtonCommand;
+        public ICommand SaveChangesButtonCommand
+        {
+            get => _saveChangesButtonCommand ?? (_saveChangesButtonCommand = new CommandHandler(
+                    () => {
+                        ConfigFileHandler<ApplicationConfig>.WriteSettings(new ApplicationConfig
+                        {
+                            port = this.port,
+                            bufferSize = this.BufferSize
+                        }
+                        );
+                        MessageBox.Show(
+                            "Zmiany zostaną zastosowane po ponownym uruchomieniu aplikacji",
+                            "NetCon v2",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                    },
+                    () => { return true; }
+                    ));
+        }
+
 
         private void startCapture()
         {
