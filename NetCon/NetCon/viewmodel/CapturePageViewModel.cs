@@ -16,6 +16,13 @@ namespace NetCon.viewmodel
         private MainWindowViewModel mMainWindowSharedViewModel;
         private IFrameRepository<Frame> mFramesRepository = FrameRepositoryImpl.instance;
 
+        private int port = 0;
+
+        public bool initError { get; set; } = false;
+        public bool isCapturing { get; set; } = false;
+        public int FramesCounter { get; set; } = 0;
+        public int BufferSize { get; set; } = 0;
+
         public CapturePageViewModel(MainWindowViewModel sharedViewModel)
         {
             mMainWindowSharedViewModel = sharedViewModel;
@@ -28,20 +35,25 @@ namespace NetCon.viewmodel
 
             new SubjectObserver<CaptureState>(state =>
             {
+                if (state is CaptureState.CaptureInitialized)
+                {
+                    mMainWindowSharedViewModel.logInfo("Połączenie nawiązane");
+                }
                 if (state is CaptureState.CaptureOn)
                 {
-                  //  isCapturing = true;
+                    isCapturing = true;
                     mMainWindowSharedViewModel.logAction("Rozpoczęto przechwytywanie ramek");
                 }
                 else if (state is CaptureState.CaptureOff)
                 {
-                  //  isCapturing = false;
+                    isCapturing = false;
                     mMainWindowSharedViewModel.logInfo("Zakończono przechwytywanie ramek");
                 }
                 else if (state is CaptureState.CaptureError)
                 {
+                    isCapturing = false;
+                    initError = true;   //TODO sprawdzić typ wyjątku i ustawiać init error tylko jeśli wystapi problem z inicjalizacją
                     mMainWindowSharedViewModel.logAction(((CaptureState.CaptureError)state).Error.Message);
-                  //  isCapturing = false;
                 }
             }).Subscribe(mFramesRepository.CaptureState);
 
@@ -63,11 +75,9 @@ namespace NetCon.viewmodel
             BufferSize = config.bufferSize;
             port = config.port;
 
-            Task.Run(() => mFramesRepository.startCapture());
+            Task.Run(() => mFramesRepository.InitCapture());
 
         }
-
-        private int port = 0;
 
         public String PortText
         {
@@ -82,9 +92,6 @@ namespace NetCon.viewmodel
             }
         }
 
-
-        private bool isCapturing = false;
-
         private ICommand _startButtonCommand;
         public ICommand StartButtonCommand
         {
@@ -93,7 +100,7 @@ namespace NetCon.viewmodel
                     {
                         startCapture();
                     },
-                    () => { return !isCapturing; }));
+                    () => { return !isCapturing && !initError; }));
         }
 
         private ICommand _stopButtonCommand;
@@ -104,7 +111,7 @@ namespace NetCon.viewmodel
                     {
                         stopCapture();
                     },
-                    () => { return !isCapturing; }));
+                    () => { return isCapturing; }));
         }
 
         private ICommand _saveChangesButtonCommand;
@@ -132,18 +139,13 @@ namespace NetCon.viewmodel
         private void startCapture()
         {
             //TODO przeciążyć start capture o port i rozmiar bufora
-            mFramesRepository.resumeCapture();
+            mFramesRepository.StartCapture();
         }
 
         private void stopCapture()
         {
-            mFramesRepository.pauseCapture();
+            mFramesRepository.StopCapture();
            // mFramesRepository.stopCapture();
         }
-
-
-
-        public int FramesCounter { get; set; } = 0;
-        public int BufferSize { get; set; } = 0;
     }
 }

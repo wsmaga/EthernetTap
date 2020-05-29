@@ -31,16 +31,10 @@ namespace NetCon.viewmodel
                 if (value)
                 {
                     mainWindowSharedViewModel.logInfo("Zaznaczono opcję eksportu do pliku *.pcap");
-
-                    if (!mPcapWriter.isInitialized)
-                        mPcapWriter.InitWrite("myFrames.pcap");
                 }
                 else
                 {
                     mainWindowSharedViewModel.logInfo("Odznaczono opcję eksportu do pliku *.pcap");
-
-                    if (mPcapWriter.isInitialized)
-                        mPcapWriter.EndWrite();
                 }
                 
             } }
@@ -56,6 +50,20 @@ namespace NetCon.viewmodel
                     mPcapWriter.WriteFrame(frame);
                 }
             }).Subscribe(mFramesRepository.FrameSubject);
+
+            new SubjectObserver<CaptureState>(state =>
+            {
+                if(state is CaptureState.CaptureOn)
+                {
+                    if (!mPcapWriter.isInitialized)
+                        mPcapWriter.InitWrite("myFrames.pcap");
+                }
+                else if(state is CaptureState.CaptureOff)
+                {
+                    if (mPcapWriter.isInitialized)
+                        mPcapWriter.EndWrite();
+                }
+            }).Subscribe(mFramesRepository.CaptureState);
         }
 
     }
