@@ -1,8 +1,13 @@
-﻿using NetCon.model;
+﻿using Kaitai;
+using NetCon.model;
+using NetCon.parsing;
 using NetCon.repo;
 using NetCon.util;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -15,7 +20,7 @@ namespace NetCon.viewmodel
 
         private MainWindowViewModel mMainWindowSharedViewModel;
         private IFrameRepository<Frame> mFramesRepository = FrameRepositoryImpl.instance;
-
+        private FrameParser frameParser=new FrameParser();
         private int port = 0;
 
         public bool initError { get; set; } = false;
@@ -26,11 +31,13 @@ namespace NetCon.viewmodel
         public CapturePageViewModel(MainWindowViewModel sharedViewModel)
         {
             mMainWindowSharedViewModel = sharedViewModel;
-
+            
             //Observing subjects
             new SubjectObserver<Frame>(frame =>
             {
-                FramesCounter++;
+                string rawDataString = BitConverter.ToString(frame.RawData).Replace("-", "").ToLower();
+                frameParser.SendFrame(rawDataString);
+                FramesCounter=frameParser.AllFrames.Count;
             }).Subscribe(mFramesRepository.FrameSubject);
 
             new SubjectObserver<CaptureState>(state =>
@@ -145,7 +152,20 @@ namespace NetCon.viewmodel
         private void stopCapture()
         {
             mFramesRepository.StopCapture();
-           // mFramesRepository.stopCapture();
+            TextWriter tw = new StreamWriter("FramesFromParser.txt");
+
+            foreach (Frame frame in frameParser.AllFrames)
+                tw.WriteLine(BitConverter.ToString(frame.RawData).Replace("-", "").ToLower());
+            tw.Close();
+            List<EthernetFrame> list = new List<EthernetFrame>();
+
+            foreach (Frame f in frameParser.AllFrames)
+            {
+                byte[] temp = new byte[f.RawData.Length-8-4];
+                Array.Copy(f.RawData, 8, temp, 0, f.RawData.Length - 8 - 4);
+                list.Add(new EthernetFrame(new KaitaiStream(temp)));
+            }
+            // mFramesRepository.stopCapture();
         }
     }
 }
