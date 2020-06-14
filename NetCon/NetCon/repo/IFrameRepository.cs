@@ -22,7 +22,7 @@ namespace NetCon.repo
 
     interface IFrameRepository<T>
     {
-        void applyFilters(FiltersConfiguration<T> config);
+        //void applyFilters(FiltersConfiguration<T> config);
         void InitCapture();
         void CloseCapture();
         void StartCapture();

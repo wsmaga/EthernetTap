@@ -1,9 +1,11 @@
-﻿using NetCon.model;
+﻿using Kaitai;
+using NetCon.model;
+using NetCon.repo;
+using NetCon.util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NetCon.parsing
 {
@@ -14,7 +16,20 @@ namespace NetCon.parsing
         private int FrameLength=-1;
         private enum FType {NONE, IPV4, ARP};
         private FType FrameType=FType.NONE;
-        public void SendFrame(string rawDataString)
+        public Subject<EthernetFrame> EthernetFrameSubject=new Subject<EthernetFrame>();
+
+        FiltersConfiguration<EthernetFrame> filtersConfig;
+        public FrameParser(Subject<Frame> _subject)
+        {
+            FiltersConfiguration<EthernetFrame>.Builder builder = new FiltersConfiguration<EthernetFrame>.Builder();
+            builder.AddFilter(new Filter<EthernetFrame>(frame => frame.EtherType==EthernetFrame.EtherTypeEnum.Arp)); //Enumerable.SequenceEqual(frame.SrcMac,new byte[] {0,1,5,27,159,150}))
+            filtersConfig = new FiltersConfiguration<EthernetFrame>(builder);
+            new SubjectObserver<Frame>(Frame =>
+            {
+                ParseFrame(BitConverter.ToString(Frame.RawData).Replace("-", "").ToLower());
+            }).Subscribe(_subject);
+        }
+        private void ParseFrame(string rawDataString)
         {
             //string rawDataString = BitConverter.ToString(rawData).Replace("-", "").ToLower();
             if(CurrFrame.Length==0)
@@ -23,13 +38,13 @@ namespace NetCon.parsing
                 if (index!=-1)
                 {
                     string tempFrame = rawDataString.Substring(index);
-                    ParseFrame(tempFrame);
+                    GroupFrame(tempFrame);
                 }
             }
             else
             {
                 string tempFrame = CurrFrame+rawDataString;
-                ParseFrame(tempFrame);
+                GroupFrame(tempFrame);
             }
         }
         private void ResetCurrFrame()
@@ -38,7 +53,7 @@ namespace NetCon.parsing
             FrameLength = -1;
             FrameType = FType.NONE;
         }
-        private void ParseFrame(string tempFrame)
+        private void GroupFrame(string tempFrame)
         {
             if (tempFrame.Length >= 52)
             {
@@ -75,27 +90,35 @@ namespace NetCon.parsing
             {
                 CurrFrame = tempFrame;
                 if (tempFrame.Length == FrameLength)
-                {
-
-                    AllFrames.Add(new Frame(Enumerable.Range(0, CurrFrame.Length)
-                     .Where(x => x % 2 == 0)
-                     .Select(x => Convert.ToByte(CurrFrame.Substring(x, 2), 16))
-                     .ToArray()));
-                    ResetCurrFrame();
-                }
+                    SaveFrame(CurrFrame);
 
             }
             else
             {
                 CurrFrame = tempFrame.Substring(0, FrameLength);
                 string remainingData = tempFrame.Substring(FrameLength);
-                AllFrames.Add(new Frame(Enumerable.Range(0, CurrFrame.Length)
-                     .Where(x => x % 2 == 0)
-                     .Select(x => Convert.ToByte(CurrFrame.Substring(x, 2), 16))
-                     .ToArray()));
-                ResetCurrFrame();
-                SendFrame(remainingData);
+                SaveFrame(CurrFrame);
+                ParseFrame(remainingData);
             }
+        }
+        private void SaveFrame(string Frame)
+        {
+            AllFrames.Add(new Frame(Enumerable.Range(0, Frame.Length)
+                     .Where(x => x % 2 == 0)
+                     .Select(x => Convert.ToByte(Frame.Substring(x, 2), 16))
+                     .ToArray()));
+            EthernetFrame temp = new EthernetFrame(new KaitaiStream(Enumerable.Range(16, Frame.Length - 16 - 8)
+                      .Where(x => x % 2 == 0)
+                      .Select(x => Convert.ToByte(Frame.Substring(x, 2), 16))
+                      .ToArray()));
+            //EthernetFrameSubject.pushNextValue(temp);
+            FilterFrame(temp);
+            ResetCurrFrame();
+        }
+        private void FilterFrame(EthernetFrame frame)
+        {
+            if (filtersConfig.pass(frame))
+                EthernetFrameSubject.pushNextValue(frame);
         }
     }
 }

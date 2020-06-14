@@ -20,7 +20,7 @@ namespace NetCon.viewmodel
 
         private MainWindowViewModel mMainWindowSharedViewModel;
         private IFrameRepository<Frame> mFramesRepository = FrameRepositoryImpl.instance;
-        private FrameParser frameParser=new FrameParser();
+        private FrameParser frameParser;
         private int port = 0;
 
         public bool initError { get; set; } = false;
@@ -31,14 +31,19 @@ namespace NetCon.viewmodel
         public CapturePageViewModel(MainWindowViewModel sharedViewModel)
         {
             mMainWindowSharedViewModel = sharedViewModel;
-            
+            frameParser = new FrameParser(mFramesRepository.FrameSubject);
             //Observing subjects
-            new SubjectObserver<Frame>(frame =>
+           /* new SubjectObserver<Frame>(frame =>
             {
                 string rawDataString = BitConverter.ToString(frame.RawData).Replace("-", "").ToLower();
-                frameParser.SendFrame(rawDataString);
-                FramesCounter=frameParser.AllFrames.Count;
-            }).Subscribe(mFramesRepository.FrameSubject);
+                frameParser.Parse(rawDataString);
+                //FramesCounter=frameParser.AllFrames.Count;
+            }).Subscribe(mFramesRepository.FrameSubject);*/
+
+            new SubjectObserver<EthernetFrame>(frame =>
+            {
+                FramesCounter++;
+            }).Subscribe(frameParser.EthernetFrameSubject);
 
             new SubjectObserver<CaptureState>(state =>
             {

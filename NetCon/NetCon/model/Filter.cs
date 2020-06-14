@@ -7,9 +7,17 @@ using System.Threading.Tasks;
 namespace NetCon.model
 {
     //TODO utworzyć klasy dla różnych rodzajów filtrów.
-    public abstract class Filter<T>
+    public class Filter<T>
     {
-        public abstract bool pass(T frame);
+        Predicate<T> filterPredicate;
+        public Filter(Predicate<T> pred)
+        {
+            filterPredicate = pred;
+        }
+        public bool pass(T frame)
+        {
+            return filterPredicate(frame);
+        }
         
     }
 }

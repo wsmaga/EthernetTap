@@ -26,7 +26,7 @@ namespace NetCon.repo
         //TODO można zrobić zmienną typu jakiegoś enum, która będzie informowała observerów o stanie przechwytywania (konfiguracje mdio, rozpoczęcie, etc. oraz błędy)
 
         //Konfiguracja filtrów
-        FiltersConfiguration<Frame> filtersConfig = new FiltersConfiguration<Frame>();
+       
 
         private FrameRepositoryImpl()
         {
@@ -38,23 +38,18 @@ namespace NetCon.repo
 
                 //TODO zaimplementować konwersję byte blob do obiektu klasy Frame. Wysłać przekonwertowaną ramkę do observerów
                 //TODO przepuścić ramkę przez filtry
-                var retFrame = new Frame(data);
 
-                if (filtersConfig.pass(retFrame))
-                {
-
-                }
-
-                _subject.pushNextValue(retFrame);
+                _subject.pushNextValue(new Frame(data));
 
                 return data.Length;
             });
         }
 
-        public void applyFilters(FiltersConfiguration<Frame> config)
+        //Deprecated configuracja i filtrowanie przeniesiona do FrameParsera
+        /*public void applyFilters(FiltersConfiguration<Frame> config)
         {
             filtersConfig = config;
-        }
+        }*/
 
         public async void InitCapture()
         {
