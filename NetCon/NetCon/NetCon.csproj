@@ -73,14 +73,8 @@
     <Compile Include="model\ApplicationConfig.cs" />
     <Compile Include="model\Filter.cs" />
     <Compile Include="model\Frame.cs" />
-    <Compile Include="parsing\kaitai\EthernetFrame.cs" />
     <Compile Include="parsing\FrameParser.cs" />
-    <Compile Include="parsing\kaitai\IcmpPacket.cs" />
-    <Compile Include="parsing\kaitai\Ipv4Packet.cs" />
-    <Compile Include="parsing\kaitai\Ipv6Packet.cs" />
-    <Compile Include="parsing\kaitai\ProtocolBody.cs" />
-    <Compile Include="parsing\kaitai\TcpSegment.cs" />
-    <Compile Include="parsing\kaitai\UdpDatagram.cs" />
+    <Compile Include="parsing\PredicateTree.cs" />
     <Compile Include="repo\FiltersConfiguration.cs" />
     <Compile Include="repo\FrameRepositoryImpl.cs" />
     <Compile Include="repo\IFrameRepository.cs" />

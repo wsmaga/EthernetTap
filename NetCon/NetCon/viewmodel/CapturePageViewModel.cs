@@ -40,7 +40,7 @@ namespace NetCon.viewmodel
                 //FramesCounter=frameParser.AllFrames.Count;
             }).Subscribe(mFramesRepository.FrameSubject);*/
 
-            new SubjectObserver<EthernetFrame>(frame =>
+            new SubjectObserver<Frame>(frame =>
             {
                 FramesCounter++;
             }).Subscribe(frameParser.EthernetFrameSubject);
@@ -157,20 +157,6 @@ namespace NetCon.viewmodel
         private void stopCapture()
         {
             mFramesRepository.StopCapture();
-            TextWriter tw = new StreamWriter("FramesFromParser.txt");
-
-            foreach (Frame frame in frameParser.AllFrames)
-                tw.WriteLine(BitConverter.ToString(frame.RawData).Replace("-", "").ToLower());
-            tw.Close();
-            List<EthernetFrame> list = new List<EthernetFrame>();
-
-            foreach (Frame f in frameParser.AllFrames)
-            {
-                byte[] temp = new byte[f.RawData.Length-8-4];
-                Array.Copy(f.RawData, 8, temp, 0, f.RawData.Length - 8 - 4);
-                list.Add(new EthernetFrame(new KaitaiStream(temp)));
-            }
-            // mFramesRepository.stopCapture();
         }
     }
 }

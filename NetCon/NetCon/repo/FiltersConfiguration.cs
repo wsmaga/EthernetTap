@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace NetCon.repo
 {
-    public class FiltersConfiguration<T>
+    public class FiltersConfiguration
     {
-        List<Filter<T>> filters;
+        List<Filter> filters;
 
         public FiltersConfiguration()
         {
-            filters = new List<Filter<T>>();
+            filters = new List<Filter>();
         }
 
         public FiltersConfiguration(Builder confBuilder)
@@ -23,34 +23,33 @@ namespace NetCon.repo
         }
 
 
-        public bool pass(T frame)
+        public Filter pass(Frame frame)
         {
-            bool pass = true;
             
             foreach(var filter in filters)
             {
-                if (!filter.pass(frame))
+                if (filter.pass(frame))
                 {
-                    pass = false;
-                    break;
+                    return filter;
                 }
             }
 
-            return pass;
+            return null;
         }
 
         public class Builder
         {
-            public List<Filter<T>> filters { get; } = new List<Filter<T>>();
-            public Builder AddFilter(Filter<T> filter)
+            public List<Filter> filters { get; } = new List<Filter>();
+            public Builder AddFilter(Filter filter)
             {
-                filters.Add(filter);
+                if(filter!=null)
+                    filters.Add(filter);
                 return this;
             }
 
-            public FiltersConfiguration<T> Build()
+            public FiltersConfiguration Build()
             {
-                return new FiltersConfiguration<T>(this);
+                return new FiltersConfiguration(this);
             }
         }
 
