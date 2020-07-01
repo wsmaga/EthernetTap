@@ -40,6 +40,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Kaitai.Struct.Runtime, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KaitaiStruct.Runtime.CSharp.0.8.0\lib\net45\Kaitai.Struct.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="PropertyChanged, Version=3.2.8.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.3.2.8\lib\net40\PropertyChanged.dll</HintPath>
     </Reference>
@@ -63,14 +66,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="export\IPcapWriter.cs" />
+    <Compile Include="export\PcapWriterImpl.cs" />
     <Compile Include="interface\INetCon.cs" />
     <Compile Include="interface\NetConImpl.cs" />
+    <Compile Include="model\ApplicationConfig.cs" />
     <Compile Include="model\Filter.cs" />
     <Compile Include="model\Frame.cs" />
+    <Compile Include="parsing\FrameParser.cs" />
+    <Compile Include="parsing\PredicateTree.cs" />
     <Compile Include="repo\FiltersConfiguration.cs" />
     <Compile Include="repo\FrameRepositoryImpl.cs" />
     <Compile Include="repo\IFrameRepository.cs" />
-    <Compile Include="util\ObservableObject.cs" />
+    <Compile Include="util\ConfigFileHandler.cs" />
     <Compile Include="ui\CapturePage.xaml.cs">
       <DependentUpon>CapturePage.xaml</DependentUpon>
     </Compile>

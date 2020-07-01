@@ -2,6 +2,7 @@
 using NetCon.ui;
 using NetCon.viewmodel;
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,6 +32,7 @@ namespace NetCon
         {
             InitializeComponent();
             mMainWindowViewModel = new MainWindowViewModel();
+
             this.DataContext = mMainWindowViewModel;
             
             mPages = new Page[]{
@@ -55,10 +57,7 @@ namespace NetCon
 
         private void navigateToExportPage(object sender, RoutedEventArgs e)
         {
-           contentFrame.Navigate(mPages[2]);
+            contentFrame.Navigate(mPages[2]);
         }
-
-
-
     }
 }

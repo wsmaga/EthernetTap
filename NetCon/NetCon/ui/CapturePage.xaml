@@ -25,6 +25,7 @@
                 <Slider Margin="98,30,137,10" Value="{Binding BufferSize}"/>
                 <TextBlock Text="{Binding BufferSize}" Margin="223,30,81,10"/>
                 <TextBox HorizontalAlignment="Left" Height="23" Margin="98,0,0,0" TextWrapping="Wrap" Text="{Binding PortText}" VerticalAlignment="Top" Width="120"/>
+                <Button Command="{Binding SaveChangesButtonCommand}" Content="Zastosuj zmiany" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top" Width="107"/>
             </Grid>
         </GroupBox>
         <GroupBox Foreground="#FFFFFF" Header="Przechwytywanie" Height="175" Margin="10,2,5,0" VerticalAlignment="Top" Grid.Row="1">

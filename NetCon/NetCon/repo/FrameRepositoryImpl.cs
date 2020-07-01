@@ -16,20 +16,17 @@ namespace NetCon.repo
     {
         //Singleton boilerplate
         public static FrameRepositoryImpl instance { get; } = new FrameRepositoryImpl();
-
         private Subject<Frame> _subject = new Subject<Frame>();
         public Subject<Frame> FrameSubject => _subject;
-
         private Subject<CaptureState> captureState = new Subject<CaptureState>();
         public Subject<CaptureState> CaptureState => captureState;
-
         //TODO tu można zmienić implementację przechwytywacza ramek na jakiś mock   //////////////
         private INetCon netConService = new NetConImpl();
 
         //TODO można zrobić zmienną typu jakiegoś enum, która będzie informowała observerów o stanie przechwytywania (konfiguracje mdio, rozpoczęcie, etc. oraz błędy)
 
         //Konfiguracja filtrów
-        FiltersConfiguration<Frame> filtersConfig = new FiltersConfiguration<Frame>();
+       
 
         private FrameRepositoryImpl()
         {
@@ -41,25 +38,20 @@ namespace NetCon.repo
 
                 //TODO zaimplementować konwersję byte blob do obiektu klasy Frame. Wysłać przekonwertowaną ramkę do observerów
                 //TODO przepuścić ramkę przez filtry
-                var retFrame = new Frame(data);
 
-                if (filtersConfig.pass(retFrame))
-                {
-
-                }
-
-                _subject.pushNextValue(retFrame);
+                _subject.pushNextValue(new Frame(data));
 
                 return data.Length;
             });
         }
 
-        public void applyFilters(FiltersConfiguration<Frame> config)
+        //Deprecated configuracja i filtrowanie przeniesiona do FrameParsera
+        /*public void applyFilters(FiltersConfiguration<Frame> config)
         {
             filtersConfig = config;
-        }
+        }*/
 
-        public async void startCapture()
+        public async void InitCapture()
         {
             try
             {
@@ -72,7 +64,7 @@ namespace NetCon.repo
 
                 string[] strVec = new string[] { "NetCon.exe", "set", "3", "0" };
                 netConService.sendSettings(strVec);
-                captureState.pushNextValue(new repo.CaptureState.CaptureOn());
+                captureState.pushNextValue(new repo.CaptureState.CaptureInitialized());
                 await Task.Run(()=>netConService.startCapture());
                 
             }
@@ -83,20 +75,22 @@ namespace NetCon.repo
             
         }
 
-        public void stopCapture()
+        public void CloseCapture()
         {
-            captureState.pushNextValue(new repo.CaptureState.CaptureOff());
             netConService.stopCapture();
+            captureState.pushNextValue(new repo.CaptureState.CaptureClosed());
         }
 
-        public void resumeCapture()
-        {
+        public void StartCapture()
+        { 
             netConService.setCaptureState(true);
+            captureState.pushNextValue(new repo.CaptureState.CaptureOn());
         }
 
-        public void pauseCapture()
+        public void StopCapture()
         {
             netConService.setCaptureState(false);
+            captureState.pushNextValue(new repo.CaptureState.CaptureOff());
         }
     }
 }

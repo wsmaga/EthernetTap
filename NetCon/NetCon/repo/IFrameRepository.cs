@@ -1,10 +1,5 @@
-﻿using NetCon.model;
-using NetCon.util;
+﻿using NetCon.util;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetCon.repo
 {
@@ -13,6 +8,8 @@ namespace NetCon.repo
     {
         public class CaptureOn: CaptureState { }
         public class CaptureOff: CaptureState { }
+        public class CaptureInitialized: CaptureState { }
+        public class CaptureClosed: CaptureState { }
         public class CaptureError: CaptureState {
             private Exception error;
             public Exception Error { get { return error; } }
@@ -25,14 +22,11 @@ namespace NetCon.repo
 
     interface IFrameRepository<T>
     {
-
-        void applyFilters(FiltersConfiguration<T> config);
-        void startCapture();
-        void stopCapture();
-
-        void resumeCapture();
-        void pauseCapture();
-
+        //void applyFilters(FiltersConfiguration<T> config);
+        void InitCapture();
+        void CloseCapture();
+        void StartCapture();
+        void StopCapture();
         Subject<T> FrameSubject { get; }
         Subject<CaptureState> CaptureState { get; }
     }
