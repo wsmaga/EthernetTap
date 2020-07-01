@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetCon.parsing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,17 +8,30 @@ using System.Threading.Tasks;
 namespace NetCon.model
 {
     //TODO utworzyć klasy dla różnych rodzajów filtrów.
-    public class Filter<T>
+    [Serializable]
+    public class Filter
     {
-        Predicate<T> filterPredicate;
-        public Filter(Predicate<T> pred)
+        public readonly string filterString;
+        public int maxIndex { private set; get; }
+        public DataType targetDataType { private set; get; }
+        public int[] targetIndexes { private set; get; }
+        private PredicateTree filter;
+        public Filter(PredicateTree pred, int max_index, int[] target_indexes, DataType data_type, string filter_string)
         {
-            filterPredicate = pred;
+            filter = pred;
+            maxIndex = max_index;
+            targetIndexes = target_indexes;
+            targetDataType = data_type;
+            filterString = filter_string;
         }
-        public bool pass(T frame)
+        public bool pass(Frame frame)
         {
-            return filterPredicate(frame);
+            if (frame.RawData.Length <= maxIndex)
+                return false;
+            else
+                return filter.Pass(frame);
         }
+
         
     }
 }
