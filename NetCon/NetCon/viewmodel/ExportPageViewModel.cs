@@ -37,7 +37,8 @@ namespace NetCon.viewmodel
                     mainWindowSharedViewModel.logInfo("Odznaczono opcję eksportu do pliku *.pcap");
                 }
                 
-            } }
+            }
+        }
 
         public ExportPageViewModel(MainWindowViewModel sharedViewModel)
         {
@@ -45,7 +46,7 @@ namespace NetCon.viewmodel
 
             new SubjectObserver<Frame>(frame =>
             {
-                if (mPcapWriter.isInitialized)
+                if (mPcapWriter.isInitialized && FileExportOption)
                 {
                     mPcapWriter.WriteFrame(frame);
                 }
@@ -55,7 +56,7 @@ namespace NetCon.viewmodel
             {
                 if(state is CaptureState.CaptureOn)
                 {
-                    if (!mPcapWriter.isInitialized)
+                    if (!mPcapWriter.isInitialized && FileExportOption)
                         mPcapWriter.InitWrite("myFrames.pcap");
                 }
                 else if(state is CaptureState.CaptureOff)
