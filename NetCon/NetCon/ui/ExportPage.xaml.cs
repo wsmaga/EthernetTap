@@ -26,7 +26,13 @@ namespace NetCon.ui
         {
             InitializeComponent();
             viewModel = new ExportPageViewModel(sharedViewModel);
+            
             this.DataContext = viewModel;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ExportTargetPage.Navigate(ExportTargetSelector.SelectedItem);
         }
     }
 }

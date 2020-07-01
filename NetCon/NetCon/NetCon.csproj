@@ -78,6 +78,16 @@
     <Compile Include="repo\FiltersConfiguration.cs" />
     <Compile Include="repo\FrameRepositoryImpl.cs" />
     <Compile Include="repo\IFrameRepository.cs" />
+    <Compile Include="ui\Export pages\AzurePage.xaml.cs">
+      <DependentUpon>AzurePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ui\Export pages\ILabeled.cs" />
+    <Compile Include="ui\Export pages\LocalDatabasePage.xaml.cs">
+      <DependentUpon>LocalDatabasePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ui\Export pages\RemoteDatabasePage.xaml.cs">
+      <DependentUpon>RemoteDatabasePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="util\ConfigFileHandler.cs" />
     <Compile Include="ui\CapturePage.xaml.cs">
       <DependentUpon>CapturePage.xaml</DependentUpon>
@@ -108,6 +118,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ui\CapturePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ui\Export pages\AzurePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ui\Export pages\LocalDatabasePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ui\Export pages\RemoteDatabasePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

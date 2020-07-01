@@ -8,30 +8,133 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ExportPage">
 
-    <Grid Margin="10 10 0 0">
-
+    <Grid Margin="10,10,15,10" IsEnabled="{Binding IsExportEnabled}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="550"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <GroupBox Foreground="#FFFFFF" Grid.Row="0" Header="Eksport do Bazy Danych">
-            <Grid>
-                <Label Foreground="#FFFFFF" Content="TODO!"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox Foreground="#FFFFFF" Height="100" Grid.Row="1" Header="Eksport do pliku">
+        <!--  Export to file  -->
+        <GroupBox
+            Foreground="#FFFFFF"
+            Grid.Row="0"
+            Header="Eksport do pliku"
+            Margin="2,2,2,2"
+            >
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30*"/>
-                    <RowDefinition Height="47*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label Foreground="#FFFFFF" Content="Zapisuj ramki do pliku *.pcap" Margin="37,15,239,34" Grid.RowSpan="2"/>
-                <CheckBox IsChecked="{Binding FileExportOption}" Margin="228,23,192,20" Grid.RowSpan="2"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <WrapPanel Orientation="Horizontal" Grid.Column="0">
+                    <Label
+                        Foreground="#FFFFFF"
+                        Content="Zapisuj ramki do pliku *.pcap"
+                        Margin="2,2,2,2"
+                        VerticalAlignment="Center"
+                        />
+                    <CheckBox
+                        IsChecked="{Binding FileExportOption}"
+                        Margin="2,2,2,2"
+                        VerticalAlignment="Center"
+                        />
+                </WrapPanel>
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label
+                        Foreground="#FFFFFF"
+                        Content="Nazwa pliku:"
+                        Grid.Column="0"
+                        Margin="2,2,2,2"
+                        VerticalAlignment="Center"
+                    />
+                    <TextBox
+                        Text="{Binding FileExportName}"
+                        Grid.Column="1"
+                        Margin="2,2,2,2"
+                        VerticalAlignment="Center"
+                        />
+                </Grid>
+            </Grid>
+        </GroupBox>
+
+        <!--  Export to data storage systems  -->
+        <GroupBox
+            Foreground="#FFFFFF"
+            Grid.Row="1"
+            Header="Eksport do systemów magazynowania danych"
+            Margin="2,2,2,2"
+            >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <WrapPanel
+                        Grid.Column="0"
+                        VerticalAlignment="Stretch"
+                        Background="Gray"
+                        Margin="1"
+                        >
+                        <WrapPanel
+                            Orientation="Vertical"
+                            Margin="4"
+                            >
+                            <WrapPanel>
+                                <Label
+                                    Foreground="#FFFFFF"
+                                    Content="Zapisuj dane do systemu&#10;magazynowania danych"
+                                    Margin="2,2,2,2"
+                                    VerticalAlignment="Center"
+                                />
+                                <CheckBox
+                                    IsChecked="{Binding StorageExportOption}"
+                                    Margin="2,2,2,2"
+                                    VerticalAlignment="Center"
+                                />
+                            </WrapPanel>
+                            <Label
+                                Content="Cel eksportu:"
+                                Foreground="White"
+                                Margin="2"
+                                />
+                            <ComboBox
+                                Height="20"
+                                FontSize="11"
+                                Margin="2"
+                                ItemsSource="{Binding Pages}"
+                                DisplayMemberPath="Label"
+                                SelectionChanged="ComboBox_SelectionChanged"
+                                x:Name="ExportTargetSelector"
+                                >
+                            
+                            </ComboBox>
+                        </WrapPanel>
+                    </WrapPanel>
+                    <Frame
+                        Grid.Column="1"
+                        x:Name="ExportTargetPage"
+                        Margin="2"
+                        />
+                </Grid>
             </Grid>
         </GroupBox>
 

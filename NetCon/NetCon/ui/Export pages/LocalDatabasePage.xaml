@@ -1,0 +1,60 @@
+﻿<Page x:Class="NetCon.ui.Export_pages.LocalDatabasePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NetCon.ui.Export_pages"
+      mc:Ignorable="d" 
+      Title="LocalDatabasePage"
+      d:DesignHeight="300" d:DesignWidth="300"
+      >
+
+    <Viewbox
+        VerticalAlignment="Top"
+        Margin="2"
+        >
+        <WrapPanel
+            Orientation="Vertical"
+            >
+            <Label
+                Content="Utwórz lub wczytaj lokalną bazę&#10;danych MS SQL z pliku *.mdf."
+                Foreground="White"
+                FontWeight="Bold"   
+                />
+            <Label
+                Content="Plik bazy danych:"
+                Foreground="White"
+                Margin="0,10,0,0"
+                />
+            <Grid Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox
+                    Text="{Binding FileURL}"
+                    VerticalContentAlignment="Center"
+                    VerticalAlignment="Stretch"
+                    Grid.Column="0"
+                    MaxWidth="150"
+                    />
+                <Button
+                    Content="Przeglądaj"
+                    Grid.Column="1"
+                    Padding="6,2,6,2"
+                    x:Name="BtnFileSelector"
+                    Click="BtnFileSelector_Click"
+                    />
+            </Grid>
+            <Button
+                Content="Sprawdź połączenie"
+                Margin="0,50,0,0"
+                HorizontalAlignment="Left"
+                Padding="4"
+                x:Name="BtnConnectionCheck"
+                Click="BtnConnectionCheck_Click"
+                />
+        </WrapPanel>
+    </Viewbox>
+</Page>
