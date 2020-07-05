@@ -1,4 +1,5 @@
-﻿using NetCon.util;
+﻿using NetCon.model;
+using NetCon.util;
 using System;
 
 namespace NetCon.repo
@@ -29,5 +30,6 @@ namespace NetCon.repo
         void StopCapture();
         Subject<T> FrameSubject { get; }
         Subject<CaptureState> CaptureState { get; }
+        Subject<T> EthernetFrameSubject { get; }
     }
 }

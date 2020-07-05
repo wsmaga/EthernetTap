@@ -43,7 +43,7 @@ namespace NetCon.viewmodel
             new SubjectObserver<Frame>(frame =>
             {
                 FramesCounter++;
-            }).Subscribe(frameParser.EthernetFrameSubject);
+            }).Subscribe(mFramesRepository.EthernetFrameSubject);
 
             new SubjectObserver<CaptureState>(state =>
             {

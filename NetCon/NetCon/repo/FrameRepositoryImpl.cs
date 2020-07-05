@@ -18,6 +18,8 @@ namespace NetCon.repo
         public static FrameRepositoryImpl instance { get; } = new FrameRepositoryImpl();
         private Subject<Frame> _subject = new Subject<Frame>();
         public Subject<Frame> FrameSubject => _subject;
+        private Subject<Frame> _ethernetFrameSubject = new Subject<Frame>();
+        public Subject<Frame> EthernetFrameSubject => _ethernetFrameSubject;
         private Subject<CaptureState> captureState = new Subject<CaptureState>();
         public Subject<CaptureState> CaptureState => captureState;
         //TODO tu można zmienić implementację przechwytywacza ramek na jakiś mock   //////////////

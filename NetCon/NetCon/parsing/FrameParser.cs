@@ -20,7 +20,8 @@ namespace NetCon.parsing
         private int FrameLength=-1;
         private enum FType {NONE, IPV4, ARP};
         private FType FrameType=FType.NONE;
-        public Subject<Frame> EthernetFrameSubject=new Subject<Frame>();
+
+        private IFrameRepository<Frame> frameRepository = FrameRepositoryImpl.instance;  // To access common EthernetFrameSubject
 
         FiltersConfiguration filtersConfig;
         public FrameParser(Subject<Frame> _subject)
@@ -122,7 +123,7 @@ namespace NetCon.parsing
             {
                 frame.usefulData = GetUsefulData(passedFilter.targetIndexes,frame.RawData);
                 frame.usefulDataType = passedFilter.targetDataType;
-                EthernetFrameSubject.pushNextValue(frame);
+                frameRepository.EthernetFrameSubject.pushNextValue(frame);
             }
                 
         }
