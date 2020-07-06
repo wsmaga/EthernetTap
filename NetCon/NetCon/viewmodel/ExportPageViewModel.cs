@@ -15,16 +15,42 @@ using System.Windows.Controls;
 
 namespace NetCon.viewmodel
 {
-    public class ExportPageViewModel : INotifyPropertyChanged
+    /// <summary>
+    /// Possible data export targets.
+    /// </summary>
+    public enum ExportTargetDesc
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        LocalDB,
+        ExternalDB,
+        Azure
+    }
+    
+    /// <summary>
+    /// Represents a single data export target combobox item.
+    /// Value - enum value of an item. Desc - user-friendly description to be shown in combobox.
+    /// </summary>
+    public class ComboBoxItem
+    {
+        public ExportTargetDesc Value { get; set; }
+        public String Desc { get; set; }
+    }
+
+    public class ExportPageViewModel
+    {
+        /// <summary>
+        /// Data export target combobox items.
+        /// </summary>
+        public ComboBoxItem[] ComboBoxItems { get; } =
+        {
+            new ComboBoxItem{ Value = ExportTargetDesc.LocalDB, Desc = "Lokalna baza MSSQL" },
+            new ComboBoxItem{ Value = ExportTargetDesc.ExternalDB, Desc = "Zewnętrzna baza danych" },
+            new ComboBoxItem{ Value = ExportTargetDesc.Azure, Desc = "Azure" }
+        };
 
         private MainWindowViewModel mainWindowSharedViewModel;
         private IPcapWriter<model.Frame> mPcapWriter = new PcapWriterImpl();
 
         private IFrameRepository<model.Frame> mFramesRepository = FrameRepositoryImpl.instance;
-
-        public List<Page> Pages { get; } = new List<Page>();
 
         public String FileURL { get; set; } = null;
 
@@ -87,11 +113,6 @@ namespace NetCon.viewmodel
         {
             // Shared viewmodel of main window:
             mainWindowSharedViewModel = sharedViewModel;
-
-            // Add all subpages:
-            Pages.Add(new LocalDatabasePage(this));
-            Pages.Add(new RemoteDatabasePage(this));
-            Pages.Add(new AzurePage(this));
 
             new SubjectObserver<model.Frame>(frame =>
             {

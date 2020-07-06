@@ -89,7 +89,6 @@
     <Compile Include="ui\Export pages\AzurePage.xaml.cs">
       <DependentUpon>AzurePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ui\Export pages\ILabeled.cs" />
     <Compile Include="ui\Export pages\LocalDatabasePage.xaml.cs">
       <DependentUpon>LocalDatabasePage.xaml</DependentUpon>
     </Compile>

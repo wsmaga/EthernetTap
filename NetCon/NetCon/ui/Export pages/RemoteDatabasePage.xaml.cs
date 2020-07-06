@@ -19,14 +19,12 @@ namespace NetCon.ui.Export_pages
     /// <summary>
     /// Interaction logic for RemoteDatabasePage.xaml
     /// </summary>
-    public partial class RemoteDatabasePage : Page, ILabeled
+    public partial class RemoteDatabasePage : Page
     {
         public RemoteDatabasePage(ExportPageViewModel viewmodel)
         {
             InitializeComponent();
             this.DataContext = viewmodel;
         }
-
-        public string Label { get; } = "Zdalna baza danych";
     }
 }

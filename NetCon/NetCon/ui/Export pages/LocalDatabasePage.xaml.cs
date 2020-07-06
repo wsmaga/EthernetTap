@@ -9,20 +9,16 @@ namespace NetCon.ui.Export_pages
     /// <summary>
     /// Interaction logic for LocalDatabasePage.xaml
     /// </summary>
-    public partial class LocalDatabasePage : Page, ILabeled
+    public partial class LocalDatabasePage : Page
     {
         private ExportPageViewModel ViewModel;
 
-        
-        
         public LocalDatabasePage(ExportPageViewModel viewmodel)
         {
             InitializeComponent();
             ViewModel = viewmodel;
             this.DataContext = ViewModel;
         }
-
-        public string Label { get; } = "Lokalna baza danych";
 
         private void BtnFileSelector_Click(object sender, RoutedEventArgs e)
         {
@@ -37,7 +33,6 @@ namespace NetCon.ui.Export_pages
             {
                 ViewModel.FileURL = dialog.FileName;
             }
-
         }
 
         private void BtnConnectionCheck_Click(object sender, RoutedEventArgs e)

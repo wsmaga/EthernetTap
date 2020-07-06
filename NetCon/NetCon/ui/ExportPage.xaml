@@ -120,8 +120,8 @@
                                 Height="20"
                                 FontSize="11"
                                 Margin="2"
-                                ItemsSource="{Binding Pages}"
-                                DisplayMemberPath="Label"
+                                ItemsSource="{Binding ComboBoxItems}"
+                                DisplayMemberPath="Desc"
                                 SelectionChanged="ComboBox_SelectionChanged"
                                 x:Name="ExportTargetSelector"
                                 >

@@ -19,7 +19,7 @@ namespace NetCon.ui.Export_pages
     /// <summary>
     /// Interaction logic for AzurePage.xaml
     /// </summary>
-    public partial class AzurePage : Page, ILabeled
+    public partial class AzurePage : Page
     {
 
         public AzurePage(ExportPageViewModel viewmodel)
@@ -27,7 +27,5 @@ namespace NetCon.ui.Export_pages
             InitializeComponent();
             this.DataContext = viewmodel;
         }
-
-        public string Label { get; } = "Chmura Azure";
     }
 }
