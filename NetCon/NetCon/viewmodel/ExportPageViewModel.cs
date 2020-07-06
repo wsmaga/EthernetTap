@@ -58,7 +58,13 @@ namespace NetCon.viewmodel
             }
         }
 
+        /// <summary>
+        /// <see cref="FileExportOption"/>
+        /// </summary>
         private bool _fileExportOption = false;
+        /// <summary>
+        /// If true - frames will be exported to a *.pcap file.
+        /// </summary>
         public bool FileExportOption
         { 
             get => _fileExportOption;
