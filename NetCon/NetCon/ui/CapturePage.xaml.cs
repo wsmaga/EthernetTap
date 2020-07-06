@@ -1,4 +1,4 @@
-﻿using NetCon.viewmodel;
+﻿using NetCon.ViewModel;
 using System.Windows.Controls;
 
 namespace NetCon.ui

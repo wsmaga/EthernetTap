@@ -4,16 +4,25 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="Database_x0020_design_x0020_EDM.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="Database_x0020_design_x0020_EDMTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="Database_x0020_design_x0020_EDM.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Database_x0020_design_x0020_EDMStoreContainer">
+    <EntitySet Name="ByteMeasurementSet" EntityType="Database_x0020_design_x0020_EDM.Store.ByteMeasurementSet" store:Type="Tables" Schema="dbo" />
+  </EntityContainer>
+  <EntityType Name="ByteMeasurementSet">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MeasurementID" Type="int" Nullable="false" />
+    <Property Name="Timestamp" Type="datetime" Nullable="false" />
+    <Property Name="Value" Type="tinyint" Nullable="false" />
+  </EntityType>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Database_x0020_design_x0020_EDM" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
-        <EntityContainer Name="Database_x0020_design_x0020_EDMContainer" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="ByteMeasurementSet" EntityType="Database_x0020_design_x0020_EDM.ByteMeasurement" />
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="EntityContainerNamespace" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="EntityContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ByteMeasurementSet" EntityType="EntityContainerNamespace.ByteMeasurement" />
         </EntityContainer>
         <EntityType Name="ByteMeasurement">
           <Key>
@@ -28,13 +37,20 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="Database_x0020_design_x0020_EDM" />
-        <Alias Key="Target" Value="Database_x0020_design_x0020_EDM.Store" />
-        <EntityContainerMapping CdmEntityContainer="Database_x0020_design_x0020_EDMContainer" StorageEntityContainer="Database_x0020_design_x0020_EDMTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Database_x0020_design_x0020_EDMStoreContainer" CdmEntityContainer="EntityContainer">
+    <EntitySetMapping Name="ByteMeasurementSet">
+      <EntityTypeMapping TypeName="IsTypeOf(EntityContainerNamespace.ByteMeasurement)">
+        <MappingFragment StoreEntitySet="ByteMeasurementSet">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="MeasurementID" ColumnName="MeasurementID" />
+          <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -48,6 +64,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

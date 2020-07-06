@@ -1,6 +1,6 @@
 ﻿using NetCon.inter;
 using NetCon.ui;
-using NetCon.viewmodel;
+using NetCon.ViewModel;
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;

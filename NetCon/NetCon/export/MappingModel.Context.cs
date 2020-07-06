@@ -13,10 +13,10 @@ namespace NetCon.export
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Database_x0020_design_x0020_EDMContainer : DbContext
+    public partial class EntityContainer : DbContext
     {
-        public Database_x0020_design_x0020_EDMContainer()
-            : base("name=Database_x0020_design_x0020_EDMContainer")
+        public EntityContainer()
+            : base("name=EntityContainer")
         {
         }
     

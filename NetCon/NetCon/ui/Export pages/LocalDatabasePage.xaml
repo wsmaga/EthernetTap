@@ -17,7 +17,7 @@
             Orientation="Vertical"
             >
             <Label
-                Content="Utwórz lub wczytaj lokalną bazę&#10;danych MS SQL z pliku *.mdf."
+                Content="Wybierz lokalną bazę danych&#10;z pliku *.mdf."
                 Foreground="White"
                 FontWeight="Bold"   
                 />
@@ -33,11 +33,12 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox
-                    Text="{Binding FileURL}"
+                    Text="{Binding FileURLLabel, Mode=TwoWay}"
                     VerticalContentAlignment="Center"
                     VerticalAlignment="Stretch"
                     Grid.Column="0"
-                    MaxWidth="150"
+                    MaxWidth="118"
+                    TextWrapping="NoWrap"
                     />
                 <Button
                     Content="Przeglądaj"

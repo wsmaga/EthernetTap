@@ -1,4 +1,4 @@
-﻿using NetCon.viewmodel;
+﻿using NetCon.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

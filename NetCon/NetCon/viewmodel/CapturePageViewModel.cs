@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace NetCon.viewmodel
+namespace NetCon.ViewModel
 {
     class CapturePageViewModel : INotifyPropertyChanged
     {

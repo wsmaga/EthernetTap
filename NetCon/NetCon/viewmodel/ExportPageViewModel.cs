@@ -8,18 +8,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Entity.Core.Mapping;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace NetCon.viewmodel
+namespace NetCon.ViewModel
 {
     /// <summary>
     /// Possible data export targets.
     /// </summary>
     public enum ExportTargetDesc
     {
+        NONE,
         LocalDB,
         ExternalDB,
         Azure
@@ -35,24 +37,45 @@ namespace NetCon.viewmodel
         public String Desc { get; set; }
     }
 
-    public class ExportPageViewModel
+    public class ExportPageViewModel : INotifyPropertyChanged
     {
+        // TODO: Contain all exporters, their descriptions and enums in a single class.
+        
         /// <summary>
         /// Data export target combobox items.
         /// </summary>
-        public ComboBoxItem[] ComboBoxItems { get; } =
+        public List<ComboBoxItem> ComboBoxItems { get; } = new List<ComboBoxItem>
         {
             new ComboBoxItem{ Value = ExportTargetDesc.LocalDB, Desc = "Lokalna baza MSSQL" },
             new ComboBoxItem{ Value = ExportTargetDesc.ExternalDB, Desc = "Zewnętrzna baza danych" },
             new ComboBoxItem{ Value = ExportTargetDesc.Azure, Desc = "Azure" }
         };
 
+        private ExportTargetDesc CurrentExportTarget { get; set; } = ExportTargetDesc.NONE;
+
+        LocalDBExporter localDBExporter = new LocalDBExporter();
+
+        internal void DEBUG_SendByte(byte data)
+        {
+            localDBExporter.StoreByte(data);
+        }
+
+        internal void SetCurrentExportTarget(ExportTargetDesc newTarget)
+        {
+            CurrentExportTarget = newTarget;
+        }
+
+        internal void SetMdfFilePath(string path)
+        {
+            localDBExporter.SetMdfFile(path);
+        }
+
         private MainWindowViewModel mainWindowSharedViewModel;
         private IPcapWriter<model.Frame> mPcapWriter = new PcapWriterImpl();
 
         private IFrameRepository<model.Frame> mFramesRepository = FrameRepositoryImpl.instance;
 
-        public String FileURL { get; set; } = null;
+        public String FileURLLabel { get; set; } = "";
 
         /// <summary>
         /// Name of the frames export file, used by IPcapWriterImpl.
@@ -88,6 +111,9 @@ namespace NetCon.viewmodel
         /// <see cref="FileExportOption"/>
         /// </summary>
         private bool _fileExportOption = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         /// <summary>
         /// If true - frames will be exported to a *.pcap file.
         /// </summary>

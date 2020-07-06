@@ -55,7 +55,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,7 +77,28 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="export\ByteMeasurement.cs">
+      <DependentUpon>MappingModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="export\Database design EDM.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Database design EDM.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="export\EntityContainerExtend.cs" />
+    <Compile Include="export\IDataExporter.cs" />
     <Compile Include="export\IPcapWriter.cs" />
+    <Compile Include="export\LocalDBExporter.cs" />
+    <Compile Include="export\MappingModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MappingModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="export\MappingModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MappingModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="export\PcapWriterImpl.cs" />
     <Compile Include="interface\INetCon.cs" />
     <Compile Include="interface\NetConImpl.cs" />
@@ -167,6 +191,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EntityDeploy Include="export\Database design EDM.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Database design EDM.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="export\Database design EDM.edmx.diagram">
+      <DependentUpon>Database design EDM.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -178,6 +209,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\images\RJ45M8P1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="export\Database init DDL script.sql" />
+    <Content Include="export\MappingModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MappingModel.Context.cs</LastGenOutput>
+      <DependentUpon>Database design EDM.edmx</DependentUpon>
+    </Content>
+    <Content Include="export\MappingModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MappingModel.cs</LastGenOutput>
+      <DependentUpon>Database design EDM.edmx</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.1.1\build\Fody.targets" Condition="Exists('..\packages\Fody.6.1.1\build\Fody.targets')" />

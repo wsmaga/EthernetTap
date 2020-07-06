@@ -1,5 +1,5 @@
 ﻿using NetCon.ui.Export_pages;
-using NetCon.viewmodel;
+using NetCon.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,20 +24,20 @@ namespace NetCon.ui
     {
         private Page[] Subpages { get; }
         
-        private ExportPageViewModel viewModel;
+        private ExportPageViewModel ViewModel;
         public ExportPage(MainWindowViewModel sharedViewModel)
         {
             InitializeComponent();
-            viewModel = new ExportPageViewModel(sharedViewModel);
+            ViewModel = new ExportPageViewModel(sharedViewModel);
             
-            this.DataContext = viewModel;
+            this.DataContext = ViewModel;
 
             // Initialize all subpages:
             Subpages = new Page[]
             {
-                new LocalDatabasePage(viewModel),
-                new RemoteDatabasePage(viewModel),
-                new AzurePage(viewModel)
+                new LocalDatabasePage(ViewModel),
+                new RemoteDatabasePage(ViewModel),
+                new AzurePage(ViewModel)
             };
         }
 
@@ -48,7 +48,8 @@ namespace NetCon.ui
         /// <param name="e"></param>
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            NetCon.viewmodel.ComboBoxItem selected = (NetCon.viewmodel.ComboBoxItem)ExportTargetSelector.SelectedItem;
+            ViewModel.ComboBoxItem selected = (NetCon.ViewModel.ComboBoxItem)ExportTargetSelector.SelectedItem;
+            ViewModel.SetCurrentExportTarget(selected.Value);
             switch (selected.Value)
             {
                 case ExportTargetDesc.LocalDB:
