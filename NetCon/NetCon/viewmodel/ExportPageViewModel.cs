@@ -51,6 +51,11 @@ namespace NetCon.ViewModel
             new ComboBoxItem{ Value = ExportTargetDesc.Azure, Desc = "Azure" }
         };
 
+        internal bool CheckConnectionLocalDB()
+        {
+            return localDBExporter.CanConnect;
+        }
+
         private ExportTargetDesc CurrentExportTarget { get; set; } = ExportTargetDesc.NONE;
 
         LocalDBExporter localDBExporter = new LocalDBExporter();
@@ -148,6 +153,27 @@ namespace NetCon.ViewModel
                 }
             }).Subscribe(mFramesRepository.FrameSubject);
 
+            new SubjectObserver<model.Frame>(frame =>
+            {
+                if (StorageExportOption)
+                {
+                    switch (CurrentExportTarget)
+                    {
+                        case ExportTargetDesc.LocalDB:
+                            switch (frame.usefulDataType)
+                            {
+                                case DataType.Bytes:
+                                    if (!localDBExporter.StoreByte(frame.usefulData[0]))
+                                        mainWindowSharedViewModel.logError("Some or all data couldn't be stored!");
+                                    break;
+                                // TODO: Add remaining data types.
+                            }
+                            break;
+                            // TODO: Add remaining exporters.
+                    }
+                }
+            }).Subscribe(mFramesRepository.EthernetFrameSubject);
+
             new SubjectObserver<CaptureState>(state =>
             {
                 if(state is CaptureState.CaptureOn)
@@ -156,12 +182,34 @@ namespace NetCon.ViewModel
                         mPcapWriter.InitWrite(FileExportName);
 
                     IsExportEnabled = false;
+                    if (StorageExportOption)
+                    {
+                        switch (CurrentExportTarget)
+                        {
+                            case ExportTargetDesc.LocalDB:
+                                localDBExporter.StartNewStoring();
+                                break;
+                                // TODO: Add remaining exporters.
+                        }
+                    }
                 }
                 else if(state is CaptureState.CaptureOff)
                 {
                     if (mPcapWriter.isInitialized)
                         mPcapWriter.EndWrite();
 
+                    if (StorageExportOption)
+                    {
+                        switch (CurrentExportTarget)
+                        {
+                            case ExportTargetDesc.LocalDB:
+                                if (!localDBExporter.FinishStoring())
+                                    mainWindowSharedViewModel.logError("Some or all data couldn't be stored!");
+                                break;
+                                // TODO: Add remaining exporters.
+                        }
+                    }
+                    
                     IsExportEnabled = true;
                 }
             }).Subscribe(mFramesRepository.CaptureState);

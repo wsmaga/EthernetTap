@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace NetCon.export
 {
+    public static class IDataExporterSettings
+    {
+        readonly public static int DATA_TO_BUFFER_NUM = 10;
+    }
+
     /// <summary>
     /// Interface of a data exporter that can send data to an external storage like a database.
     /// </summary>
@@ -20,6 +25,6 @@ namespace NetCon.export
         /// Stores a single byte in the storage system.
         /// </summary>
         /// <param name="data">Data to be stored.</param>
-        void StoreByte(byte data);
+        bool StoreByte(byte data);
     }
 }

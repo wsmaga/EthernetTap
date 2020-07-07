@@ -34,6 +34,12 @@ namespace NetCon.ViewModel
             bottomTextColor = MainWindow.INFO_COLOR;
         }
 
+        public void logError(string errorText)
+        {
+            bottomText = errorText;
+            bottomTextColor = MainWindow.ERROR_COLOR;
+        }
+
         public MainWindowViewModel()
         {
 

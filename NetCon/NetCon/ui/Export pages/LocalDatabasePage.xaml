@@ -17,7 +17,7 @@
             Orientation="Vertical"
             >
             <Label
-                Content="Wybierz lokalną bazę danych&#10;z pliku *.mdf."
+                Content="Wybierz lokalną bazę danych z pliku *.mdf."
                 Foreground="White"
                 FontWeight="Bold"   
                 />
@@ -37,7 +37,7 @@
                     VerticalContentAlignment="Center"
                     VerticalAlignment="Stretch"
                     Grid.Column="0"
-                    MaxWidth="118"
+                    MaxWidth="173"
                     TextWrapping="NoWrap"
                     />
                 <Button

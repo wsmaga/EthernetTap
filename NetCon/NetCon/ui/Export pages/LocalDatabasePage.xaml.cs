@@ -33,15 +33,24 @@ namespace NetCon.ui.Export_pages
             {
                 ViewModel.SetMdfFilePath(dialog.FileName);
                 ViewModel.FileURLLabel = dialog.FileName;
-                
             }
         }
 
         private void BtnConnectionCheck_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Implement
-            byte data = 69;
-            ViewModel.DEBUG_SendByte(data);
+            if(ViewModel.CheckConnectionLocalDB())
+            {
+                MessageBox.Show("Connection OK", "", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Connection couldn't be established! The database has invalid schema, is not online or authentication failed.",
+                    "FAILED TO CONNECT",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                    );
+            }
         }
     }
 }

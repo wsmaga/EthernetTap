@@ -23,6 +23,7 @@ namespace NetCon
 
         public const string INFO_COLOR = "#0779e4";
         public const string ACTION_COLOR = "#ff5200";
+        public const string ERROR_COLOR = "#ff0000";
 
         public MainWindowViewModel mMainWindowViewModel;
 
