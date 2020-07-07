@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity.Core;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Linq;
@@ -33,8 +34,15 @@ namespace NetCon.export
                         Timestamp = DateTime.Now
                     }
                     );
-                if (!(Context.SaveChanges() == 1))
+                try
+                {
+                    if (!(Context.SaveChanges() == 1))
+                        return false;
+                }
+                catch(EntityException e)
+                {
                     return false;
+                }
 
                 // Is it possible to find and remove said data?
                 try
@@ -52,6 +60,10 @@ namespace NetCon.export
                     return false;
                 }
                 catch(InvalidOperationException e)
+                {
+                    return false;
+                }
+                catch (EntityException e)
                 {
                     return false;
                 }
