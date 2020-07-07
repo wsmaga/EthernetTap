@@ -39,6 +39,7 @@
                     Grid.Column="0"
                     MaxWidth="173"
                     TextWrapping="NoWrap"
+                    IsReadOnly="True"
                     />
                 <Button
                     Content="Przeglądaj"
