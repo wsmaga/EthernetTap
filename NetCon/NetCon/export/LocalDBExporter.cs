@@ -39,13 +39,19 @@ namespace NetCon.export
                 // Is it possible to find and remove said data?
                 try
                 {
-                    ByteMeasurement temp = Context.ByteMeasurementSet.Where(element => element.MeasurementID == -1).First<ByteMeasurement>();
+                    ByteMeasurement temp = Context.ByteMeasurementSet
+                        .Where(element => element.MeasurementID == -1)
+                        .First<ByteMeasurement>();
 
                     Context.ByteMeasurementSet.Remove(temp);
                     if (!(Context.SaveChanges() == 1))
                         return false;
                 }
                 catch(ArgumentNullException e)
+                {
+                    return false;
+                }
+                catch(InvalidOperationException e)
                 {
                     return false;
                 }
@@ -114,7 +120,7 @@ namespace NetCon.export
 
         public void StartNewStoring()
         {
-            int maxMeasurementID = 0;
+            int maxMeasurementID = -1;
 
             try
             {
@@ -126,6 +132,7 @@ namespace NetCon.export
 
             }
             catch (ArgumentNullException e) { }
+            catch (InvalidOperationException e) { }
 
             CurrentMeasurementID = maxMeasurementID + 1;
         }

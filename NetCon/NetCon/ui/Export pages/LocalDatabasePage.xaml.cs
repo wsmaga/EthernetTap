@@ -25,7 +25,7 @@ namespace NetCon.ui.Export_pages
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "Plik bazy danych|*.mdf";
             dialog.DefaultExt = "mdf";
-            dialog.Title = "Select database file location";
+            dialog.Title = "Wybierz plik lokalnej bazy danych";
             dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
             dialog.ValidateNames = false;
 
@@ -40,13 +40,13 @@ namespace NetCon.ui.Export_pages
         {
             if(ViewModel.CheckConnectionLocalDB())
             {
-                MessageBox.Show("Connection OK", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Test połączenia OK", "", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
                 MessageBox.Show(
-                    "Connection couldn't be established! The database has invalid schema, is not online or authentication failed.",
-                    "FAILED TO CONNECT",
+                    "Test połączenia nie powiódł się! Wybrana baza danych ma niewłaściwą strukturę, nie jest online lub nie powiodła się autentykacja.",
+                    "NIEPOWODZENIE",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                     );
