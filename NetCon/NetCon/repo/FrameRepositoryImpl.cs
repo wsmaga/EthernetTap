@@ -21,7 +21,8 @@ namespace NetCon.repo
         private Subject<CaptureState> captureState = new Subject<CaptureState>();
         public Subject<CaptureState> CaptureState => captureState;
         //TODO tu można zmienić implementację przechwytywacza ramek na jakiś mock   //////////////
-        private INetCon netConService = new NetConImpl();
+       // private INetCon netConService = new NetConImpl();
+        private INetCon netConService = new NetConMockImpl();
 
         //TODO można zrobić zmienną typu jakiegoś enum, która będzie informowała observerów o stanie przechwytywania (konfiguracje mdio, rozpoczęcie, etc. oraz błędy)
 
