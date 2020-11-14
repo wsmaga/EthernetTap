@@ -4,6 +4,7 @@
 #include "filters.h"
 #include <io.h>
 #include <fcntl.h>  //for _O_RDONLY
+#include <algorithm>
 
 struct Filter {
 	uint8_t c1;
