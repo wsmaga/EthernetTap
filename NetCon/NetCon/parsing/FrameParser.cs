@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 
 namespace NetCon.parsing
 {
-    public enum Operation { NONE, AND, OR }
     class FrameParser
     {
         static string testFilterString = "<Condition>And([20]=08,[21]=06)</Condition>\n\r" +
