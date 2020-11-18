@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace NetCon.parsing
 {
     public enum Operation { NONE, AND, OR }
+
     public class PredicateTree
     {
         Operation operation;

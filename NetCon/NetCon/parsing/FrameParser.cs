@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace NetCon.parsing
 {
+    public enum Operation { NONE, AND, OR }
     class FrameParser
     {
         static string testFilterString = "<Condition>And([20]=08,[21]=06)</Condition>\n\r" +
@@ -27,6 +28,7 @@ namespace NetCon.parsing
             /*FiltersConfiguration.Builder builder = new FiltersConfiguration.Builder();
             builder.AddFilter(LoadFilter(testFilterString)); //Enumerable.SequenceEqual(frame.SrcMac,new byte[] {0,1,5,27,159,150}))
             filtersConfig = new FiltersConfiguration(builder);*/
+
             new SubjectObserver<Frame>(Frame =>
             {
                 ParseFrame(BitConverter.ToString(Frame.RawData).Replace("-", "").ToLower());
@@ -172,6 +174,7 @@ namespace NetCon.parsing
                     }
                     int[] targetIndexes = GetTargetIndexes(targetInput);
                     DataType targetDataType = GetTargetDataType(targetDataTypeInput);
+
                     if (targetIndexes.Length>0 && targetDataType!=DataType.NONE && maxIndex!=-1)
                     {
                         return new Filter(predicate, maxIndex, targetIndexes, targetDataType, input);
@@ -189,7 +192,6 @@ namespace NetCon.parsing
         }
         static private int[] GetTargetIndexes(string input)
         {
-            
             Regex rSplitIndexes = new Regex(@"\[\d+\]");
             MatchCollection matches = rSplitIndexes.Matches(input);
             int[] result = new int[matches.Count];
