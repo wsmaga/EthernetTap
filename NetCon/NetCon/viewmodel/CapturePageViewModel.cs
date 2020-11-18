@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -150,8 +152,38 @@ namespace NetCon.viewmodel
 
         private void startCapture()
         {
+            if(File.Exists("filters.bin"))
+            {
+                FileStream stream = new FileStream("filters.bin", FileMode.Open);
+                BinaryFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    List<string> loadedFilters = (List<string>)formatter.Deserialize(stream);
+                    FiltersConfiguration.Builder builder = new FiltersConfiguration.Builder();
+                    foreach (string s in loadedFilters)
+                    {
+                        builder.AddFilter(FrameParser.LoadFilter(s));
+                    }
+                    frameParser.LoadFilterConfiguration(new FiltersConfiguration(builder));
+                    mFramesRepository.StartCapture();
+                }
+                catch(SerializationException)
+                {
+                    if(MessageBox.Show("Deserializacja filtrow z pliku jest niemożliwa. Filtry nie zostana zaladowane. Czy na pewno chcesz rozpoczac przechwytywanie?","Brak filtrow",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        mFramesRepository.StartCapture();
+                    }
+                }
+            }
+            else
+            {
+                if (MessageBox.Show("Nie istnieje plik. Filtry nie zostana zaladowane. Czy na pewno chcesz rozpoczac przechwytywanie?", "Brak filtrow", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    mFramesRepository.StartCapture();
+                }
+            }
             //TODO przeciążyć start capture o port i rozmiar bufora
-            mFramesRepository.StartCapture();
+
         }
 
         private void stopCapture()

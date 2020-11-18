@@ -22,12 +22,13 @@ namespace NetCon.parsing
         private FType FrameType=FType.NONE;
         public Subject<Frame> EthernetFrameSubject=new Subject<Frame>();
 
-        FiltersConfiguration filtersConfig;
+        private FiltersConfiguration filtersConfig;
         public FrameParser(Subject<Frame> _subject)
         {
-            FiltersConfiguration.Builder builder = new FiltersConfiguration.Builder();
+            /*FiltersConfiguration.Builder builder = new FiltersConfiguration.Builder();
             builder.AddFilter(LoadFilter(testFilterString)); //Enumerable.SequenceEqual(frame.SrcMac,new byte[] {0,1,5,27,159,150}))
-            filtersConfig = new FiltersConfiguration(builder);
+            filtersConfig = new FiltersConfiguration(builder);*/
+
             new SubjectObserver<Frame>(Frame =>
             {
                 ParseFrame(BitConverter.ToString(Frame.RawData).Replace("-", "").ToLower());
@@ -117,14 +118,16 @@ namespace NetCon.parsing
         }
         private void FilterFrame(Frame frame)
         {
-            Filter passedFilter = filtersConfig.pass(frame);
-            if (passedFilter!=null)
-            {
-                frame.usefulData = GetUsefulData(passedFilter.targetIndexes,frame.RawData);
-                frame.usefulDataType = passedFilter.targetDataType;
-                EthernetFrameSubject.pushNextValue(frame);
+            if (filtersConfig != null)
+            { 
+                Filter passedFilter = filtersConfig.pass(frame);
+                if (passedFilter!=null)
+                {
+                    frame.usefulData = GetUsefulData(passedFilter.targetIndexes,frame.RawData);
+                    frame.usefulDataType = passedFilter.targetDataType;
+                    EthernetFrameSubject.pushNextValue(frame);
+                }
             }
-                
         }
         private byte[] GetUsefulData(int[] targetIndexes, byte[] rawData)
         {
@@ -136,12 +139,17 @@ namespace NetCon.parsing
             return result;
         }
         
+        public void LoadFilterConfiguration(FiltersConfiguration configuration)
+        {
+            filtersConfig = configuration;
+        }
+
         //FILTER FORMAT
         //<Condition>And([8]=4f,Or(And([1]=0a,[2]=22),And([3]=ff,[5]=bc)))</Condition>
         //<Target>[8],[9],[10]</Target>
         //<Type>byte</Type>
 
-        private Filter LoadFilter(string input)
+        static public Filter LoadFilter(string input)
         {
             Regex rPredInput=new Regex(@"<Condition>.*</Condition>");
             string predInput = rPredInput.Match(input)?.Value.Replace("<Condition>","").Replace("</Condition>", "");
@@ -149,7 +157,7 @@ namespace NetCon.parsing
             string targetInput = rTargetInput.Match(input)?.Value.Replace("<Target>", "").Replace("</Target>", ""); 
             Regex rTargetDataTypeInput=new Regex(@"<Type>.*</Type>");
             string targetDataTypeInput = rTargetDataTypeInput.Match(input)?.Value.Replace("<Type>", "").Replace("</Type>", "");
-            if (targetInput!=null && targetDataTypeInput!=null)
+            if (targetInput!="" && targetDataTypeInput!="")
             {
                 PredicateTree predicate = CalculatePredicate(predInput);
                 if (predicate != null)
@@ -166,9 +174,10 @@ namespace NetCon.parsing
                     }
                     int[] targetIndexes = GetTargetIndexes(targetInput);
                     DataType targetDataType = GetTargetDataType(targetDataTypeInput);
-                    if (targetIndexes!=null && targetDataType!=DataType.NONE && maxIndex!=-1)
+
+                    if (targetIndexes.Length>0 && targetDataType!=DataType.NONE && maxIndex!=-1)
                     {
-                        return new Filter(predicate, maxIndex, targetIndexes, targetDataType);
+                        return new Filter(predicate, maxIndex, targetIndexes, targetDataType, input);
                     }
                     
                 }
@@ -176,12 +185,12 @@ namespace NetCon.parsing
             
             return null;
         }
-        private DataType GetTargetDataType(string input)
+        static private DataType GetTargetDataType(string input)
         {
             //TODO implement function
             return DataType.Bytes;
         }
-        private int[] GetTargetIndexes(string input)
+        static private int[] GetTargetIndexes(string input)
         {
             Regex rSplitIndexes = new Regex(@"\[\d+\]");
             MatchCollection matches = rSplitIndexes.Matches(input);
@@ -193,7 +202,7 @@ namespace NetCon.parsing
             return result;
         }
         
-        private PredicateTree CalculatePredicate(string input)
+        static private PredicateTree CalculatePredicate(string input)
         {
             Operation op = Operation.NONE;
             string inputCopy;
