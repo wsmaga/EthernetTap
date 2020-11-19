@@ -60,44 +60,21 @@ namespace NetCon.inter
         {
             Byte[] data = File.ReadAllBytes("./mock.pcap");
             List<Byte> frame = new List<Byte>();
-            pushFrameHeader(frame);
-            for (int i = 25; i < data.Length; i++){
-                if(data[i] == 0x55)
+            for (int i = 40; i < data.Length; i++){
+                if (data[i] == 0x55)
                 {
                     Byte[] headerCandidate = new Byte[8];
-                    Array.ConstrainedCopy(data, i-1, headerCandidate, 0, 8);
-                    if (checkForHeader(headerCandidate))
+                    Array.ConstrainedCopy(data, i, headerCandidate, 0, 8);
+                    if (checkForHeader(headerCandidate) && frame.Count > 0)
                     {
-                        frames.Add(frame.ToArray());
-                        frame = new List<Byte>();
-                        pushFrameHeader(frame);
-                        i += 7;
-                        continue;
-                    }
-                    else
-                    {
-                        frame.Add(data[i]);
+                            frames.Add(frame.ToArray());
+                            frame = new List<Byte>();
                     }
                 }
-                else
-                {
-                    frame.Add(data[i]);
-                }
+                frame.Add(data[i]);
             }
+            frames.Add(frame.ToArray());
         }
-
-        private void pushFrameHeader(List<Byte> frame)
-        {
-            frame.Add(0x55);
-            frame.Add(0x55);
-            frame.Add(0x55);
-            frame.Add(0x55);
-            frame.Add(0x55);
-            frame.Add(0x55);
-            frame.Add(0x55);
-            frame.Add(0xd5);
-        }
-
         private bool checkForHeader(Byte[] headerCandidate)
         {
             bool isHeader = true;
