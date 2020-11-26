@@ -17,7 +17,7 @@ namespace NetCon.parsing
         public List<Frame> AllFrames = new List<Frame>() ;
         private string CurrFrame = "";
         private int FrameLength=-1;
-        private enum FType {NONE, IPV4, ARP};
+        private enum FType {NONE, IPV4, ARP, EtherCAT };
         private FType FrameType=FType.NONE;
         public Subject<Frame> EthernetFrameSubject=new Subject<Frame>();
 
@@ -80,6 +80,11 @@ namespace NetCon.parsing
                         FrameLength = 144; //doswiadczalnie wyznaczona liczba 
                         HandleFrameData(tempFrame);
                         break;
+                    case "88a4":
+                        FrameType = FType.EtherCAT;
+                        FrameLength = 144;
+                        HandleFrameData(tempFrame);
+                        break;
                     default:
                         ResetCurrFrame();
                         break;
@@ -127,6 +132,8 @@ namespace NetCon.parsing
                     EthernetFrameSubject.pushNextValue(frame);
                 }
             }
+            else
+                EthernetFrameSubject.pushNextValue(frame);
         }
         private byte[] GetUsefulData(int[] targetIndexes, byte[] rawData)
         {
@@ -201,7 +208,7 @@ namespace NetCon.parsing
             return result;
         }
         
-        static private PredicateTree CalculatePredicate(string input)
+        static public PredicateTree CalculatePredicate(string input)
         {
             Operation op = Operation.NONE;
             string inputCopy;
