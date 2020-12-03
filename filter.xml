@@ -1,0 +1,15 @@
+<Filter>
+	<Condition>And([22]=1e,[23]=40)</Condition>
+	<Targets>
+		<Target>
+			<Bytes>53</Bytes>
+			<Type>integer</Type>
+			<Name>temperatura</Name>
+			<Treshold>
+				<Type>gt</Type>
+				<Value>200</Value>
+			</Treshold>
+			<RegisterChanges>true</RegisterChanges>
+		</Target>
+	</Targets>
+</Filter>

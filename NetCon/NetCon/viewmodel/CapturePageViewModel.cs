@@ -162,7 +162,7 @@ namespace NetCon.viewmodel
                     FiltersConfiguration.Builder builder = new FiltersConfiguration.Builder();
                     foreach (string s in loadedFilters)
                     {
-                        builder.AddFilter(FrameParser.LoadFilter(s));
+                        builder.AddFilter(FilterDomain.New(FilterDto.Deserialize(s)));
                     }
                     frameParser.LoadFilterConfiguration(new FiltersConfiguration(builder));
                     mFramesRepository.StartCapture();

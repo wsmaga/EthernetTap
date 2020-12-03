@@ -1,4 +1,5 @@
 ﻿using NetCon.model;
+using NetCon.parsing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,11 @@ namespace NetCon.repo
 {
     public class FiltersConfiguration
     {
-        List<Filter> filters;
+        List<IFilter> filters;
 
         public FiltersConfiguration()
         {
-            filters = new List<Filter>();
+            filters = new List<IFilter>();
         }
 
         public FiltersConfiguration(Builder confBuilder)
@@ -23,12 +24,12 @@ namespace NetCon.repo
         }
 
 
-        public Filter pass(Frame frame)
+        public IFilter pass(Frame frame)
         {
             
             foreach(var filter in filters)
             {
-                if (filter.pass(frame))
+                if (filter.Pass(frame))
                 {
                     return filter;
                 }
@@ -39,8 +40,8 @@ namespace NetCon.repo
 
         public class Builder
         {
-            public List<Filter> filters { get; } = new List<Filter>();
-            public Builder AddFilter(Filter filter)
+            public List<IFilter> filters { get; } = new List<IFilter>();
+            public Builder AddFilter(IFilter filter)
             {
                 if(filter!=null)
                     filters.Add(filter);

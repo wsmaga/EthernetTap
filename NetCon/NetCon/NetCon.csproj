@@ -43,6 +43,9 @@
     <Reference Include="Kaitai.Struct.Runtime, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\KaitaiStruct.Runtime.CSharp.0.8.0\lib\net45\Kaitai.Struct.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PropertyChanged, Version=3.2.8.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.3.2.8\lib\net40\PropertyChanged.dll</HintPath>
     </Reference>
@@ -74,7 +77,11 @@
     <Compile Include="model\ApplicationConfig.cs" />
     <Compile Include="model\Filter.cs" />
     <Compile Include="model\Frame.cs" />
+    <Compile Include="parsing\FilterDomain.cs" />
+    <Compile Include="parsing\FilterDto.cs" />
+    <Compile Include="parsing\TargetDataDto.cs" />
     <Compile Include="parsing\FrameParser.cs" />
+    <Compile Include="parsing\IFilter.cs" />
     <Compile Include="parsing\PredicateTree.cs" />
     <Compile Include="repo\FiltersConfiguration.cs" />
     <Compile Include="repo\FrameRepositoryImpl.cs" />
