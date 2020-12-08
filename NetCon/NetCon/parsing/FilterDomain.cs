@@ -47,7 +47,6 @@ namespace NetCon.parsing
                 .Select(match => int.Parse(match.Value))
                 .Max();
             return targetsMaxIndex > conditionMaxIndex ? targetsMaxIndex : conditionMaxIndex;
-            //dear future me: good luck understanding whats going on
         }
         public List<TargetDataDto> GetUsefulData(Frame frame)
         {
@@ -82,9 +81,11 @@ namespace NetCon.parsing
             {
                 case "byte_array": type = DataType.ByteArray;break;
                 case "integer": type = DataType.Integer;break;
+                case "string": type = DataType.String;break;
+                case "boolean": type = DataType.Boolean;break;
                 default: return null;
             }
-            var treshold = TargetTreshold.New(type, targetDto.Treshold) ?? throw new ArgumentException("Could not parse target treshold");
+            var treshold = TargetTreshold.New(type, targetDto.Treshold);
             return new TargetDomain(targetDto.Name,targetDto.Bytes, type,treshold,targetDto.RegisterChanges);
         }
         private TargetDomain(string name, int[] bytes, DataType type, TargetTreshold treshold, bool registerChanges=false)
@@ -95,7 +96,7 @@ namespace NetCon.parsing
             Treshold = treshold;
             RegisterChanges = registerChanges;
         }
-        //possibly json??
+
         public TargetDataDto GetTargetData(Frame frame)
         {
             var rawData = new List<byte>();
@@ -110,11 +111,17 @@ namespace NetCon.parsing
                 case DataType.Integer:
                     var prefixedHex = "0x" + BitConverter.ToString(rawData.ToArray()).Replace("-", "").ToLower();
                     value = Convert.ToInt32(prefixedHex, 16); 
-                    break;    
+                    break;
+                case DataType.String:
+                    value = string.Concat(rawData.Select(el=>(char)el));
+                    break;
+                case DataType.Boolean:
+                    value = rawData.Count(el => el == 0) == rawData.Count();
+                    break;
                 default: throw new ArgumentException("Target type data extraction not implemented");
             }
             string tresholdType;
-            switch (Treshold.Type)
+            switch (Treshold?.Type)
             {
                 case TargetTreshold.TresholdType.GT: tresholdType = "gt"; break;
                 case TargetTreshold.TresholdType.GE: tresholdType = "ge"; break;
@@ -136,8 +143,8 @@ namespace NetCon.parsing
                 Value = value,
                 DataType = dataType,
                 RawData = rawData.ToArray(),
-                TriggeredTreshold = this.Treshold.IsAboveTreshold(value),
-                TresholdValue = this.Treshold.Value,
+                TriggeredTreshold = this.Treshold?.IsAboveTreshold(value)??false,
+                TresholdValue = this.Treshold?.Value,
                 RegisterChanges=this.RegisterChanges,
                 TresholdType=tresholdType
             };

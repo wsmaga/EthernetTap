@@ -66,8 +66,7 @@ namespace NetCon.parsing
             !string.IsNullOrWhiteSpace(Name) &&
             Bytes != null &&
             Bytes.Length > 0 &&
-            !string.IsNullOrWhiteSpace(Type) &&
-            Treshold != null
+            !string.IsNullOrWhiteSpace(Type)
             );
     }
 
