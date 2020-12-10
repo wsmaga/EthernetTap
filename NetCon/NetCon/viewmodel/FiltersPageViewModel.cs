@@ -1,19 +1,26 @@
-﻿using NetCon.util;
+﻿using NetCon.model;
+using NetCon.parsing;
+using NetCon.repo;
+using NetCon.util;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Xml.Serialization;
 
 namespace NetCon.viewmodel
 {
     class FiltersPageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
         private MainWindowViewModel mainWindowSharedViewModel;
         public ObservableCollection<string> filterDefinitions { get; private set; } = new ObservableCollection<string>();
         public string newFilterText { get; set; }
@@ -27,8 +34,19 @@ namespace NetCon.viewmodel
                 return _addFilterCommand ?? (_addFilterCommand = new CommandHandler(
                     () =>
                     {
-                        filterDefinitions.Add(newFilterText);
-                        mainWindowSharedViewModel.logInfo($"Dodano filtr {newFilterText}");
+                        Filter temp = FrameParser.LoadFilter(newFilterText);
+                        if (temp != null)
+                        {
+                            if(filterDefinitions.IndexOf(newFilterText)==-1)
+                            { 
+                                filterDefinitions.Add(newFilterText);
+                                mainWindowSharedViewModel.logInfo($"Dodano filtr {newFilterText}");
+                            }
+                            else
+                                MessageBox.Show("Podany filtr już istnieje");
+                        }
+                        else
+                            MessageBox.Show("Błędna definicja filtru");
                     },
 
                     ()=> 
@@ -44,6 +62,7 @@ namespace NetCon.viewmodel
                 return _deleteFilterCommand ?? (_deleteFilterCommand = new CommandHandler(
                     () =>
                     {
+                        int filterIndex = filterDefinitions.IndexOf(selectedFilterDefiniton);
                         mainWindowSharedViewModel.logInfo($"Usunięto filtr {selectedFilterDefiniton}");
                         filterDefinitions.Remove(selectedFilterDefiniton);
                     },
@@ -60,14 +79,17 @@ namespace NetCon.viewmodel
             get
             {
                 return _shiftUpFilterCommand ?? (_shiftUpFilterCommand = new CommandHandler(
-                    () => { 
-                        filterDefinitions.Move(filterDefinitions.IndexOf(selectedFilterDefiniton), filterDefinitions.IndexOf(selectedFilterDefiniton) - 1);
-                        mainWindowSharedViewModel.logInfo($"Przesunięto filtr {selectedFilterDefiniton} na pozycję {filterDefinitions.IndexOf(selectedFilterDefiniton)}");
+                    () => {
+                        int index = filterDefinitions.IndexOf(selectedFilterDefiniton);
+                        filterDefinitions.Move(index, index - 1);
+                        mainWindowSharedViewModel.logInfo($"Przesunięto filtr {selectedFilterDefiniton} na pozycję {index}");
                     },
-                    () => { return filterDefinitions.IndexOf(selectedFilterDefiniton) > 0; }
+                    () => { return selectedFilterDefiniton != null && filterDefinitions.Count > 1 &&
+                        filterDefinitions.IndexOf(selectedFilterDefiniton) > 0; }
                     ));
             }
         }
+
         private ICommand _shiftDownFilterCommand;
         public ICommand ShiftDownFilterCommand
         {
@@ -75,13 +97,109 @@ namespace NetCon.viewmodel
             {
                 return _shiftDownFilterCommand ?? (_shiftDownFilterCommand = new CommandHandler(
                     () => {
-                        filterDefinitions.Move(filterDefinitions.IndexOf(selectedFilterDefiniton), filterDefinitions.IndexOf(selectedFilterDefiniton) + 1);
-                        mainWindowSharedViewModel.logInfo($"Przesunięto filtr {selectedFilterDefiniton} na pozycję {filterDefinitions.IndexOf(selectedFilterDefiniton)}");
+                        int index = filterDefinitions.IndexOf(selectedFilterDefiniton);
+                        filterDefinitions.Move(index, index + 1);
+                        mainWindowSharedViewModel.logInfo($"Przesunięto filtr {selectedFilterDefiniton} na pozycję {index}");
                     },
                     () => { return 
                         selectedFilterDefiniton !=null && 
                         filterDefinitions.Count>1 && 
                         filterDefinitions.IndexOf(selectedFilterDefiniton) < filterDefinitions.Count-1; }
+                    ));
+            }
+        }
+
+        private ICommand _applyFilters;
+        public ICommand ApplyFilters
+        {
+            get
+            {
+                return _applyFilters ?? (_applyFilters = new CommandHandler(
+                    () => {
+                        
+                        BinaryFormatter formatter = new BinaryFormatter();
+                        FileStream stream = new FileStream("filters.bin", FileMode.Create);
+                        try
+                        {
+                            formatter.Serialize(stream, filterDefinitions.ToList());
+                        }
+                        catch (SerializationException e)
+                        {
+                            MessageBox.Show("Bład serializacji");
+                        }
+                        finally
+                        {
+                            stream.Close();
+                        }
+                    },
+                    () => {
+                        return filterDefinitions.Count > 0;
+                    }
+                    ));
+            }
+        }
+        private ICommand _loadFilters;
+        public ICommand LoadFilters
+        {
+            get
+            {
+                return _loadFilters ?? (_loadFilters = new CommandHandler(
+                    () => {
+                        List<string> loadedFilters=null;
+                        if (File.Exists("filters.bin"))
+                        {
+                            FileStream stream = new FileStream("filters.bin", FileMode.Open);
+                            try
+                            {
+                                BinaryFormatter formatter = new BinaryFormatter();
+                                loadedFilters = (List<string>)formatter.Deserialize(stream);
+                                ObservableCollection<string> newFilterDefinitions = new ObservableCollection<string>();
+                                foreach (string s in loadedFilters)
+                                {
+                                    if (FrameParser.LoadFilter(s) == null)
+                                    {
+                                        if (MessageBox.Show("Plik z filtrami jest uszkodzony. Czy chcesz usunąć stary plik?", "Błąd pliku", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                                        {
+                                            File.Delete("filters.bin");
+                                        }
+                                        return;
+                                    }
+                                    else
+                                        newFilterDefinitions.Add(s);
+                                }
+                                filterDefinitions = newFilterDefinitions;
+
+
+                            }
+                            catch (SerializationException)
+                            {
+                                if (MessageBox.Show("Deserializacja filtrów z pliku jest niemożliwa. Czy chcesz usunąć stary plik?", "Błąd deserializacji", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                                {
+                                    try
+                                    {
+
+                                        File.Delete("filters.bin");
+                                    }
+                                    catch (IOException)
+                                    {
+                                        MessageBox.Show("Nie udało sie usunąć pliku. Plik jest otwarty w innym programie");
+                                    }
+                                    File.Delete("filters.bin");
+                                }
+                            }
+                            finally
+                            {
+                                stream.Close();
+                            }
+                        }
+                        else
+                            MessageBox.Show("Nie istnieje plik z filtrami");
+
+
+                    },
+                    () => {
+                        return File.Exists("filters.bin");
+                    }
                     ));
             }
         }

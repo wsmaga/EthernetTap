@@ -1,4 +1,7 @@
-﻿using System;
+﻿using NetCon.model;
+using NetCon.repo;
+using NetCon.util;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +16,8 @@ namespace NetCon
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+        }
     }
 }
