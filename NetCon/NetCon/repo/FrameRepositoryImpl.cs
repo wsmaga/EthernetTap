@@ -2,35 +2,46 @@
 using NetCon.model;
 using NetCon.util;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace NetCon.repo
 {
     class FrameRepositoryImpl : IFrameRepository<Frame>
     {
-        //Singleton boilerplate
-        public static FrameRepositoryImpl instance { get; } = new FrameRepositoryImpl();
+        public static FrameRepositoryImpl instance { get; } = getRepository();
+
+       
+        private static FrameRepositoryImpl getRepository()
+        {
+            var config = ConfigFileHandler<ApplicationConfig>.ReadSettings();
+            
+            switch(config.Source)
+            {
+                case ApplicationConfig.FrameSource.MOCK: return new FrameRepositoryImpl(new NetConMockImpl());
+                case ApplicationConfig.FrameSource.NET_FPGA: return new FrameRepositoryImpl(new NetConImpl());
+                default: throw new ArgumentException("Unknown frames source");
+            }
+        }
+
+
         private Subject<Frame> _subject = new Subject<Frame>();
         public Subject<Frame> FrameSubject => _subject;
         private Subject<CaptureState> captureState = new Subject<CaptureState>();
         public Subject<CaptureState> CaptureState => captureState;
         //TODO tu można zmienić implementację przechwytywacza ramek na jakiś mock   //////////////
-       // private INetCon netConService = new NetConImpl();
-        private INetCon netConService = new NetConMockImpl();
+        // private INetCon netConService = new NetConImpl();
+        private INetCon netConService = null;
 
         //TODO można zrobić zmienną typu jakiegoś enum, która będzie informowała observerów o stanie przechwytywania (konfiguracje mdio, rozpoczęcie, etc. oraz błędy)
 
         //Konfiguracja filtrów
-       
 
-        private FrameRepositoryImpl()
+
+        internal FrameRepositoryImpl(INetCon netcon)
         {
+            netConService = netcon;
+
             //zadeklarowanie naszego callbacka tutaj!   /////////////
             netConService.setOnFrameListener((IntPtr arr, int size) =>
             {
@@ -66,14 +77,14 @@ namespace NetCon.repo
                 string[] strVec = new string[] { "NetCon.exe", "set", "3", "0" };
                 netConService.sendSettings(strVec);
                 captureState.pushNextValue(new repo.CaptureState.CaptureInitialized());
-                await Task.Run(()=>netConService.startCapture());
-                
+                await Task.Run(() => netConService.startCapture());
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 captureState.pushNextValue(new repo.CaptureState.CaptureError(e));
             }
-            
+
         }
 
         public void CloseCapture()
@@ -83,7 +94,7 @@ namespace NetCon.repo
         }
 
         public void StartCapture()
-        { 
+        {
             netConService.setCaptureState(true);
             captureState.pushNextValue(new repo.CaptureState.CaptureOn());
         }

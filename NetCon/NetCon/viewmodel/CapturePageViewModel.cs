@@ -32,6 +32,7 @@ namespace NetCon.viewmodel
 
         public CapturePageViewModel(MainWindowViewModel sharedViewModel)
         {
+            ApplicationConfig config = ConfigFileHandler<ApplicationConfig>.ReadSettings();
             mMainWindowSharedViewModel = sharedViewModel;
             frameParser = new FrameParser(mFramesRepository.FrameSubject);
             //Observing subjects
@@ -73,8 +74,6 @@ namespace NetCon.viewmodel
 
 
             //Setup capture 
-
-            ApplicationConfig config = ConfigFileHandler<ApplicationConfig>.ReadSettings();
 
             if(config == null)
             {
