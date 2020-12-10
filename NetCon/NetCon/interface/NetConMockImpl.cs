@@ -44,7 +44,7 @@ namespace NetCon.inter
                 Marshal.Copy(frame, 0, mockDataPtr, frame.Length);
                 if (captureState)
                 {
-                    frameListener(mockDataPtr, frame.Length);
+                    frameListener(mockDataPtr, frame.Length-16);
                 }
                 Thread.Sleep(10);
             }

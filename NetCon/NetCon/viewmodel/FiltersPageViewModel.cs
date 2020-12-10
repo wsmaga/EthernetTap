@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -34,19 +35,25 @@ namespace NetCon.viewmodel
                 return _addFilterCommand ?? (_addFilterCommand = new CommandHandler(
                     () =>
                     {
-                        Filter temp = FrameParser.LoadFilter(newFilterText);
-                        if (temp != null)
+                        try
                         {
-                            if(filterDefinitions.IndexOf(newFilterText)==-1)
+                            var newFilterNoWhitespace = new string(newFilterText.Where(c => !char.IsWhiteSpace(c)).ToArray());
+                            FilterDto filterDto = FilterDto.Deserialize(newFilterNoWhitespace);
+                            FilterDomain filterDomain = FilterDomain.New(filterDto);
+                            if (filterDefinitions.IndexOf(newFilterNoWhitespace) ==-1)
                             { 
-                                filterDefinitions.Add(newFilterText);
-                                mainWindowSharedViewModel.logInfo($"Dodano filtr {newFilterText}");
+                                filterDefinitions.Add(newFilterNoWhitespace);
+                                mainWindowSharedViewModel.logInfo($"Dodano filtr {newFilterNoWhitespace}");
+                                newFilterText = "";
                             }
                             else
                                 MessageBox.Show("Podany filtr już istnieje");
                         }
-                        else
-                            MessageBox.Show("Błędna definicja filtru");
+                        catch(ArgumentException ex)
+                        {
+                            MessageBox.Show($"Błędna definicja filtru\n{ex.Message}");
+                        }
+                            
                     },
 
                     ()=> 
@@ -122,6 +129,7 @@ namespace NetCon.viewmodel
                         try
                         {
                             formatter.Serialize(stream, filterDefinitions.ToList());
+                            MessageBox.Show($"Poprawnie załadowano filtry");
                         }
                         catch (SerializationException e)
                         {
@@ -153,19 +161,22 @@ namespace NetCon.viewmodel
                             {
                                 BinaryFormatter formatter = new BinaryFormatter();
                                 loadedFilters = (List<string>)formatter.Deserialize(stream);
+                                stream.Close();
                                 ObservableCollection<string> newFilterDefinitions = new ObservableCollection<string>();
                                 foreach (string s in loadedFilters)
                                 {
-                                    if (FrameParser.LoadFilter(s) == null)
+                                    try
+                                    {
+                                        FilterDomain.New(FilterDto.Deserialize(s));
+                                        newFilterDefinitions.Add(s);
+                                    }
+                                    catch(ArgumentException)
                                     {
                                         if (MessageBox.Show("Plik z filtrami jest uszkodzony. Czy chcesz usunąć stary plik?", "Błąd pliku", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                                         {
                                             File.Delete("filters.bin");
                                         }
-                                        return;
-                                    }
-                                    else
-                                        newFilterDefinitions.Add(s);
+                                    }  
                                 }
                                 filterDefinitions = newFilterDefinitions;
 

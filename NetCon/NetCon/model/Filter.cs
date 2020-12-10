@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetCon.model
 {
-    //TODO utworzyć klasy dla różnych rodzajów filtrów.
+/*    //DEPRECATED DO NOT USE
     [Serializable]
     public class Filter
     {
@@ -24,14 +24,30 @@ namespace NetCon.model
             targetDataType = data_type;
             filterString = filter_string;
         }
-        public bool pass(Frame frame)
+        public bool Pass(Frame frame)
         {
             if (frame.RawData.Length <= maxIndex)
                 return false;
             else
                 return filter.Pass(frame);
         }
+        public List<TargetDataDto> GetUsefulData(Frame frame)
+        {
+            List<TargetDataDto> result = new List<TargetDataDto>();
+            var bytes=new byte[targetIndexes.Length];
+            for (int i = 0; i < targetIndexes.Length; i++)
+            {
+                bytes[i] = frame.RawData[targetIndexes[i]];
+            }
+            result.Add(new TargetDataDto
+            {
+                RawData=bytes,
+                Value=bytes,
+                TriggeredThreshold=false,
+                ThresholdValue=null
+            });
+            return result;
+        }
 
-        
-    }
+    }*/
 }

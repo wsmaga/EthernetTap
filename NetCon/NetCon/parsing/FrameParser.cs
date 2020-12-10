@@ -2,6 +2,7 @@
 using NetCon.model;
 using NetCon.repo;
 using NetCon.util;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace NetCon.parsing
         public List<Frame> AllFrames = new List<Frame>() ;
         private string CurrFrame = "";
         private int FrameLength=-1;
-        private enum FType {NONE, IPV4, ARP};
+        private enum FType {NONE, IPV4, ARP, EtherCAT };
         private FType FrameType=FType.NONE;
         public Subject<Frame> EthernetFrameSubject=new Subject<Frame>();
 
@@ -35,7 +36,6 @@ namespace NetCon.parsing
         }
         private void ParseFrame(string rawDataString)
         {
-            //string rawDataString = BitConverter.ToString(rawData).Replace("-", "").ToLower();
             if(CurrFrame.Length==0)
             {
                 int index = rawDataString.IndexOf("55555555555555d5");
@@ -80,6 +80,11 @@ namespace NetCon.parsing
                         FrameLength = 144; //doswiadczalnie wyznaczona liczba 
                         HandleFrameData(tempFrame);
                         break;
+                    case "88a4":
+                        FrameType = FType.EtherCAT;
+                        FrameLength = 144;
+                        HandleFrameData(tempFrame);
+                        break;
                     default:
                         ResetCurrFrame();
                         break;
@@ -117,25 +122,18 @@ namespace NetCon.parsing
         }
         private void FilterFrame(Frame frame)
         {
+            Console.WriteLine(BitConverter.ToString(frame.RawData).Replace("-", " ").ToLower());//remove after presentation
             if (filtersConfig != null)
             { 
-                Filter passedFilter = filtersConfig.pass(frame);
+                IFilter passedFilter = filtersConfig.pass(frame);
                 if (passedFilter!=null)
                 {
-                    frame.usefulData = GetUsefulData(passedFilter.targetIndexes,frame.RawData);
-                    frame.usefulDataType = passedFilter.targetDataType;
+                    Console.WriteLine(JToken.FromObject(passedFilter.GetUsefulData(frame)));  //remove after presentation
                     EthernetFrameSubject.pushNextValue(frame);
                 }
             }
-        }
-        private byte[] GetUsefulData(int[] targetIndexes, byte[] rawData)
-        {
-            byte[] result = new byte[targetIndexes.Length];
-            for (int i = 0; i < targetIndexes.Length; i++)
-            {
-                result[i] = rawData[targetIndexes[i]];
-            }
-            return result;
+            else
+                EthernetFrameSubject.pushNextValue(frame);
         }
         
         public void LoadFilterConfiguration(FiltersConfiguration configuration)
@@ -143,65 +141,9 @@ namespace NetCon.parsing
             filtersConfig = configuration;
         }
 
-        //FILTER FORMAT
-        //<Condition>And([8]=4f,Or(And([1]=0a,[2]=22),And([3]=ff,[5]=bc)))</Condition>
-        //<Target>[8],[9],[10]</Target>
-        //<Type>byte</Type>
-
-        static public Filter LoadFilter(string input)
-        {
-            Regex rPredInput=new Regex(@"<Condition>.*</Condition>");
-            string predInput = rPredInput.Match(input)?.Value.Replace("<Condition>","").Replace("</Condition>", "");
-            Regex rTargetInput = new Regex(@"<Target>.*</Target>");
-            string targetInput = rTargetInput.Match(input)?.Value.Replace("<Target>", "").Replace("</Target>", ""); 
-            Regex rTargetDataTypeInput=new Regex(@"<Type>.*</Type>");
-            string targetDataTypeInput = rTargetDataTypeInput.Match(input)?.Value.Replace("<Type>", "").Replace("</Type>", "");
-            if (targetInput!="" && targetDataTypeInput!="")
-            {
-                PredicateTree predicate = CalculatePredicate(predInput);
-                if (predicate != null)
-                {
-                    int maxIndex = -1;
-                    Regex rAllIndexes = new Regex(@"\[\d+\]");
-                    foreach (Match index in rAllIndexes.Matches(input))
-                    {
-                        int parsedIndex = int.Parse(index.Value.Replace("[","").Replace("]",""));
-                        if (parsedIndex > maxIndex)
-                        {
-                            maxIndex = parsedIndex;
-                        }
-                    }
-                    int[] targetIndexes = GetTargetIndexes(targetInput);
-                    DataType targetDataType = GetTargetDataType(targetDataTypeInput);
-
-                    if (targetIndexes.Length>0 && targetDataType!=DataType.NONE && maxIndex!=-1)
-                    {
-                        return new Filter(predicate, maxIndex, targetIndexes, targetDataType, input);
-                    }
-                    
-                }
-            }
-            
-            return null;
-        }
-        static private DataType GetTargetDataType(string input)
-        {
-            //TODO implement function
-            return DataType.Bytes;
-        }
-        static private int[] GetTargetIndexes(string input)
-        {
-            Regex rSplitIndexes = new Regex(@"\[\d+\]");
-            MatchCollection matches = rSplitIndexes.Matches(input);
-            int[] result = new int[matches.Count];
-            for(int i=0; i<matches.Count;i++)
-            {
-                result[i] = int.Parse(matches[i].Value.Replace("[", "").Replace("]", ""));
-            }
-            return result;
-        }
         
-        static private PredicateTree CalculatePredicate(string input)
+
+        static public PredicateTree CalculatePredicate(string input)
         {
             Operation op = Operation.NONE;
             string inputCopy;
