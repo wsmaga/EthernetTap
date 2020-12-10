@@ -19,10 +19,10 @@ namespace NetCon.parsing
         public TargetList Targets { get; set; }
         [XmlIgnore]
         public bool IsValid => (
-            !string.IsNullOrWhiteSpace(Condition) && 
-            Targets != null && 
-            Targets.Items.Count > 0
-           
+            !string.IsNullOrWhiteSpace(Condition) &&
+            Targets != null &&
+            Targets.Items.Count > 0 &&
+            Targets.Items.Select(t => t.Id).Distinct().Count() == Targets.Items.Count()
             );
         public static FilterDto Deserialize(string xml)
         {
@@ -40,6 +40,8 @@ namespace NetCon.parsing
     }
     public class TargetDto
     {
+        [XmlElement("Id")]
+        public int Id=-1;
         [XmlIgnore]
         public int[] Bytes { get; set; }
         [XmlElement("Bytes")]
@@ -56,13 +58,14 @@ namespace NetCon.parsing
         [XmlElement("Type")]
         public string Type;
         [XmlElement("Name")]
-        public string Name; //TODO: VALIDATE NAMES!!!!!
-        [XmlElement("Treshold")]
-        public TresholdDto Treshold;
+        public string Name; 
+        [XmlElement("Threshold")]
+        public ThresholdDto Threshold;
         [XmlElement("RegisterChanges")]
         public bool RegisterChanges;
         [XmlIgnore]
         public bool IsValid => (
+            Id!=-1 &&
             !string.IsNullOrWhiteSpace(Name) &&
             Bytes != null &&
             Bytes.Length > 0 &&
@@ -70,18 +73,19 @@ namespace NetCon.parsing
             );
     }
 
-    public class TresholdDto
+    public class ThresholdDto
     {
         [XmlElement("Type")]
         public string Type;
         [XmlElement("Value")]
         public string Value;
+        [XmlElement("Value2")]
+        public string Value2;
         [XmlIgnore]
         public bool IsValid => (
             !string.IsNullOrWhiteSpace(Type) &&
             !string.IsNullOrWhiteSpace(Value)
             );
-
     }
     public static class FilterDtoExtensions
     {

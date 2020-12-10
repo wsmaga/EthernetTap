@@ -14,9 +14,9 @@ namespace NetCon.parsing
         public dynamic Value;
         public string DataType; //change to enum after presentation
         public byte[] RawData;
-        public bool TriggeredTreshold;
-        public dynamic TresholdValue;
-        public string TresholdType; //change to enum after presentation
+        public bool TriggeredThreshold;
+        public dynamic ThresholdValue;
+        public string ThresholdType; //change to enum after presentation
         public bool RegisterChanges;
     }
 }

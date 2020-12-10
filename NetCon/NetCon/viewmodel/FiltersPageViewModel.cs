@@ -37,12 +37,14 @@ namespace NetCon.viewmodel
                     {
                         try
                         {
-                            FilterDto filterDto = FilterDto.Deserialize(newFilterText);
+                            var newFilterNoWhitespace = new string(newFilterText.Where(c => !char.IsWhiteSpace(c)).ToArray());
+                            FilterDto filterDto = FilterDto.Deserialize(newFilterNoWhitespace);
                             FilterDomain filterDomain = FilterDomain.New(filterDto);
-                            if (filterDefinitions.IndexOf(newFilterText)==-1)
+                            if (filterDefinitions.IndexOf(newFilterNoWhitespace) ==-1)
                             { 
-                                filterDefinitions.Add(newFilterText);
-                                mainWindowSharedViewModel.logInfo($"Dodano filtr {newFilterText}");
+                                filterDefinitions.Add(newFilterNoWhitespace);
+                                mainWindowSharedViewModel.logInfo($"Dodano filtr {newFilterNoWhitespace}");
+                                newFilterText = "";
                             }
                             else
                                 MessageBox.Show("Podany filtr już istnieje");
@@ -127,6 +129,7 @@ namespace NetCon.viewmodel
                         try
                         {
                             formatter.Serialize(stream, filterDefinitions.ToList());
+                            MessageBox.Show($"Poprawnie załadowano filtry");
                         }
                         catch (SerializationException e)
                         {

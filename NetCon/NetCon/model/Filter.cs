@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NetCon.model
 {
-    //DEPRECATED DO NOT USE
+/*    //DEPRECATED DO NOT USE
     [Serializable]
     public class Filter
     {
@@ -43,11 +43,11 @@ namespace NetCon.model
             {
                 RawData=bytes,
                 Value=bytes,
-                TriggeredTreshold=false,
-                TresholdValue=null
+                TriggeredThreshold=false,
+                ThresholdValue=null
             });
             return result;
         }
 
-    }
+    }*/
 }
