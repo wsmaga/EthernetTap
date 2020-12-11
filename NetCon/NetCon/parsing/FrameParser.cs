@@ -12,23 +12,16 @@ namespace NetCon.parsing
 {
     class FrameParser
     {
-        static string testFilterString = "<Condition>And([20]=08,[21]=06)</Condition>\n\r" +
-                                         "<Target>[14],[15],[16],[17],[18],[19]</Target>\n\r" +
-                                         "<Type>byte</Type>";
         public List<Frame> AllFrames = new List<Frame>() ;
         private string CurrFrame = "";
         private int FrameLength=-1;
         private enum FType {NONE, IPV4, ARP, EtherCAT };
         private FType FrameType=FType.NONE;
-        public Subject<Frame> EthernetFrameSubject=new Subject<Frame>();
+        public Subject<TargetDataDto> FrameDataSubject=new Subject<TargetDataDto>();
 
         private FiltersConfiguration filtersConfig;
         public FrameParser(Subject<Frame> _subject)
         {
-            /*FiltersConfiguration.Builder builder = new FiltersConfiguration.Builder();
-            builder.AddFilter(LoadFilter(testFilterString)); //Enumerable.SequenceEqual(frame.SrcMac,new byte[] {0,1,5,27,159,150}))
-            filtersConfig = new FiltersConfiguration(builder);*/
-
             new SubjectObserver<Frame>(Frame =>
             {
                 ParseFrame(BitConverter.ToString(Frame.RawData).Replace("-", "").ToLower());
@@ -128,12 +121,12 @@ namespace NetCon.parsing
                 IFilter passedFilter = filtersConfig.pass(frame);
                 if (passedFilter!=null)
                 {
-                    Console.WriteLine(JToken.FromObject(passedFilter.GetUsefulData(frame)));  //remove after presentation
-                    EthernetFrameSubject.pushNextValue(frame);
+                    var data = passedFilter.GetUsefulData(frame);
+                    Console.WriteLine(JToken.FromObject(data));  //remove after presentation
+                    foreach(var d in data)
+                        FrameDataSubject.pushNextValue(d);
                 }
             }
-            else
-                EthernetFrameSubject.pushNextValue(frame);
         }
         
         public void LoadFilterConfiguration(FiltersConfiguration configuration)

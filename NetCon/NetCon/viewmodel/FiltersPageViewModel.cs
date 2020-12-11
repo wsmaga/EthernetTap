@@ -131,7 +131,7 @@ namespace NetCon.viewmodel
                             formatter.Serialize(stream, filterDefinitions.ToList());
                             MessageBox.Show($"Poprawnie załadowano filtry");
                         }
-                        catch (SerializationException e)
+                        catch (SerializationException)
                         {
                             MessageBox.Show("Bład serializacji");
                         }

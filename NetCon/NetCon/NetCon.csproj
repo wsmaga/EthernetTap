@@ -75,7 +75,6 @@
     <Compile Include="interface\NetConImpl.cs" />
     <Compile Include="interface\NetConMockImpl.cs" />
     <Compile Include="model\ApplicationConfig.cs" />
-    <Compile Include="model\Filter.cs" />
     <Compile Include="model\Frame.cs" />
     <Compile Include="parsing\FilterDomain.cs" />
     <Compile Include="parsing\FilterDto.cs" />

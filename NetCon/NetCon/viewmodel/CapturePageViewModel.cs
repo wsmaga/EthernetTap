@@ -43,10 +43,10 @@ namespace NetCon.viewmodel
                 //FramesCounter=frameParser.AllFrames.Count;
             }).Subscribe(mFramesRepository.FrameSubject);*/
 
-            new SubjectObserver<Frame>(frame =>
+            new SubjectObserver<TargetDataDto>(frame =>
             {
                 FramesCounter++;
-            }).Subscribe(frameParser.EthernetFrameSubject);
+            }).Subscribe(frameParser.FrameDataSubject);
 
             new SubjectObserver<CaptureState>(state =>
             {
@@ -101,7 +101,7 @@ namespace NetCon.viewmodel
                 {
                     port = Int32.Parse(value);
                 }
-                catch (Exception e){}
+                catch (Exception){}
             }
         }
 

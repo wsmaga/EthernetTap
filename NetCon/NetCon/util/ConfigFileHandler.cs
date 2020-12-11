@@ -33,7 +33,7 @@ namespace NetCon.util
                 reader.Close();
                 return conf;
             }
-            catch(FileNotFoundException e) { return default(T); }
+            catch(FileNotFoundException) { return default(T); }
         }
     }
 }
