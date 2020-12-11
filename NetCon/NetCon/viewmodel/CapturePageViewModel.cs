@@ -46,7 +46,7 @@ namespace NetCon.viewmodel
             new SubjectObserver<TargetDataDto>(frame =>
             {
                 FramesCounter++;
-            }).Subscribe(frameParser.FrameDataSubject);
+            }).Subscribe(TargetDataRepository.GetInstance().FrameDataSubject);
 
             new SubjectObserver<CaptureState>(state =>
             {

@@ -82,6 +82,7 @@
     <Compile Include="parsing\FrameParser.cs" />
     <Compile Include="parsing\IFilter.cs" />
     <Compile Include="parsing\PredicateTree.cs" />
+    <Compile Include="parsing\TargetDataRepository.cs" />
     <Compile Include="repo\FiltersConfiguration.cs" />
     <Compile Include="repo\FrameRepositoryImpl.cs" />
     <Compile Include="repo\IFrameRepository.cs" />

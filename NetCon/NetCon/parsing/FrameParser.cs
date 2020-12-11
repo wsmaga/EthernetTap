@@ -17,7 +17,7 @@ namespace NetCon.parsing
         private int FrameLength=-1;
         private enum FType {NONE, IPV4, ARP, EtherCAT };
         private FType FrameType=FType.NONE;
-        public Subject<TargetDataDto> FrameDataSubject=new Subject<TargetDataDto>();
+        public TargetDataRepository TargetDataRepo=TargetDataRepository.GetInstance();
 
         private FiltersConfiguration filtersConfig;
         public FrameParser(Subject<Frame> _subject)
@@ -124,7 +124,7 @@ namespace NetCon.parsing
                     var data = passedFilter.GetUsefulData(frame);
                     Console.WriteLine(JToken.FromObject(data));  //remove after presentation
                     foreach(var d in data)
-                        FrameDataSubject.pushNextValue(d);
+                        TargetDataRepo.FrameDataSubject.pushNextValue(d);
                 }
             }
         }
