@@ -76,16 +76,16 @@
     <Compile Include="interface\NetConMockImpl.cs" />
     <Compile Include="model\ApplicationConfig.cs" />
     <Compile Include="model\Frame.cs" />
-    <Compile Include="parsing\FilterDomain.cs" />
-    <Compile Include="parsing\FilterDto.cs" />
-    <Compile Include="parsing\TargetDataDto.cs" />
-    <Compile Include="parsing\FrameParser.cs" />
-    <Compile Include="parsing\IFilter.cs" />
-    <Compile Include="parsing\PredicateTree.cs" />
-    <Compile Include="parsing\TargetDataRepository.cs" />
-    <Compile Include="repo\FiltersConfiguration.cs" />
-    <Compile Include="repo\FrameRepositoryImpl.cs" />
-    <Compile Include="repo\IFrameRepository.cs" />
+    <Compile Include="filtering\FilterDomain.cs" />
+    <Compile Include="filtering\FilterDto.cs" />
+    <Compile Include="filtering\TargetDataDto.cs" />
+    <Compile Include="filtering\FrameParser.cs" />
+    <Compile Include="filtering\IFilter.cs" />
+    <Compile Include="filtering\PredicateTree.cs" />
+    <Compile Include="repositories\TargetDataRepository.cs" />
+    <Compile Include="repositories\FiltersConfiguration.cs" />
+    <Compile Include="repositories\FrameRepositoryImpl.cs" />
+    <Compile Include="repositories\IFrameRepository.cs" />
     <Compile Include="util\ConfigFileHandler.cs" />
     <Compile Include="ui\CapturePage.xaml.cs">
       <DependentUpon>CapturePage.xaml</DependentUpon>
