@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DBModelStoreContainer">
+    <EntitySet Name="TargetNameSet" EntityType="DBModel.Store.TargetNameSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TargetSet" EntityType="DBModel.Store.TargetSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="VariableEventSet" EntityType="DBModel.Store.VariableEventSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="TargetNameTarget" Association="DBModel.Store.TargetNameTarget">
+      <End Role="TargetName" EntitySet="TargetNameSet" />
+      <End Role="Target" EntitySet="TargetSet" />
+    </AssociationSet>
+    <AssociationSet Name="TargetVariableEvent" Association="DBModel.Store.TargetVariableEvent">
+      <End Role="Target" EntitySet="TargetSet" />
+      <End Role="VariableEvent" EntitySet="VariableEventSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="TargetNameSet">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="creationDate" Type="datetime" Nullable="false" />
+    <Property Name="modifyDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TargetSet">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="date" Type="datetime" Nullable="false" />
+    <Property Name="rawData" Type="varbinary(max)" Nullable="false" />
+    <Property Name="dataType" Type="int" Nullable="false" />
+    <Property Name="arraySize" Type="int" Nullable="false" />
+    <Property Name="TargetName_id" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VariableEventSet">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="date" Type="datetime" Nullable="false" />
+    <Property Name="thresholdValue" Type="varbinary(max)" Nullable="false" />
+    <Property Name="thresholdValue2" Type="varbinary(max)" Nullable="false" />
+    <Property Name="thresholdType" Type="int" Nullable="false" />
+    <Property Name="thresholdDataType" Type="int" Nullable="false" />
+    <Property Name="Target_id" Type="bigint" Nullable="false" />
+  </EntityType>
+  <Association Name="TargetNameTarget">
+    <End Role="TargetName" Type="DBModel.Store.TargetNameSet" Multiplicity="1" />
+    <End Role="Target" Type="DBModel.Store.TargetSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TargetName">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Target">
+        <PropertyRef Name="TargetName_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TargetVariableEvent">
+    <End Role="Target" Type="DBModel.Store.TargetSet" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="VariableEvent" Type="DBModel.Store.VariableEventSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Target">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="VariableEvent">
+        <PropertyRef Name="Target_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="DBModelContainer1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TargetNameSet" EntityType="DBModel.TargetName" />
+          <EntitySet Name="TargetSet" EntityType="DBModel.Target" />
+          <EntitySet Name="VariableEventSet" EntityType="DBModel.VariableEvent" />
+          <AssociationSet Name="TargetNameTarget" Association="DBModel.TargetNameTarget">
+            <End Role="TargetName" EntitySet="TargetNameSet" />
+            <End Role="Target" EntitySet="TargetSet" />
+          </AssociationSet>
+          <AssociationSet Name="TargetVariableEvent" Association="DBModel.TargetVariableEvent">
+            <End Role="Target" EntitySet="TargetSet" />
+            <End Role="VariableEvent" EntitySet="VariableEventSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EnumType Name="DataType" cg:ExternalTypeName="NetCon.enums.DataType" />
+        <EnumType Name="ThresholdType" cg:ExternalTypeName="NetCon.enums.ThresholdType" />
+        <EntityType Name="TargetName">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" />
+          <Property Name="creationDate" Type="DateTime" Nullable="false" />
+          <Property Name="modifyDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Target" Relationship="DBModel.TargetNameTarget" FromRole="TargetName" ToRole="Target" />
+        </EntityType>
+        <EntityType Name="Target">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Nullable="false" />
+          <Property Name="rawData" Type="Binary" Nullable="false" />
+          <Property Name="dataType" Type="DBModel.DataType" Nullable="false" />
+          <Property Name="arraySize" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TargetName" Relationship="DBModel.TargetNameTarget" FromRole="Target" ToRole="TargetName" />
+          <Property Name="TargetName_id" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="VariableEvent" Relationship="DBModel.TargetVariableEvent" FromRole="Target" ToRole="VariableEvent" />
+        </EntityType>
+        <EntityType Name="VariableEvent">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Nullable="false" />
+          <Property Name="thresholdValue" Type="Binary" Nullable="false" />
+          <Property Name="thresholdValue2" Type="Binary" Nullable="false" />
+          <Property Name="thresholdType" Type="DBModel.ThresholdType" Nullable="false" />
+          <Property Name="thresholdDataType" Type="DBModel.DataType" Nullable="false" />
+          <NavigationProperty Name="Target" Relationship="DBModel.TargetVariableEvent" FromRole="VariableEvent" ToRole="Target" />
+        </EntityType>
+        <Association Name="TargetNameTarget">
+          <End Type="DBModel.TargetName" Role="TargetName" Multiplicity="1" />
+          <End Type="DBModel.Target" Role="Target" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TargetName">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Target">
+              <PropertyRef Name="TargetName_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TargetVariableEvent">
+          <End Type="DBModel.Target" Role="Target" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBModel.VariableEvent" Role="VariableEvent" Multiplicity="0..1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="DBModelContainer1">
+    <EntitySetMapping Name="TargetNameSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DBModel.TargetName)">
+        <MappingFragment StoreEntitySet="TargetNameSet">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="creationDate" ColumnName="creationDate" />
+          <ScalarProperty Name="modifyDate" ColumnName="modifyDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TargetSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DBModel.Target)">
+        <MappingFragment StoreEntitySet="TargetSet">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="rawData" ColumnName="rawData" />
+          <ScalarProperty Name="dataType" ColumnName="dataType" />
+          <ScalarProperty Name="arraySize" ColumnName="arraySize" />
+          <ScalarProperty Name="TargetName_id" ColumnName="TargetName_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VariableEventSet">
+      <EntityTypeMapping TypeName="IsTypeOf(DBModel.VariableEvent)">
+        <MappingFragment StoreEntitySet="VariableEventSet">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="date" ColumnName="date" />
+          <ScalarProperty Name="thresholdValue" ColumnName="thresholdValue" />
+          <ScalarProperty Name="thresholdValue2" ColumnName="thresholdValue2" />
+          <ScalarProperty Name="thresholdType" ColumnName="thresholdType" />
+          <ScalarProperty Name="thresholdDataType" ColumnName="thresholdDataType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="TargetVariableEvent" TypeName="DBModel.TargetVariableEvent" StoreEntitySet="VariableEventSet">
+      <EndProperty Name="Target">
+        <ScalarProperty Name="id" ColumnName="Target_id" />
+      </EndProperty>
+      <EndProperty Name="VariableEvent">
+        <ScalarProperty Name="id" ColumnName="id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
