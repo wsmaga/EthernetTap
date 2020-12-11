@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace NetCon.model
 {
-    public enum DataType { NONE, ByteArray, String, Boolean, Int16, Int32, Int64, Single, Double };
     public class Frame
     {
         //public DataType usefulDataType = DataType.NONE;

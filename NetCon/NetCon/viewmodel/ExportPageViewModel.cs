@@ -23,9 +23,9 @@ namespace NetCon.viewmodel
 
         private bool _fileExportOption = false;
         public bool FileExportOption
-        { 
-            get => _fileExportOption; 
-            set 
+        {
+            get => _fileExportOption;
+            set
             {
                 _fileExportOption = value;
                 if (value)
@@ -36,13 +36,21 @@ namespace NetCon.viewmodel
                 {
                     mainWindowSharedViewModel.logInfo("Odznaczono opcję eksportu do pliku *.pcap");
                 }
-                
-            } }
+
+            }
+        }
 
         public ExportPageViewModel(MainWindowViewModel sharedViewModel)
         {
             mainWindowSharedViewModel = sharedViewModel;
 
+            SetupPcapWriter();
+
+            
+        }
+
+        private void SetupPcapWriter()
+        {
             new SubjectObserver<Frame>(frame =>
             {
                 if (mPcapWriter.isInitialized)
@@ -53,12 +61,12 @@ namespace NetCon.viewmodel
 
             new SubjectObserver<CaptureState>(state =>
             {
-                if(state is CaptureState.CaptureOn)
+                if (state is CaptureState.CaptureOn)
                 {
                     if (!mPcapWriter.isInitialized)
                         mPcapWriter.InitWrite("myFrames.pcap");
                 }
-                else if(state is CaptureState.CaptureOff)
+                else if (state is CaptureState.CaptureOff)
                 {
                     if (mPcapWriter.isInitialized)
                         mPcapWriter.EndWrite();
