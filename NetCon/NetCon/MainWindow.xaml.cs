@@ -38,7 +38,8 @@ namespace NetCon
             mPages = new Page[]{
                 new CapturePage(mMainWindowViewModel),
                 new FiltersPage(mMainWindowViewModel),
-                new ExportPage(mMainWindowViewModel)
+                new ExportPage(mMainWindowViewModel),
+                new HardwareFilterPage(mMainWindowViewModel)
             };
 
 
@@ -58,6 +59,11 @@ namespace NetCon
         private void navigateToExportPage(object sender, RoutedEventArgs e)
         {
             contentFrame.Navigate(mPages[2]);
+        }
+
+        private void navigateToHardwareFilterPage(object sender, RoutedEventArgs e)
+        {
+            contentFrame.Navigate(mPages[3]);
         }
     }
 }
