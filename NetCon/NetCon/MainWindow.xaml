@@ -23,6 +23,7 @@
         <Button Grid.Column="0" x:Uid="filtersButton" Content="Przechwytywanie" HorizontalAlignment="Right" Margin="0,0,23,269" VerticalAlignment="Bottom" Width="107" Height="45" Click="navigateToCapturePage"/>
         <Button Grid.Column="0" x:Uid="filtersButton" Content="Filtry" HorizontalAlignment="Right" Margin="0,0,23,219" VerticalAlignment="Bottom" Width="107" Height="45" Click="navigateToFiltersPage"/>
         <Button Grid.Column="0" x:Uid="ExportButton" Content="Eksport" HorizontalAlignment="Right" Margin="0,0,23,170" VerticalAlignment="Bottom" Width="107" Height="44" Click="navigateToExportPage"/>
+        <Button Grid.Column="0" x:Uid="fpgaFiltersButton" Content="Filtry FPGA" HorizontalAlignment="Right" Margin="0,0,23,121" VerticalAlignment="Bottom" Width="107" Height="44" Click="navigateToHardwareFilterPage"/>
         <Frame  Grid.Column="1" x:Name="contentFrame" Background="#606060" Content="Frame"  HorizontalAlignment="Left" Height="408" VerticalAlignment="Top" Width="645" NavigationUIVisibility="Hidden"/>
         <Image Source="/res/images/RJ45M8P1.png" Margin="19,54,20,336" />
 
