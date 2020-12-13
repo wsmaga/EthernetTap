@@ -1,22 +1,18 @@
-﻿using NetCon.model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static NetCon.parsing.TargetDomain;
+﻿using NetCon.util;
 
 namespace NetCon.parsing
 {
     public class TargetDataDto
     {
-        public string Name;
-        public dynamic Value;
-        public string DataType; //change to enum after presentation
-        public byte[] RawData;
-        public bool TriggeredThreshold;
-        public dynamic ThresholdValue;
-        public string ThresholdType; //change to enum after presentation
-        public bool RegisterChanges;
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public dynamic Value { get; set; }
+        public DataType DataType { get; set; } 
+        public byte[] RawData { get; set; }
+        public bool TriggeredThreshold { get; set; }
+        public ThresholdType ThresholdType { get; set; }
+        public dynamic ThresholdValue { get; set; }
+        public dynamic ThresholdValue2 { get; set; }
+        public bool RegisterChanges { get; set; }
     }
 }

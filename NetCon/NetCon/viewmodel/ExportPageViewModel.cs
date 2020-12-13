@@ -1,14 +1,8 @@
 ﻿using NetCon.export;
 using NetCon.model;
 using NetCon.repo;
-using NetCon.ui;
 using NetCon.util;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetCon.viewmodel
 {

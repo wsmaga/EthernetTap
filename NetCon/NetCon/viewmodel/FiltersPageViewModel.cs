@@ -1,21 +1,15 @@
-﻿using NetCon.model;
-using NetCon.parsing;
-using NetCon.repo;
+﻿using NetCon.parsing;
 using NetCon.util;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Xml.Serialization;
 
 namespace NetCon.viewmodel
 {

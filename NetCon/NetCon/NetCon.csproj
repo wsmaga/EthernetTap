@@ -79,7 +79,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="enums\ThresholdType.cs" />
     <Compile Include="export\DBModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -106,7 +105,6 @@
     <Compile Include="interface\NetConImpl.cs" />
     <Compile Include="interface\NetConMockImpl.cs" />
     <Compile Include="model\ApplicationConfig.cs" />
-    <Compile Include="enums\DataType.cs" />
     <Compile Include="model\Frame.cs" />
     <Compile Include="filtering\FilterDomain.cs" />
     <Compile Include="filtering\FilterDto.cs" />
@@ -129,6 +127,7 @@
       <DependentUpon>FiltersPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="util\CommandHandler.cs" />
+    <Compile Include="util\Enums.cs" />
     <Compile Include="util\Subject.cs" />
     <Compile Include="util\SubjectObserver.cs" />
     <Compile Include="viewmodel\CapturePageViewModel.cs" />
