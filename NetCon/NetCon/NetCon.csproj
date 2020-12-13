@@ -97,9 +97,11 @@
     </Compile>
     <Compile Include="export\IPcapWriter.cs" />
     <Compile Include="export\PcapWriterImpl.cs" />
+    <Compile Include="export\Target.cs" />
     <Compile Include="export\TargetName.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="export\VariableEvent.cs" />
     <Compile Include="interface\INetCon.cs" />
     <Compile Include="interface\NetConImpl.cs" />
     <Compile Include="interface\NetConMockImpl.cs" />
