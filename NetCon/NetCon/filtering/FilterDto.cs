@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
     [XmlRoot("Filter")]
     public class FilterDto

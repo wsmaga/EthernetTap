@@ -12,7 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
     public class FilterDomain : IFilter
     {

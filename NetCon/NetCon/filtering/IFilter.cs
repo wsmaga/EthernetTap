@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
     public interface IFilter
     {

@@ -1,5 +1,5 @@
 ﻿using NetCon.model;
-using NetCon.parsing;
+using NetCon.filtering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
