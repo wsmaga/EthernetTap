@@ -1,4 +1,4 @@
-﻿using NetCon.enums;
+﻿using NetCon.util;
 using System;
 using System.Data;
 using System.Data.SqlClient;

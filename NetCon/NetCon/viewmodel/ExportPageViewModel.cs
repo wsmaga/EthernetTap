@@ -1,5 +1,4 @@
 ﻿using NetCon.export;
-using NetCon.export.entities;
 using NetCon.export.services;
 using NetCon.filtering;
 using NetCon.model;
@@ -7,9 +6,6 @@ using NetCon.repo;
 using NetCon.util;
 using System;
 using System.ComponentModel;
-using System.Data.Entity.Core.EntityClient;
-using System.Data.SqlClient;
-using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -106,7 +102,7 @@ namespace NetCon.viewmodel
             SetupPcapWriter();
             SetupSettingsChangeEnabler();
 
-            
+
 
             //var entityBuilder = new EntityConnectionStringBuilder();
             //string connectionString = string.Format(
@@ -200,10 +196,10 @@ namespace NetCon.viewmodel
             }
             switch (databaseService.CheckConnection(ServerAddress, DatabaseName))
             {
-                case enums.DBConnectionStatus.OK:
+                case DBConnectionStatus.OK:
                     MessageBox.Show("Udało się połączyć z podaną bazą danych.");
                     break;
-                case enums.DBConnectionStatus.BadServer:
+                case DBConnectionStatus.BadServer:
                     MessageBox.Show(
                         "Nie udało się połączyć z podanym serwerem!",
                         "ERROR!",
@@ -211,7 +207,7 @@ namespace NetCon.viewmodel
                         MessageBoxImage.Error
                     );
                     break;
-                case enums.DBConnectionStatus.BadDB:
+                case DBConnectionStatus.BadDB:
                     MessageBoxResult result = MessageBox.Show(
                         "Nie udało się połączyć z podaną bazą danych na serwerze! Podana baza jest niedostępna lub nie istnieje.\n\n" +
                         "Czy chcesz spróbować utworzyć nową bazę danych o podanej nazwie?",

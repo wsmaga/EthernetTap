@@ -1,6 +1,6 @@
 ﻿using NetCon.util;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
     public class TargetDataDto
     {
