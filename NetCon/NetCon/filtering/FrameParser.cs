@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
     class FrameParser
     {
@@ -114,14 +114,12 @@ namespace NetCon.parsing
         }
         private void FilterFrame(Frame frame)
         {
-            Console.WriteLine(BitConverter.ToString(frame.RawData).Replace("-", " ").ToLower());//remove after presentation
             if (filtersConfig != null)
             { 
                 IFilter passedFilter = filtersConfig.pass(frame);
                 if (passedFilter!=null)
                 {
                     var data = passedFilter.GetUsefulData(frame);
-                    Console.WriteLine(JToken.FromObject(data));  //remove after presentation
                     foreach(var d in data)
                         TargetDataRepo.FrameDataSubject.pushNextValue(d);
                 }

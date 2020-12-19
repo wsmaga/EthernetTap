@@ -24,4 +24,11 @@
         OutOpen,
         OutClosed
     }
+
+    public enum DBConnectionStatus
+    {
+        OK,
+        BadServer,
+        BadDB
+    }
 }

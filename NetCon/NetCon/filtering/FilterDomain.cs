@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
     public class FilterDomain : IFilter
     {
