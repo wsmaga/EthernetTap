@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetCon.enums;
+using NetCon.export.entities;
 
 namespace NetCon.export.services
 {
     class DOMapper
-        // TODO: Zmienić jak w TargetDataDto pojawią się enumy zamiast stringów
+    // TODO: Zmienić jak w TargetDataDto pojawią się enumy zamiast stringów
     {
         private static DOMapper instance;
         public static DOMapper GetInstance()
@@ -50,16 +51,18 @@ namespace NetCon.export.services
                     dataType = DataType.NONE;
                     break;
             }
-            return new Target(
-                //targetDataDto.nameId,
-                0,
-                DateTime.Now,
-                targetDataDto.RawData,
-                //targetDataDto.DataType,
-                dataType,
-                //targetDataDto.arraySize,
-                1
-            );
+            throw new NotImplementedException();
+            return new Target();
+            //return new Target(
+            //    //targetDataDto.nameId,
+            //    0,
+            //    DateTime.Now,
+            //    targetDataDto.RawData,
+            //    //targetDataDto.DataType,
+            //    dataType,
+            //    //targetDataDto.arraySize,
+            //    1
+            //);
         }
     }
 }

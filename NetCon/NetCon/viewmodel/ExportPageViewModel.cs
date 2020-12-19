@@ -1,4 +1,5 @@
 ﻿using NetCon.export;
+using NetCon.export.entities;
 using NetCon.export.services;
 using NetCon.filtering;
 using NetCon.model;
@@ -7,6 +8,7 @@ using NetCon.util;
 using System;
 using System.ComponentModel;
 using System.Data.Entity.Core.EntityClient;
+using System.Data.SqlClient;
 using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Input;
@@ -63,6 +65,8 @@ namespace NetCon.viewmodel
             }
         }
 
+        public bool SettingsChangeEnabled { get; set; } = true;
+
         private String _serverAddress = "(LocalDB)\\MSSQLLocalDB";
         public String ServerAddress
         {
@@ -70,14 +74,12 @@ namespace NetCon.viewmodel
             set => _serverAddress = value;
         }
 
-        private String _databaseName;
+        private String _databaseName = "EthernetTap";
         public String DatabaseName
         {
             get => _databaseName;
             set => _databaseName = value;
         }
-
-        public bool SettingsChangeEnabled { get; set; } = true;
 
         private ICommand _testConnectionButtonCommand;
         public ICommand TestConnectionButtonCommand
@@ -104,7 +106,7 @@ namespace NetCon.viewmodel
             SetupPcapWriter();
             SetupSettingsChangeEnabler();
 
-
+            
 
             //var entityBuilder = new EntityConnectionStringBuilder();
             //string connectionString = string.Format(
@@ -114,7 +116,7 @@ namespace NetCon.viewmodel
             //);
             //entityBuilder.ProviderConnectionString = connectionString;
             //entityBuilder.Provider = "System.Data.SqlClient";
-            
+
             //entityBuilder.Metadata = @"res://*/export.DBModel.csdl|res://*/export.DBModel.ssdl|res://*/export.DBModel.msl";
 
 

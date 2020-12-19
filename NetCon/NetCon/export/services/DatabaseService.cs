@@ -1,14 +1,7 @@
 ﻿using NetCon.enums;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NetCon.export.services
 {
@@ -38,79 +31,24 @@ namespace NetCon.export.services
 
         public bool InitializeDatabase(string serverAddress, string databaseName)
         {
-            return CreateDatabase(serverAddress, databaseName) &&
-                PopulateDatabaseWithTables(serverAddress, databaseName);
-        }
-
-        private bool PopulateDatabaseWithTables(string serverAddress, string databaseName)
-        {
             bool result = true;
-
-            SqlConnection databaseConnection = new SqlConnection(
-                string.Format(
-                    "Data source={0};Integrated Security=true;Database={1};Timeout=5;",
-                    serverAddress,
-                    databaseName
-                )
-            );
-
-            string DDLScript = File.ReadAllText("DBInitDDL.sql");
-            SqlCommand DDLCommand = new SqlCommand(DDLScript, databaseConnection);
-            DDLCommand.CommandTimeout = 5;
-
-            try
+            SqlConnectionStringBuilder connectionStringBuilder = new SqlConnectionStringBuilder()
             {
-                databaseConnection.Open();
-                DDLCommand.ExecuteNonQuery();
-            }
-            catch (SqlException e)
+                DataSource = serverAddress,
+                InitialCatalog = databaseName,
+                IntegratedSecurity = true
+            };
+            using (DBContext dBContext = new DBContext(connectionStringBuilder.ConnectionString))
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                result = false;
-            }
-            finally
-            {
-                if (databaseConnection.State == ConnectionState.Open)
+                try
                 {
-                    databaseConnection.Close();
+                    dBContext.Database.Initialize(true);
                 }
-            }
-
-            return result;
-        }
-
-        private bool CreateDatabase(string serverAddress, string databaseName)
-        {
-            bool result = true;
-
-            SqlConnection serverConnection = new SqlConnection(
-                string.Format(
-                    "Data source={0};Integrated Security=true;Timeout=5;",
-                    serverAddress
-                )
-            );
-
-            string query = String.Format("CREATE DATABASE {0};", databaseName);
-            SqlCommand createDatabaseCommand = new SqlCommand(query, serverConnection);
-            createDatabaseCommand.CommandTimeout = 5;
-
-            try
-            {
-                serverConnection.Open();
-                createDatabaseCommand.ExecuteNonQuery();
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                result = false;
-            }
-            finally
-            {
-                if (serverConnection.State == ConnectionState.Open)
+                catch (SqlException e)
                 {
-                    serverConnection.Close();
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    result = false;
                 }
             }
 
