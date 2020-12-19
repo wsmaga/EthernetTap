@@ -11,8 +11,8 @@ namespace NetCon.filtering
         public byte[] RawData { get; set; }
         public bool TriggeredThreshold { get; set; }
         public ThresholdType ThresholdType { get; set; }
-        public dynamic ThresholdValue { get; set; }
-        public dynamic ThresholdValue2 { get; set; }
-        public bool RegisterChanges { get; set; }
+        public byte[] ThresholdValue { get; set; }
+        public byte[] ThresholdValue2 { get; set; }
+        public bool RegisterChanges => ThresholdType != ThresholdType.NONE;
     }
 }

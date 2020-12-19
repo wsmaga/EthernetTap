@@ -6,9 +6,8 @@
 			<Bytes>70,71</Bytes>
 			<Type>integer</Type>
 			<Name>counter</Name>
-			<RegisterChanges>true</RegisterChanges>
 			<Threshold>
-				<Type>inclosed</Type>
+				<Type>outopen</Type>
 				<Value>-10000</Value>
 				<Value2>10000</Value2>
 			</Threshold>
