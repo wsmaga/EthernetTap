@@ -1,6 +1,5 @@
-﻿using Kaitai;
-using NetCon.model;
-using NetCon.filtering;
+﻿using NetCon.model;
+using NetCon.parsing;
 using NetCon.repo;
 using NetCon.util;
 using System;
@@ -9,7 +8,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -36,12 +34,12 @@ namespace NetCon.viewmodel
             mMainWindowSharedViewModel = sharedViewModel;
             frameParser = new FrameParser(mFramesRepository.FrameSubject);
             //Observing subjects
-            /* new SubjectObserver<Frame>(frame =>
-             {
-                 string rawDataString = BitConverter.ToString(frame.RawData).Replace("-", "").ToLower();
-                 frameParser.Parse(rawDataString);
-                 //FramesCounter=frameParser.AllFrames.Count;
-             }).Subscribe(mFramesRepository.FrameSubject);*/
+           /* new SubjectObserver<Frame>(frame =>
+            {
+                string rawDataString = BitConverter.ToString(frame.RawData).Replace("-", "").ToLower();
+                frameParser.Parse(rawDataString);
+                //FramesCounter=frameParser.AllFrames.Count;
+            }).Subscribe(mFramesRepository.FrameSubject);*/
 
             new SubjectObserver<TargetDataDto>(frame =>
             {
@@ -75,7 +73,7 @@ namespace NetCon.viewmodel
 
             //Setup capture 
 
-            if (config == null)
+            if(config == null)
             {
                 mMainWindowSharedViewModel.logAction("Błąd podczas wczytywania ustawień. Załadowano wartości domyślne");
                 config = new ApplicationConfig
@@ -101,7 +99,7 @@ namespace NetCon.viewmodel
                 {
                     port = Int32.Parse(value);
                 }
-                catch (Exception) { }
+                catch (Exception){}
             }
         }
 
@@ -131,8 +129,7 @@ namespace NetCon.viewmodel
         public ICommand SaveChangesButtonCommand
         {
             get => _saveChangesButtonCommand ?? (_saveChangesButtonCommand = new CommandHandler(
-                    () =>
-                    {
+                    () => {
                         ConfigFileHandler<ApplicationConfig>.WriteSettings(new ApplicationConfig
                         {
                             port = this.port,
@@ -152,7 +149,7 @@ namespace NetCon.viewmodel
 
         private void startCapture()
         {
-            if (File.Exists("filters.bin"))
+            if(File.Exists("filters.bin"))
             {
                 FileStream stream = new FileStream("filters.bin", FileMode.Open);
                 BinaryFormatter formatter = new BinaryFormatter();
@@ -167,9 +164,9 @@ namespace NetCon.viewmodel
                     frameParser.LoadFilterConfiguration(new FiltersConfiguration(builder));
                     mFramesRepository.StartCapture();
                 }
-                catch (SerializationException)
+                catch(SerializationException)
                 {
-                    if (MessageBox.Show("Deserializacja filtrow z pliku jest niemożliwa. Filtry nie zostana zaladowane. Czy na pewno chcesz rozpoczac przechwytywanie?", "Brak filtrow", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    if(MessageBox.Show("Deserializacja filtrow z pliku jest niemożliwa. Filtry nie zostana zaladowane. Czy na pewno chcesz rozpoczac przechwytywanie?","Brak filtrow",MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                     {
                         mFramesRepository.StartCapture();
                     }

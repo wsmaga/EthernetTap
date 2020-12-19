@@ -18,8 +18,8 @@ namespace NetCon.export
         public System.DateTime date { get; set; }
         public byte[] thresholdValue { get; set; }
         public byte[] thresholdValue2 { get; set; }
-        public NetCon.enums.ThresholdType thresholdType { get; set; }
-        public NetCon.enums.DataType thresholdDataType { get; set; }
+        public NetCon.util.ThresholdType thresholdType { get; set; }
+        public NetCon.util.DataType thresholdDataType { get; set; }
     
         public virtual Target Target { get; set; }
     }

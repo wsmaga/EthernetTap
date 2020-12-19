@@ -1,5 +1,4 @@
-﻿using Kaitai;
-using NetCon.model;
+﻿using NetCon.model;
 using NetCon.repo;
 using NetCon.util;
 using Newtonsoft.Json.Linq;

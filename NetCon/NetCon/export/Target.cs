@@ -17,7 +17,7 @@ namespace NetCon.export
         public long id { get; set; }
         public System.DateTime date { get; set; }
         public byte[] rawData { get; set; }
-        public NetCon.enums.DataType dataType { get; set; }
+        public NetCon.util.DataType dataType { get; set; }
         public int arraySize { get; set; }
         public long TargetName_id { get; set; }
     

@@ -1,16 +1,9 @@
-﻿using NetCon.enums;
+﻿using NetCon.util;
 using NetCon.model;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace NetCon.filtering
 {
@@ -72,6 +65,7 @@ namespace NetCon.filtering
         public int[] Bytes;
         public DataType Type;
         public string Name;
+        public int Id;
         public bool RegisterChanges;
         public static TargetDomain New(TargetDto targetDto)
         {
@@ -103,15 +97,16 @@ namespace NetCon.filtering
                 default: return null;
             }
             var threshold = TargetThreshold.New(type, targetDto.Threshold);
-            return new TargetDomain(targetDto.Name, targetDto.Bytes, type, threshold, targetDto.RegisterChanges);
+            return new TargetDomain(targetDto.Name, targetDto.Bytes, type, threshold,targetDto.Id, targetDto.RegisterChanges);
         }
-        private TargetDomain(string name, int[] bytes, DataType type, TargetThreshold threshold, bool registerChanges = false)
+        private TargetDomain(string name, int[] bytes, DataType type, TargetThreshold threshold, int id, bool registerChanges = false)
         {
             Bytes = bytes;
             Type = type;
             Name = name;
             Threshold = threshold;
             RegisterChanges = registerChanges;
+            Id = id;
         }
 
         public TargetDataDto GetTargetData(Frame frame)
@@ -159,7 +154,7 @@ namespace NetCon.filtering
                     break;
                 default: throw new ArgumentException("Target type data extraction not implemented");
             }
-            string thresholdType;
+            /*string thresholdType;
             switch (Threshold?.Type)
             {
                 case ThresholdType.GT: thresholdType = "gt"; break;
@@ -185,17 +180,19 @@ namespace NetCon.filtering
                 case DataType.Single: dataType = "Single"; break;
                 case DataType.Double: dataType = "Double"; break;
                 default: dataType = "NONE"; break;
-            }
+            }*/
             return new TargetDataDto
             {
+                Id=this.Id,
                 Name = this.Name,
                 Value = value,
-                DataType = dataType,
+                DataType = this.Type,
                 RawData = rawData.ToArray(),
                 TriggeredThreshold = this.Threshold?.IsAboveThreshold(value) ?? false,
                 ThresholdValue = this.Threshold?.Value,
+                ThresholdValue2=this.Threshold.Value2,
                 RegisterChanges = this.RegisterChanges,
-                ThresholdType = thresholdType
+                ThresholdType = this.Threshold.Type
             };
 
 
