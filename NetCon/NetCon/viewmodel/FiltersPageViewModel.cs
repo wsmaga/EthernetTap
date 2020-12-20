@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace NetCon.viewmodel
@@ -34,6 +34,12 @@ namespace NetCon.viewmodel
                             var newFilterNoWhitespace = new string(newFilterText.Where(c => !char.IsWhiteSpace(c)).ToArray());
                             FilterDto filterDto = FilterDto.Deserialize(newFilterNoWhitespace);
                             FilterDomain filterDomain = FilterDomain.New(filterDto);
+                            if(filterDomain.Targets.Any(t=>t.Threshold?.Type==ThresholdType.NONE))
+                            {
+                                var dialogResult = MessageBox.Show("Jeden lub więcej target w filtrze posiada niepoprawny threshold. Podczas filtracji zostanie on zignorowany.\nCzy chcesz dodać ten filtr?", "Niepoprawny threshold", MessageBoxButtons.YesNo);
+                                if (dialogResult != DialogResult.Yes)
+                                    return;
+                            }
                             if (filterDefinitions.IndexOf(newFilterNoWhitespace) ==-1)
                             { 
                                 filterDefinitions.Add(newFilterNoWhitespace);
@@ -45,7 +51,7 @@ namespace NetCon.viewmodel
                         }
                         catch(ArgumentException ex)
                         {
-                            MessageBox.Show($"Błędna definicja filtru\n{ex.Message}");
+                            MessageBox.Show($"Błędna definicja filtru\n{ex.Message}","Błąd dodawania filtru");
                         }
                             
                     },
@@ -123,11 +129,13 @@ namespace NetCon.viewmodel
                         try
                         {
                             formatter.Serialize(stream, filterDefinitions.ToList());
-                            MessageBox.Show($"Poprawnie załadowano filtry");
+                            MessageBox.Show($"Poprawnie załadowano filtry","Załadowano filtry");
+                            mainWindowSharedViewModel.logInfo($"Poprawnie załadowano filtry");
                         }
                         catch (SerializationException)
                         {
                             MessageBox.Show("Bład serializacji");
+                            mainWindowSharedViewModel.logInfo($"Bład serializacji");
                         }
                         finally
                         {
@@ -163,13 +171,15 @@ namespace NetCon.viewmodel
                                     {
                                         FilterDomain.New(FilterDto.Deserialize(s));
                                         newFilterDefinitions.Add(s);
+                                        mainWindowSharedViewModel.logInfo($"Załadowano filtry");
                                     }
                                     catch(ArgumentException)
                                     {
-                                        if (MessageBox.Show("Plik z filtrami jest uszkodzony. Czy chcesz usunąć stary plik?", "Błąd pliku", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                                        if (MessageBox.Show("Plik z filtrami jest uszkodzony. Czy chcesz usunąć stary plik?", "Błąd pliku", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                         {
                                             File.Delete("filters.bin");
                                         }
+                                        return;
                                     }  
                                 }
                                 filterDefinitions = newFilterDefinitions;
@@ -178,11 +188,10 @@ namespace NetCon.viewmodel
                             }
                             catch (SerializationException)
                             {
-                                if (MessageBox.Show("Deserializacja filtrów z pliku jest niemożliwa. Czy chcesz usunąć stary plik?", "Błąd deserializacji", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                                if (MessageBox.Show("Deserializacja filtrów z pliku jest niemożliwa. Czy chcesz usunąć stary plik?", "Błąd deserializacji", MessageBoxButtons.YesNo) == DialogResult.Yes)
                                 {
                                     try
                                     {
-
                                         File.Delete("filters.bin");
                                     }
                                     catch (IOException)

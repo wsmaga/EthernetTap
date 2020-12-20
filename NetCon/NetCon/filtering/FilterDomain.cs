@@ -66,7 +66,6 @@ namespace NetCon.filtering
         public DataType Type;
         public string Name;
         public int Id;
-        public bool RegisterChanges;
         public static TargetDomain New(TargetDto targetDto)
         {
             if (!(targetDto?.IsValid == true))
@@ -97,15 +96,14 @@ namespace NetCon.filtering
                 default: return null;
             }
             var threshold = TargetThreshold.New(type, targetDto.Threshold);
-            return new TargetDomain(targetDto.Name, targetDto.Bytes, type, threshold,targetDto.Id, targetDto.RegisterChanges);
+            return new TargetDomain(targetDto.Name, targetDto.Bytes, type, threshold,targetDto.Id);
         }
-        private TargetDomain(string name, int[] bytes, DataType type, TargetThreshold threshold, int id, bool registerChanges = false)
+        private TargetDomain(string name, int[] bytes, DataType type, TargetThreshold threshold, int id)
         {
             Bytes = bytes;
             Type = type;
             Name = name;
             Threshold = threshold;
-            RegisterChanges = registerChanges;
             Id = id;
         }
 
@@ -116,25 +114,35 @@ namespace NetCon.filtering
                 rawData.Add(frame.RawData[index]);
             dynamic value;
             var dataArr = rawData.ToArray();
+            byte[] thresholdValue1=null, thresholdValue2=null;
             switch (Type)
             {
                 case DataType.ByteArray:
                     value = rawData.ToArray();
                     break;
                 case DataType.Int16:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToInt16(dataArr, 0);
+                    if(Threshold!=null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((short)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((short)Threshold.Value2) : null;
+                    }
                     break;
                 case DataType.Int32:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToInt32(dataArr, 0);
+                    if (Threshold != null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((int)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((int)Threshold.Value2) : null;
+                    }
                     break;
                 case DataType.Int64:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToInt64(dataArr, 0);
+                    if (Threshold != null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((long)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((long)Threshold.Value2) : null;
+                    }
                     break;
                 case DataType.String:
                     value = string.Concat(rawData.Select(el => (char)el));
@@ -143,14 +151,20 @@ namespace NetCon.filtering
                     value = rawData.Count(el => el == 0) == rawData.Count();
                     break;
                 case DataType.Single:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToSingle(dataArr, 0);
+                    if (Threshold != null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((float)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((float)Threshold.Value2) : null;
+                    }
                     break;
                 case DataType.Double:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToDouble(dataArr, 0);
+                    if (Threshold != null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((double)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((double)Threshold.Value2) : null;
+                    }
                     break;
                 default: throw new ArgumentException("Target type data extraction not implemented");
             }
@@ -189,13 +203,10 @@ namespace NetCon.filtering
                 DataType = this.Type,
                 RawData = rawData.ToArray(),
                 TriggeredThreshold = this.Threshold?.IsAboveThreshold(value) ?? false,
-                ThresholdValue = this.Threshold?.Value,
-                ThresholdValue2=this.Threshold.Value2,
-                RegisterChanges = this.RegisterChanges,
+                ThresholdValue = thresholdValue1,
+                ThresholdValue2= thresholdValue2,
                 ThresholdType = this.Threshold.Type
             };
-
-
         }
         public partial class TargetThreshold
         {

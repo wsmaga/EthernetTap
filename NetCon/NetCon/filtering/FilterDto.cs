@@ -61,8 +61,8 @@ namespace NetCon.filtering
         public string Name; 
         [XmlElement("Threshold")]
         public ThresholdDto Threshold;
-        [XmlElement("RegisterChanges")]
-        public bool RegisterChanges;
+        /*[XmlElement("RegisterChanges")]
+        public bool RegisterChanges;*/
         [XmlIgnore]
         public bool IsValid => (
             Id!=-1 &&
