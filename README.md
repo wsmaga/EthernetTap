@@ -15,3 +15,22 @@ Student project assignment - industry network ethernet tap based on FPGA, coded 
   <li>???</li>
   <li>Profit.</li>
 </ol>
+
+<h2>An example filter to extract that one incrementing variable from the mockup pcap frames. Exporting was tested on that.</h2>
+&lt;Filter&gt;<br>
+	&lt;Condition&gt;And([20]=88,[21]=a4)&lt;/Condition&gt;<br>
+	&lt;Targets&gt;<br>
+		&lt;Target&gt;<br>
+			&lt;Id&gt;69&lt;/Id&gt;<br>
+			&lt;Bytes&gt;50,51,52,53&lt;/Bytes&gt;<br>
+			&lt;Type&gt;integer&lt;/Type&gt;<br>
+			&lt;Name&gt;zmienna2&lt;/Name&gt;<br>
+			&lt;RegisterChanges&gt;true&lt;/RegisterChanges&gt;<br>
+			&lt;Threshold&gt;<br>
+				&lt;Type&gt;gt&lt;/Type&gt;<br>
+				&lt;Value&gt;100&lt;/Value&gt;<br>
+				&lt;Value2&gt;100&lt;/Value2&gt;<br>
+			&lt;/Threshold&gt;<br>
+		&lt;/Target&gt;<br>
+	&lt;/Targets&gt;<br>
+&lt;/Filter&gt;<br>
