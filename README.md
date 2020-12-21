@@ -17,20 +17,22 @@ Student project assignment - industry network ethernet tap based on FPGA, coded 
 </ol>
 
 <h2>An example filter to extract that one incrementing variable from the mockup pcap frames. Exporting was tested on that.</h2>
-&lt;Filter&gt;<br>
-&#09;&lt;Condition&gt;And([20]=88,[21]=a4)&lt;/Condition&gt;<br>
-&#09;&lt;Targets&gt;<br>
-&#09;&#09;&lt;Target&gt;<br>
-&#09;&#09;&#09;&lt;Id&gt;69&lt;/Id&gt;<br>
-&#09;&#09;&#09;&lt;Bytes&gt;50,51,52,53&lt;/Bytes&gt;<br>
-&#09;&#09;&#09;&lt;Type&gt;integer&lt;/Type&gt;<br>
-&#09;&#09;&#09;&lt;Name&gt;zmienna2&lt;/Name&gt;<br>
-&#09;&#09;&#09;&lt;RegisterChanges&gt;true&lt;/RegisterChanges&gt;<br>
-&#09;&#09;&#09;&lt;Threshold&gt;<br>
-&#09;&#09;&#09;&#09;&lt;Type&gt;gt&lt;/Type&gt;<br>
-&#09;&#09;&#09;&#09;&lt;Value&gt;100&lt;/Value&gt;<br>
-&#09;&#09;&#09;&#09;&lt;Value2&gt;100&lt;/Value2&gt;<br>
-&#09;&#09;&#09;&lt;/Threshold&gt;<br>
-&#09;&#09;&lt;/Target&gt;<br>
-&#09;&lt;/Targets&gt;<br>
-&lt;/Filter&gt;<br>
+<pre>
+&lt;Filter&gt;
+	&lt;Condition&gt;And([20]=88,[21]=a4)&lt;/Condition&gt;
+	&lt;Targets&gt;
+		&lt;Target&gt;
+			&lt;Id&gt;69&lt;/Id&gt;
+			&lt;Bytes&gt;50,51,52,53&lt;/Bytes&gt;
+			&lt;Type&gt;integer&lt;/Type&gt;
+			&lt;Name&gt;zmienna2&lt;/Name&gt;
+			&lt;RegisterChanges&gt;true&lt;/RegisterChanges&gt;
+			&lt;Threshold&gt;
+				&lt;Type&gt;gt&lt;/Type&gt;
+				&lt;Value&gt;100&lt;/Value&gt;
+				&lt;Value2&gt;100&lt;/Value2&gt;
+			&lt;/Threshold&gt;
+		&lt;/Target&gt;
+	&lt;/Targets&gt;
+&lt;/Filter&gt;
+</pre>
