@@ -4,8 +4,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -107,21 +105,33 @@ namespace NetCon.export.services
         {
             using (DBContext dBContext = new DBContext(ConnectionString))
             {
-                targetBuffer.ForEach(target =>
+                try
                 {
-                    TargetName targetName = dBContext.TargetNames.Find(target.TargetNameID);
-                    if (targetName != null)
+                    targetBuffer.ForEach(target =>
                     {
-                        if (!targetName.Name.Equals(target.TargetName.Name))
+                        TargetName targetName = dBContext.TargetNames.Find(target.TargetNameID);
+                        if (targetName != null)
                         {
-                            targetName.Name = target.TargetName.Name;
-                            targetName.ModifyDate = target.Date;
+                            if (!targetName.Name.Equals(target.TargetName.Name))
+                            {
+                                targetName.Name = target.TargetName.Name;
+                                targetName.ModifyDate = target.Date;
+                            }
+                            target.SetTargetName(targetName);
                         }
-                        target.SetTargetName(targetName);
-                    }
-                    dBContext.Targets.Add(target);
-                });
-                dBContext.SaveChanges();
+                        dBContext.Targets.Add(target);
+                    });
+                    dBContext.SaveChanges();
+                }
+                catch (SqlException e)
+                {
+                    // TODO: Better exception handling?
+                    Console.WriteLine("ERROR PERSISTING TARGET BUFFER!");
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    targetFIFO = new ConcurrentQueue<List<Target>>();
+                    isRunning = false;
+                }
             }
         }
 
