@@ -60,13 +60,23 @@
                             Text="{Binding DatabaseName}"
                         />
                     </WrapPanel>
-                    <Button
-                        Content="Testuj połączenie"
-                        Width="100"
-                        HorizontalAlignment="Left"
-                        Command="{Binding TestConnectionButtonCommand}"
-                        IsEnabled="{Binding SettingsChangeEnabled}"
-                    />
+                    <WrapPanel>
+                        <Button
+                            Content="Testuj połączenie"
+                            Width="100"
+                            HorizontalAlignment="Left"
+                            Command="{Binding TestConnectionButtonCommand}"
+                            IsEnabled="{Binding SettingsChangeEnabled}"
+                            Margin="0 0 5 0"
+                        />
+                        <Button
+                            Content="Zatwierdź"
+                            Width="60"
+                            HorizontalAlignment="Left"
+                            Command="{Binding ConfirmButtonCommand}"
+                            IsEnabled="{Binding SettingsChangeEnabled}"
+                        />
+                    </WrapPanel>
                 </StackPanel>
             </Grid>
         </GroupBox>

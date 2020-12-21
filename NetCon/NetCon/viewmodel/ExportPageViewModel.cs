@@ -6,6 +6,7 @@ using NetCon.repo;
 using NetCon.util;
 using System;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -22,8 +23,9 @@ namespace NetCon.viewmodel
         private readonly IFrameRepository<Frame> mFramesRepository = FrameRepositoryImpl.instance;
         private readonly TargetDataRepository targetDataRepository = TargetDataRepository.GetInstance();
 
-        private readonly DOMapper doMapper = DOMapper.GetInstance();
+        private readonly EntityMapper doMapper = EntityMapper.GetInstance();
         private readonly DatabaseService databaseService = DatabaseService.GetInstance();
+        private readonly EntityPersistor entityPersistor = EntityPersistor.GetInstance();
 
         private bool _fileExportOption = false;
         public bool FileExportOption
@@ -84,13 +86,31 @@ namespace NetCon.viewmodel
                     () =>
                     {
                         SettingsChangeEnabled = false;
+                        mainWindowSharedViewModel.logInfo("Sprawdzanie połączenia z bazą danych...");
                         AllowUIToUpdate();
                         CheckDatabaseConnection();
                         SettingsChangeEnabled = true;
+                        mainWindowSharedViewModel.logInfo("Zakończono sprawdzanie połączenia z bazą danych.");
                     },
                     () =>
                     {
-                        return DatabaseExportOption && SettingsChangeEnabled;
+                        return SettingsChangeEnabled;
+                    }
+                    ));
+        }
+
+        private ICommand _confirmButtonCommand;
+        public ICommand ConfirmButtonCommand
+        {
+            get => _confirmButtonCommand ?? (_confirmButtonCommand = new CommandHandler(
+                    () =>
+                    {
+                        entityPersistor.ConnectionString = BuildConnectionString();
+                        mainWindowSharedViewModel.logInfo("Zatwierdzono adres serwera i nazwę bazy danych.");
+                    },
+                    () =>
+                    {
+                        return SettingsChangeEnabled;
                     }
                     ));
         }
@@ -102,44 +122,27 @@ namespace NetCon.viewmodel
             SetupPcapWriter();
             SetupSettingsChangeEnabler();
 
+            entityPersistor.ConnectionString = BuildConnectionString();
 
+            new SubjectObserver<TargetDataDto>(data =>
+            {
+                if (DatabaseExportOption)
+                {
+                    entityPersistor.BufferTargetData(data);
+                }
+            }).Subscribe(targetDataRepository.FrameDataSubject);
 
-            //var entityBuilder = new EntityConnectionStringBuilder();
-            //string connectionString = string.Format(
-            //    "Data source={0};Integrated Security=true;Database={1};Timeout=5;MultipleActiveResultSets=True;App=EntityFramework;attachdbfilename=C:\\Users\\Ola\\test.mdf;",
-            //    ServerAddress,
-            //    DatabaseName
-            //);
-            //entityBuilder.ProviderConnectionString = connectionString;
-            //entityBuilder.Provider = "System.Data.SqlClient";
-
-            //entityBuilder.Metadata = @"res://*/export.DBModel.csdl|res://*/export.DBModel.ssdl|res://*/export.DBModel.msl";
-
-
-
-            //var serializer = new JavaScriptSerializer();
-            //new SubjectObserver<TargetDataDto>(data =>
-            //{
-            //    Console.WriteLine(serializer.Serialize(data));
-            //    using (DBModelContext dbModelContext = new DBModelContext(entityBuilder.ConnectionString))
-            //    {
-            //        var lel = dbModelContext.Database.CompatibleWithModel(true);
-            //        Target target = doMapper.ToEntity(data);
-            //        TargetName targetName = dbModelContext.TargetNameSet.Find(69);
-            //        if (targetName == null)
-            //        {
-            //            targetName = new TargetName();
-            //            targetName.id = 69;
-            //            targetName.name = "lel";
-            //            targetName.creationDate = DateTime.Now;
-            //            targetName.modifyDate = DateTime.Now;
-            //        }
-            //        target.TargetName = targetName;
-            //        dbModelContext.TargetSet.Add(target);
-            //        dbModelContext.SaveChanges();
-            //    }
-            //}).Subscribe(targetDataRepository.FrameDataSubject);
-
+            new SubjectObserver<CaptureState>(state =>
+            {
+                if (state is CaptureState.CaptureOn)
+                {
+                    entityPersistor.StartExporting();
+                }
+                else if (state is CaptureState.CaptureOff)
+                {
+                    entityPersistor.StopExporting();
+                }
+            }).Subscribe(mFramesRepository.CaptureState);
         }
 
         private void SetupSettingsChangeEnabler()
@@ -216,6 +219,9 @@ namespace NetCon.viewmodel
                         MessageBoxImage.Warning
                     );
                     if (result == MessageBoxResult.Yes)
+                    {
+                        mainWindowSharedViewModel.logInfo(String.Format("Tworzenie bazy \"{0}\" pod adresem \"{1}\" ...", DatabaseName, ServerAddress));
+                        AllowUIToUpdate();
                         if (databaseService.InitializeDatabase(ServerAddress, DatabaseName))
                             MessageBox.Show("Udało się stworzyć nową bazę danych.");
                         else
@@ -225,10 +231,21 @@ namespace NetCon.viewmodel
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Error
                             );
+                    }
                     break;
                 default:
                     break;
             }
+        }
+
+        private string BuildConnectionString()
+        {
+            return new SqlConnectionStringBuilder()
+            {
+                DataSource = ServerAddress,
+                InitialCatalog = DatabaseName,
+                IntegratedSecurity = true
+            }.ConnectionString;
         }
 
         private void AllowUIToUpdate()
