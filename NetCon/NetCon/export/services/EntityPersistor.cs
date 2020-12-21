@@ -23,7 +23,7 @@ namespace NetCon.export.services
 
         public string ConnectionString { get; set; }
 
-        private const int TARGET_BUFFER_MAX_SIZE = 128;
+        private const int TARGET_BUFFER_MAX_SIZE = 1024;
         private const int TRANSACTION_INTERVAL = 500;
         private const int WAIT_FOR_QUEUE_PERIOD = 10;
 
@@ -92,7 +92,7 @@ namespace NetCon.export.services
 
             targetBuffer.Add(target);
 
-            if (isRunning && stopwatch.ElapsedMilliseconds > TRANSACTION_INTERVAL)
+            if (isRunning && ((stopwatch.ElapsedMilliseconds > TRANSACTION_INTERVAL) || (targetBuffer.Count > TARGET_BUFFER_MAX_SIZE)))
             {
                 List<Target> targetBufferShallowCopy = new List<Target>(targetBuffer);
                 targetFIFO.Enqueue(targetBufferShallowCopy);
@@ -129,8 +129,8 @@ namespace NetCon.export.services
                     Console.WriteLine("ERROR PERSISTING TARGET BUFFER!");
                     Console.WriteLine(e.Message);
                     Console.WriteLine(e.StackTrace);
+                    StopExporting();
                     targetFIFO = new ConcurrentQueue<List<Target>>();
-                    isRunning = false;
                 }
             }
         }
