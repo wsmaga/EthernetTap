@@ -8,7 +8,37 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="HardwareFilter">
 
-    <Grid>
-        <TextBlock Text="TEST"/>
-    </Grid>
+    <GroupBox Foreground="#FFFFFF" Header="Nastawy filtrów" Margin="20,20,20,20">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Foreground="White">Port</Label>
+            <Label Grid.Row="1" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Foreground="White">Min rozmiar ramki</Label>
+            <Label Grid.Row="2" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Foreground="White">Filtr 1</Label>
+            <Label Grid.Row="3" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Foreground="White">Filtr 2</Label>
+            <Label Grid.Row="4" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Foreground="White">Filtr 3</Label>
+            <Label Grid.Row="5" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Foreground="White">Filtr 4</Label>
+
+            <TextBox Height="20" Grid.Column="1" Grid.Row="0" Width="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Height="20" Grid.Column="1" Grid.Row="1" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Height="20" Grid.Column="1" Grid.Row="2" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Height="20" Grid.Column="1" Grid.Row="3" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Height="20" Grid.Column="1" Grid.Row="4" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Height="20" Grid.Column="1" Grid.Row="5" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+
+            <Button Grid.Row="7" Grid.Column="2" Width="120" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0">Zastosuj</Button>
+        </Grid>
+    </GroupBox>
 </Page>
