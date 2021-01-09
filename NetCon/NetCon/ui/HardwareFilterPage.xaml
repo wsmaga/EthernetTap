@@ -31,14 +31,14 @@
             <Label Grid.Row="4" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Foreground="White">Filtr 3</Label>
             <Label Grid.Row="5" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" Foreground="White">Filtr 4</Label>
 
-            <TextBox Height="20" Grid.Column="1" Grid.Row="0" Width="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox Height="20" Grid.Column="1" Grid.Row="1" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox Height="20" Grid.Column="1" Grid.Row="2" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox Height="20" Grid.Column="1" Grid.Row="3" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox Height="20" Grid.Column="1" Grid.Row="4" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
-            <TextBox Height="20" Grid.Column="1" Grid.Row="5" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Text="{Binding PortText}" Height="20" Grid.Column="1" Grid.Row="0" Width="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Text="{Binding MinFrameLength}" Height="20" Grid.Column="1" Grid.Row="1" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Text="{Binding Filter1}" Height="20" Grid.Column="1" Grid.Row="2" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Text="{Binding Filter2}" Height="20" Grid.Column="1" Grid.Row="3" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Text="{Binding Filter3}" Height="20" Grid.Column="1" Grid.Row="4" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBox Text="{Binding Filter4}" Height="20" Grid.Column="1" Grid.Row="5" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" />
 
-            <Button Grid.Row="7" Grid.Column="2" Width="120" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0">Zastosuj</Button>
+            <Button  Command="{Binding SaveChangesCommand}" Grid.Row="7" Grid.Column="2" Width="120" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0">Zastosuj</Button>
         </Grid>
     </GroupBox>
 </Page>

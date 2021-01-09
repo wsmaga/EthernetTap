@@ -71,6 +71,7 @@
     </ApplicationDefinition>
     <Compile Include="export\IPcapWriter.cs" />
     <Compile Include="export\PcapWriterImpl.cs" />
+    <Compile Include="hardwareFilters\HardwareFilterSenderService.cs" />
     <Compile Include="interface\INetCon.cs" />
     <Compile Include="interface\NetConImpl.cs" />
     <Compile Include="interface\NetConMockImpl.cs" />
