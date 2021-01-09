@@ -205,7 +205,7 @@ namespace NetCon.filtering
                 TriggeredThreshold = this.Threshold?.IsAboveThreshold(value) ?? false,
                 ThresholdValue = thresholdValue1,
                 ThresholdValue2= thresholdValue2,
-                ThresholdType = this.Threshold.Type
+                ThresholdType = this.Threshold?.Type ?? ThresholdType.NONE
             };
         }
         public partial class TargetThreshold
