@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace NetCon.ui
 {
-    /// <summary>
-    /// Logika interakcji dla klasy HardwareFilter.xaml
-    /// </summary>
     public partial class HardwareFilterPage : Page
     {
         private HardwareFilterViewModel hardwareFilterViewModel;
