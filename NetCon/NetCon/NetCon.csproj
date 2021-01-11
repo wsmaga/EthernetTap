@@ -200,6 +200,7 @@
     <Compile Include="export\entities\VariableEvent.cs" />
     <Compile Include="export\IPcapWriter.cs" />
     <Compile Include="export\PcapWriterImpl.cs" />
+    <Compile Include="hardwareFilters\HardwareFilterSenderService.cs" />
     <Compile Include="export\services\DatabaseService.cs" />
     <Compile Include="export\services\EntityMapper.cs" />
     <Compile Include="export\services\EntityPersistor.cs" />
@@ -208,6 +209,19 @@
     <Compile Include="interface\NetConMockImpl.cs" />
     <Compile Include="model\ApplicationConfig.cs" />
     <Compile Include="model\Frame.cs" />
+    <Compile Include="parsing\FilterDomain.cs" />
+    <Compile Include="parsing\FilterDto.cs" />
+    <Compile Include="parsing\TargetDataDto.cs" />
+    <Compile Include="parsing\FrameParser.cs" />
+    <Compile Include="parsing\IFilter.cs" />
+    <Compile Include="parsing\PredicateTree.cs" />
+    <Compile Include="parsing\TargetDataRepository.cs" />
+    <Compile Include="repo\FiltersConfiguration.cs" />
+    <Compile Include="repo\FrameRepositoryImpl.cs" />
+    <Compile Include="repo\IFrameRepository.cs" />
+    <Compile Include="ui\HardwareFilterPage.xaml.cs">
+      <DependentUpon>HardwareFilterPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="filtering\FilterDomain.cs" />
     <Compile Include="filtering\FilterDto.cs" />
     <Compile Include="filtering\TargetDataDto.cs" />
@@ -235,6 +249,7 @@
     <Compile Include="viewmodel\CapturePageViewModel.cs" />
     <Compile Include="viewmodel\ExportPageViewModel.cs" />
     <Compile Include="viewmodel\FiltersPageViewModel.cs" />
+    <Compile Include="viewmodel\HardwareFilterViewModel.cs" />
     <Compile Include="viewmodel\MainWindowViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -257,6 +272,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ui\FiltersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ui\HardwareFilterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
