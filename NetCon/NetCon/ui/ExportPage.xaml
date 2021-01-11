@@ -19,9 +19,65 @@
             <ColumnDefinition Width="550"/>
         </Grid.ColumnDefinitions>
 
+        <!-- EXPORT TO DATABASE -->
         <GroupBox Foreground="#FFFFFF" Grid.Row="0" Header="Eksport do Bazy Danych">
             <Grid>
-                <Label Foreground="#FFFFFF" Content="TODO!"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="0" Margin="10 10 0 0">
+                    <Label
+                        Foreground="#FFFFFF"
+                        Content="Zapisuj dane do bazy danych"
+                    />
+                    <CheckBox
+                        IsChecked="{Binding DatabaseExportOption}"
+                        Margin="0 5 0 0"
+                    />
+                </WrapPanel>
+                <StackPanel Grid.Row="1" Margin="10 10 0 0">
+                    <WrapPanel Margin="0 2 0 2" IsEnabled="{Binding SettingsChangeEnabled}">
+                        <Label
+                            Foreground="#FFFFFF"
+                            Content="Adres serwera"
+                        />
+                        <TextBox
+                            Width="200"
+                            VerticalContentAlignment="Center"
+                            Text="{Binding ServerAddress}"
+                        />
+                    </WrapPanel>
+                    <WrapPanel Margin="0 2 0 2" IsEnabled="{Binding SettingsChangeEnabled}">
+                        <Label
+                            Foreground="#FFFFFF"
+                            Content="Nazwa bazy"
+                        />
+                        <TextBox
+                            Width="200"
+                            VerticalContentAlignment="Center"
+                            Margin="12 0 0 0"
+                            Text="{Binding DatabaseName}"
+                        />
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Button
+                            Content="Testuj połączenie"
+                            Width="100"
+                            HorizontalAlignment="Left"
+                            Command="{Binding TestConnectionButtonCommand}"
+                            IsEnabled="{Binding SettingsChangeEnabled}"
+                            Margin="0 0 5 0"
+                        />
+                        <Button
+                            Content="Zatwierdź"
+                            Width="60"
+                            HorizontalAlignment="Left"
+                            Command="{Binding ConfirmButtonCommand}"
+                            IsEnabled="{Binding SettingsChangeEnabled}"
+                        />
+                    </WrapPanel>
+                </StackPanel>
             </Grid>
         </GroupBox>
         <GroupBox Foreground="#FFFFFF" Height="100" Grid.Row="1" Header="Eksport do pliku">

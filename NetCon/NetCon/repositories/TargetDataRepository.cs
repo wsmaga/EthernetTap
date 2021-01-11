@@ -1,11 +1,6 @@
 ﻿using NetCon.util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
     public class TargetDataRepository
     {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
     [XmlRoot("Filter")]
     public class FilterDto
@@ -61,8 +61,8 @@ namespace NetCon.parsing
         public string Name; 
         [XmlElement("Threshold")]
         public ThresholdDto Threshold;
-        [XmlElement("RegisterChanges")]
-        public bool RegisterChanges;
+        /*[XmlElement("RegisterChanges")]
+        public bool RegisterChanges;*/
         [XmlIgnore]
         public bool IsValid => (
             Id!=-1 &&

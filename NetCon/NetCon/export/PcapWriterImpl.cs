@@ -1,10 +1,9 @@
 ﻿using NetCon.model;
 using System.IO;
-using System.Windows.Navigation;
 
 namespace NetCon.export
 {
-    
+
     class PcapWriterImpl : IPcapWriter<Frame>
     {
         BinaryWriter writer;

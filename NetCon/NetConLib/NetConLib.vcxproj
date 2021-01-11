@@ -168,6 +168,7 @@
     <ClInclude Include="NetConLib.h" />
     <ClInclude Include="open_stream.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="readStatistics.h" />
     <ClInclude Include="ringBuffer.h" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +185,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="readStatistics.cpp" />
     <ClCompile Include="ringBuffer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

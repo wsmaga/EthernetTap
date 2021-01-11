@@ -1,26 +1,20 @@
-﻿using NetCon.model;
-using Newtonsoft.Json.Linq;
+﻿using NetCon.util;
+using NetCon.model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Dynamic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace NetCon.parsing
+namespace NetCon.filtering
 {
-    public class FilterDomain: IFilter
+    public class FilterDomain : IFilter
     {
         public PredicateTree Condition;
         public List<TargetDomain> Targets;
         public readonly int MaxIndex;
         public static FilterDomain New(FilterDto filterDto)
         {
-            if (!(filterDto?.IsValid==true))
+            if (!(filterDto?.IsValid == true))
                 throw new ArgumentNullException("One or more property in filterDto is null");
             var filter = FrameParser.CalculatePredicate(filterDto.Condition) ?? throw new ArgumentException("Could not calculate predicate");
             var results = new List<TargetDomain>();
@@ -51,7 +45,7 @@ namespace NetCon.parsing
         public List<TargetDataDto> GetUsefulData(Frame frame)
         {
             List<TargetDataDto> results = new List<TargetDataDto>();
-            foreach(var t in Targets)
+            foreach (var t in Targets)
             {
                 results.Add(t.GetTargetData(frame));
             }
@@ -65,32 +59,32 @@ namespace NetCon.parsing
                 return Condition.Pass(frame);
         }
     }
-    public class TargetDomain
+    public partial class TargetDomain
     {
         public TargetThreshold Threshold;
         public int[] Bytes;
         public DataType Type;
         public string Name;
-        public bool RegisterChanges;
+        public int Id;
         public static TargetDomain New(TargetDto targetDto)
         {
             if (!(targetDto?.IsValid == true))
                 return null;
-            DataType type=DataType.NONE;
-            switch(targetDto.Type.ToLower())
+            DataType type = DataType.NONE;
+            switch (targetDto.Type.ToLower())
             {
-                case "byte_array": type = DataType.ByteArray;break;
-                case "integer": 
-                    switch(targetDto.Bytes.Count())
+                case "byte_array": type = DataType.ByteArray; break;
+                case "integer":
+                    switch (targetDto.Bytes.Count())
                     {
-                        case 2: type = DataType.Int16;break;
-                        case 4: type = DataType.Int32;break;
-                        case 8: type = DataType.Int64;break;
+                        case 2: type = DataType.Int16; break;
+                        case 4: type = DataType.Int32; break;
+                        case 8: type = DataType.Int64; break;
                         default: return null;
                     }
                     break;
-                case "string": type = DataType.String;break;
-                case "boolean": type = DataType.Boolean;break;
+                case "string": type = DataType.String; break;
+                case "boolean": type = DataType.Boolean; break;
                 case "float":
                     switch (targetDto.Bytes.Count())
                     {
@@ -102,15 +96,15 @@ namespace NetCon.parsing
                 default: return null;
             }
             var threshold = TargetThreshold.New(type, targetDto.Threshold);
-            return new TargetDomain(targetDto.Name,targetDto.Bytes, type,threshold,targetDto.RegisterChanges);
+            return new TargetDomain(targetDto.Name, targetDto.Bytes, type, threshold,targetDto.Id);
         }
-        private TargetDomain(string name, int[] bytes, DataType type, TargetThreshold threshold, bool registerChanges=false)
+        private TargetDomain(string name, int[] bytes, DataType type, TargetThreshold threshold, int id)
         {
             Bytes = bytes;
             Type = type;
             Name = name;
             Threshold = threshold;
-            RegisterChanges = registerChanges;
+            Id = id;
         }
 
         public TargetDataDto GetTargetData(Frame frame)
@@ -120,55 +114,71 @@ namespace NetCon.parsing
                 rawData.Add(frame.RawData[index]);
             dynamic value;
             var dataArr = rawData.ToArray();
+            byte[] thresholdValue1=null, thresholdValue2=null;
             switch (Type)
             {
                 case DataType.ByteArray:
                     value = rawData.ToArray();
                     break;
                 case DataType.Int16:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToInt16(dataArr, 0);
+                    if(Threshold!=null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((short)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((short)Threshold.Value2) : null;
+                    }
                     break;
                 case DataType.Int32:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToInt32(dataArr, 0);
+                    if (Threshold != null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((int)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((int)Threshold.Value2) : null;
+                    }
                     break;
                 case DataType.Int64:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToInt64(dataArr, 0);
+                    if (Threshold != null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((long)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((long)Threshold.Value2) : null;
+                    }
                     break;
                 case DataType.String:
-                    value = string.Concat(rawData.Select(el=>(char)el));
+                    value = string.Concat(rawData.Select(el => (char)el));
                     break;
                 case DataType.Boolean:
                     value = rawData.Count(el => el == 0) == rawData.Count();
                     break;
                 case DataType.Single:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToSingle(dataArr, 0);
+                    if (Threshold != null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((float)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((float)Threshold.Value2) : null;
+                    }
                     break;
                 case DataType.Double:
-                    if (BitConverter.IsLittleEndian)
-                        dataArr = dataArr.Reverse().ToArray();
                     value = BitConverter.ToDouble(dataArr, 0);
+                    if (Threshold != null)
+                    {
+                        thresholdValue1 = Threshold.Value != null ? BitConverter.GetBytes((double)Threshold.Value) : null;
+                        thresholdValue2 = Threshold.Value2 != null ? BitConverter.GetBytes((double)Threshold.Value2) : null;
+                    }
                     break;
                 default: throw new ArgumentException("Target type data extraction not implemented");
             }
-            string thresholdType;
+            /*string thresholdType;
             switch (Threshold?.Type)
             {
-                case TargetThreshold.ThresholdType.GT: thresholdType = "gt"; break;
-                case TargetThreshold.ThresholdType.GE: thresholdType = "ge"; break;
-                case TargetThreshold.ThresholdType.LT: thresholdType = "lt"; break;
-                case TargetThreshold.ThresholdType.LE: thresholdType = "le"; break;
-                case TargetThreshold.ThresholdType.InClosed: thresholdType = "inclosed"; break;
-                case TargetThreshold.ThresholdType.InOpen: thresholdType = "inopen"; break;
-                case TargetThreshold.ThresholdType.OutClosed: thresholdType = "outclosed"; break;
-                case TargetThreshold.ThresholdType.OutOpen: thresholdType = "outopen"; break;
+                case ThresholdType.GT: thresholdType = "gt"; break;
+                case ThresholdType.GE: thresholdType = "ge"; break;
+                case ThresholdType.LT: thresholdType = "lt"; break;
+                case ThresholdType.LE: thresholdType = "le"; break;
+                case ThresholdType.InClosed: thresholdType = "inclosed"; break;
+                case ThresholdType.InOpen: thresholdType = "inopen"; break;
+                case ThresholdType.OutClosed: thresholdType = "outclosed"; break;
+                case ThresholdType.OutOpen: thresholdType = "outopen"; break;
                 default: thresholdType = "NONE"; break;
             }
 
@@ -184,22 +194,21 @@ namespace NetCon.parsing
                 case DataType.Single: dataType = "Single"; break;
                 case DataType.Double: dataType = "Double"; break;
                 default: dataType = "NONE"; break;
-            }
+            }*/
             return new TargetDataDto
             {
+                Id=this.Id,
                 Name = this.Name,
                 Value = value,
-                DataType = dataType,
+                DataType = this.Type,
                 RawData = rawData.ToArray(),
-                TriggeredThreshold = this.Threshold?.IsAboveThreshold(value)??false,
-                ThresholdValue = this.Threshold?.Value,
-                RegisterChanges=this.RegisterChanges,
-                ThresholdType=thresholdType
+                TriggeredThreshold = this.Threshold?.IsAboveThreshold(value) ?? false,
+                ThresholdValue = thresholdValue1,
+                ThresholdValue2= thresholdValue2,
+                ThresholdType = this.Threshold?.Type ?? ThresholdType.NONE
             };
-
-            
         }
-        public class TargetThreshold
+        public partial class TargetThreshold
         {
             public DataType DataType;
             public ThresholdType Type;
@@ -212,24 +221,24 @@ namespace NetCon.parsing
                 ThresholdType thresholdType;
                 switch (thresholdDto.Type.ToLower())
                 {
-                    case "gt":  thresholdType = ThresholdType.GT;break;
-                    case "ge": thresholdType = ThresholdType.GE;break;
+                    case "gt": thresholdType = ThresholdType.GT; break;
+                    case "ge": thresholdType = ThresholdType.GE; break;
                     case "lt": thresholdType = ThresholdType.LT; break;
                     case "le": thresholdType = ThresholdType.LE; break;
-                    case "inclosed": thresholdType = ThresholdType.InClosed;break;
-                    case "inopen": thresholdType = ThresholdType.InOpen;break;
+                    case "inclosed": thresholdType = ThresholdType.InClosed; break;
+                    case "inopen": thresholdType = ThresholdType.InOpen; break;
                     case "outclosed": thresholdType = ThresholdType.OutClosed; break;
                     case "outopen": thresholdType = ThresholdType.OutOpen; break;
                     default: thresholdType = ThresholdType.NONE; break;
                 }
-                switch(dataType)
+                switch (dataType)
                 {
                     case DataType.Int16:
                         if (short.TryParse(thresholdDto.Value, out var val1_int16))
                         {
-                            if (thresholdType == ThresholdType.InClosed || thresholdType==ThresholdType.InClosed || thresholdType== ThresholdType.OutClosed || thresholdType == ThresholdType.OutOpen)
+                            if (thresholdType == ThresholdType.InClosed || thresholdType == ThresholdType.InClosed || thresholdType == ThresholdType.OutClosed || thresholdType == ThresholdType.OutOpen)
                             {
-                                if(thresholdDto.Value2!=null && short.TryParse(thresholdDto.Value2,out var val2_int16))
+                                if (thresholdDto.Value2 != null && short.TryParse(thresholdDto.Value2, out var val2_int16))
                                     return new TargetThreshold { DataType = dataType, Value = val1_int16, Value2 = val2_int16, Type = thresholdType };
                             }
                             else
@@ -291,7 +300,7 @@ namespace NetCon.parsing
             }
             public bool IsAboveThreshold(dynamic checkedValue)
             {
-                switch(Type)
+                switch (Type)
                 {
                     case ThresholdType.GT:
                         return checkedValue > Value;
@@ -313,8 +322,7 @@ namespace NetCon.parsing
                         return false;
                 }
             }
-            public enum ThresholdType { NONE, GT, LT, GE, LE, InOpen, InClosed, OutOpen, OutClosed }
-            
+
         }
     }
 }

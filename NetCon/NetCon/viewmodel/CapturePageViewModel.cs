@@ -1,6 +1,5 @@
-﻿using Kaitai;
-using NetCon.model;
-using NetCon.parsing;
+﻿using NetCon.model;
+using NetCon.filtering;
 using NetCon.repo;
 using NetCon.util;
 using System;
@@ -9,7 +8,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;

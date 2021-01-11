@@ -1,14 +1,4 @@
-﻿using NetCon.inter;
-using NetCon.util;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.ComponentModel;
 
 namespace NetCon.viewmodel
 {
