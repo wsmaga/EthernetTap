@@ -39,7 +39,8 @@ namespace NetCon
                 new CapturePage(mMainWindowViewModel),
                 new FiltersPage(mMainWindowViewModel),
                 new ExportPage(mMainWindowViewModel),
-                new HardwareFilterPage(mMainWindowViewModel)
+                new HardwareFilterPage(mMainWindowViewModel),
+                new EthernetConfigurationPage(mMainWindowViewModel)
             };
 
 
@@ -64,6 +65,11 @@ namespace NetCon
         private void navigateToHardwareFilterPage(object sender, RoutedEventArgs e)
         {
             contentFrame.Navigate(mPages[3]);
+        }
+
+        private void navigateToEthernetConfigurationPage(object sender, RoutedEventArgs e)
+        {
+            contentFrame.Navigate(mPages[4]);
         }
     }
 }

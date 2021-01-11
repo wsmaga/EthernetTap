@@ -28,6 +28,7 @@
         <Image Source="/res/images/RJ45M8P1.png" Margin="19,54,20,336" />
 
         <TextBlock Grid.Row="1" Padding ="5,1,1,1" Foreground="#FFFFFF" Text="{Binding bottomText}" Background="{Binding bottomTextColor}" Grid.ColumnSpan="2"/>
+        <Button Grid.Column="0" x:Uid="fpgaFiltersButton" Content="Konfiguracja&#xD;&#xA;Ethernet &#xD;&#xA;" HorizontalAlignment="Right" Margin="0,0,23,72" Click="navigateToEthernetConfigurationPage" VerticalAlignment="Bottom" Width="107" Height="44"/>
 
     </Grid>
 </Window>

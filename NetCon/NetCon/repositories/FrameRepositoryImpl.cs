@@ -72,7 +72,7 @@ namespace NetCon.repo
                 netConService.sendRequest(RequestCode.BRIDGE_SWITCH, 3, true);
                 netConService.sendRequest(RequestCode.BRIDGE_SWITCH, 4, true);
 
-                netConService.sendAndReceiveMdio();
+               // netConService.sendAndReceiveMdio();
 
                 string[] strVec = new string[] { "NetCon.exe", "set", "3", "0" };
                 netConService.sendSettings(strVec);

@@ -194,6 +194,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="deviceConfig\DeviceConfigService.cs" />
     <Compile Include="export\DBContext.cs" />
     <Compile Include="export\entities\Target.cs" />
     <Compile Include="export\entities\TargetName.cs" />
@@ -219,7 +220,10 @@
     <Compile Include="repositories\FiltersConfiguration.cs" />
     <Compile Include="repositories\FrameRepositoryImpl.cs" />
     <Compile Include="repositories\IFrameRepository.cs" />
-	 <Compile Include="ui\HardwareFilterPage.xaml.cs">
+    <Compile Include="ui\EthernetConfigurationPage.xaml.cs">
+      <DependentUpon>EthernetConfigurationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ui\HardwareFilterPage.xaml.cs">
       <DependentUpon>HardwareFilterPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="util\ConfigFileHandler.cs" />
@@ -237,6 +241,7 @@
     <Compile Include="util\Subject.cs" />
     <Compile Include="util\SubjectObserver.cs" />
     <Compile Include="viewmodel\CapturePageViewModel.cs" />
+    <Compile Include="viewmodel\EthernetConfigurationViewModel.cs" />
     <Compile Include="viewmodel\ExportPageViewModel.cs" />
     <Compile Include="viewmodel\FiltersPageViewModel.cs" />
     <Compile Include="viewmodel\HardwareFilterViewModel.cs" />
@@ -254,6 +259,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ui\CapturePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ui\EthernetConfigurationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
