@@ -29,10 +29,7 @@ namespace NetCon.viewmodel
 
         public string PortText 
         { 
-            get 
-            { 
-                return portText; 
-            }
+            get => portText;
 
             set 
             {
@@ -42,10 +39,7 @@ namespace NetCon.viewmodel
         }
         public string MinFrameLength 
         {
-            get 
-            { 
-                return minFrameLength; 
-            }
+            get => minFrameLength;
 
             set 
             {
@@ -55,10 +49,7 @@ namespace NetCon.viewmodel
         }
         public string Filter1 
         { 
-            get
-            {
-                return filter1;
-            }
+            get => filter1;
             set
             {
                 filter1 = value;
@@ -68,10 +59,7 @@ namespace NetCon.viewmodel
 
         public string Filter2
         {
-            get
-            {
-                return filter2;
-            }
+            get => filter2;
             set
             {
                 filter2 = value;
@@ -81,10 +69,8 @@ namespace NetCon.viewmodel
 
         public string Filter3
         {
-            get
-            {
-                return filter3;
-            }
+            get => filter3;
+           
             set
             {
                 filter3 = value;
@@ -94,10 +80,7 @@ namespace NetCon.viewmodel
 
         public string Filter4
         {
-            get
-            {
-                return filter4;
-            }
+            get => filter4;
             set
             {
                 filter4 = value;

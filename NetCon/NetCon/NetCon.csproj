@@ -216,6 +216,7 @@
     <Compile Include="filtering\FrameParser.cs" />
     <Compile Include="filtering\IFilter.cs" />
     <Compile Include="filtering\PredicateTree.cs" />
+    <Compile Include="model\HardwareFiltersDefinition.cs" />
     <Compile Include="repositories\TargetDataRepository.cs" />
     <Compile Include="repositories\FiltersConfiguration.cs" />
     <Compile Include="repositories\FrameRepositoryImpl.cs" />
