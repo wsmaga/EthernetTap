@@ -1,4 +1,5 @@
 ﻿using NetCon.hardwareFilters;
+using NetCon.model;
 using NetCon.util;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace NetCon.viewmodel
@@ -26,6 +28,10 @@ namespace NetCon.viewmodel
         private string filter4 = "";
 
         private ICommand _saveChangesCommand;
+
+        private ICommand _loadFileCommand;
+
+        private ICommand _saveFileCommand;
 
         public string PortText 
         { 
@@ -104,6 +110,28 @@ namespace NetCon.viewmodel
             }
         }
 
+        public ICommand LoadFileCommand
+        {
+            get
+            {
+                return _loadFileCommand ?? (_loadFileCommand = new CommandHandler(
+                    () => loadFromFile(),
+                    () => true
+                    ));
+            }
+        }
+
+        public ICommand SaveFileCommand
+        {
+            get
+            {
+                return _saveFileCommand ?? (_saveFileCommand = new CommandHandler(
+                    () => saveToFile(),
+                    () => isFormValid
+                    ));
+            }
+        }
+
         public HardwareFilterViewModel(MainWindowViewModel mainWindowViewModel)
         {
             this.mainWindowViewModel = mainWindowViewModel;
@@ -163,6 +191,59 @@ namespace NetCon.viewmodel
         {
             hardwareFilterSenderService.sendFilters(args);
             mainWindowViewModel.logInfo($"Wysłano filtry {args}");
+        }
+
+        private void loadFromFile()
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "pliki XML (*.xml)|*.xml";
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    HardwareFiltersConfigFileHandler handler = new HardwareFiltersConfigFileHandler(dialog.FileName);
+                    HardwareFiltersDefinition definition = handler.ReadSettings();
+                    fillInputsFromDefinition(definition);
+                }
+                catch ( Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+                
+            }
+        }
+
+        private void saveToFile()
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "pliki XML (*.xml)|*.xml";
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                HardwareFiltersConfigFileHandler handler = new HardwareFiltersConfigFileHandler(dialog.FileName);
+                handler.WriteSettings(getHardwareFiltersDefinitionFromInputs());
+            }
+        }
+
+        private HardwareFiltersDefinition getHardwareFiltersDefinitionFromInputs()
+        {
+            HardwareFiltersDefinition definition = new HardwareFiltersDefinition();
+            definition.Port = Int32.Parse(portText);
+            definition.MinFrameLength = Int32.Parse(minFrameLength);
+            definition.Filter1 = filter1;
+            definition.Filter2 = filter2;
+            definition.Filter3 = filter3;
+            definition.Filter4 = filter4;
+            return definition;
+        }
+
+        private void fillInputsFromDefinition(HardwareFiltersDefinition definition)
+        {
+            PortText = definition.Port.ToString();
+            MinFrameLength = definition.MinFrameLength.ToString();
+            Filter1 = definition.Filter1;
+            Filter2 = definition.Filter2;
+            Filter3 = definition.Filter3;
+            Filter4 = definition.Filter4;
         }
     }
 }

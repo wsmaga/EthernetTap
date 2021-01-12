@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NetCon.model
 {
-    class HardwareFiltersDefinition
+    public class HardwareFiltersDefinition
     {
         int port;
         int minFrameLength;

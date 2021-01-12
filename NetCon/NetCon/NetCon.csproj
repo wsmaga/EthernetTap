@@ -204,6 +204,7 @@
     <Compile Include="export\services\DatabaseService.cs" />
     <Compile Include="export\services\EntityMapper.cs" />
     <Compile Include="export\services\EntityPersistor.cs" />
+    <Compile Include="hardwareFilters\HardwareFiltersConfigFileHandler.cs" />
     <Compile Include="hardwareFilters\HardwareFilterSenderService.cs" />
     <Compile Include="interface\INetCon.cs" />
     <Compile Include="interface\NetConImpl.cs" />
