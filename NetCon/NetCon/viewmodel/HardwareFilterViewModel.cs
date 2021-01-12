@@ -147,33 +147,31 @@ namespace NetCon.viewmodel
             List<string> args = new List<string>();
 
             args.Add(portText);
-            args.Add(minFrameLength);
 
-            string argument = "\"";
 
             if(filter1.Length > 0)
             {
-                argument += $"{filter1};";
+                args.Add(minFrameLength);
+                args.Add($"\"{filter1}\"");
             }
 
             if (filter2.Length > 0)
             {
-                argument += $" {filter2};";
+                args.Add(minFrameLength);
+                args.Add($"\"{filter1}\"");
             }
 
             if (filter3.Length > 0)
             {
-                argument += $" {filter3};";
+                args.Add(minFrameLength);
+                args.Add($"\"{filter1}\"");
             }
 
             if (filter4.Length > 0)
             {
-                argument += $" {filter4};";
+                args.Add(minFrameLength);
+                args.Add($"\"{filter1}\"");
             }
-
-            argument += "\"";
-
-            args.Add(argument);
 
             return args;
         }
