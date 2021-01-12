@@ -39,7 +39,7 @@
             <TextBox Text="{Binding Filter3}" Height="20" Grid.Column="1" Grid.Row="4" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,15,0,15" />
             <TextBox Text="{Binding Filter4}" Height="20" Grid.Column="1" Grid.Row="5" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,15,0,15" />
 
-            <Button  Command="{Binding SaveChangesCommand}" Grid.Row="6" Grid.Column="1" Width="120" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,24,0,23">Zastosuj</Button>
+            <Button  Command="{Binding SaveChangesCommand}" Grid.Row="5" Grid.Column="2" Width="120" Height="40" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,10">Zastosuj</Button>
 
             <StackPanel Grid.Column="2" Grid.Row="1">
                 <Label Content="Wczytaj filtry z pliku" Foreground="White"/>
