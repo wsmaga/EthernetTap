@@ -2,11 +2,7 @@
 using NetCon.inter;
 using NetCon.util;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace NetCon.viewmodel
@@ -31,12 +27,12 @@ namespace NetCon.viewmodel
         private bool eeeEnabled;
 
 
-        public String Port1SpeedValue { get; set; }
-        public String Port2SpeedValue { get; set; }
-        public String Port3SpeedValue { get; set; }
-        public String Port4SpeedValue { get; set; }
+        public String Port1SpeedValue { get { return port1SpeedValue; } set { this.port1SpeedValue = value; } }
+        public String Port2SpeedValue { get { return port2SpeedValue; } set { this.port2SpeedValue = value; } }
+        public String Port3SpeedValue { get { return port3SpeedValue; } set { this.port3SpeedValue = value; } }
+        public String Port4SpeedValue { get { return port4SpeedValue; } set { this.port4SpeedValue = value; } }
 
-        public bool EeeEnabled { get; set; }
+        public bool EeeEnabled { get { return eeeEnabled; } set { this.eeeEnabled = value; } }
 
         public EthernetConfigurationViewModel(MainWindowViewModel _sharedViewModel)
         {
