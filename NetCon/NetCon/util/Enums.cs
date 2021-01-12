@@ -31,4 +31,12 @@
         BadServer,
         BadDB
     }
+
+    public enum EthernetSpeed
+    {
+        SPEED_10,
+        SPEED_100,
+        AUTONEGOTIATION
+    }
+
 }

@@ -22,8 +22,10 @@ namespace NetCon.inter
 
         void sendSettings(string[] settings);
 
-        void sendAndReceiveMdio();
+        void sendMdio(int port, int register, int data);
 
         void setOnFrameListener(FrameListener f);
+
+
 }
 }

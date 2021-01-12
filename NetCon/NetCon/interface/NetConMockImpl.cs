@@ -15,7 +15,7 @@ namespace NetCon.inter
         List<Byte[]> frames = new List<Byte[]>();
 
         private IntPtr mockDataPtr;
-        public void sendAndReceiveMdio() { }
+        public void sendMdio(int p, int r, int d) { }
         public void sendFilter() { }
         public void sendRequest(RequestCode code, int port, bool value) { }
         public void sendSettings(string[] settings) { }

@@ -31,29 +31,9 @@ namespace NetCon.inter
 
         [DllImport(".\\..\\..\\..\\Debug\\NETCONLIB.dll", EntryPoint = "setCaptureState", CallingConvention = CallingConvention.Cdecl)]
         private static extern void _setCaptureState(bool state);
-        public void sendAndReceiveMdio()
+        public void sendMdio(int port, int register, int data)
         {
-            for (int i = 1; i < 5; i++)
-            {
-                _sendAndReceiveMdio(1, i, 13, 7);
-                _sendAndReceiveMdio(1, i, 14, 60);
-                _sendAndReceiveMdio(1, i, 13, 16391);
-                _sendAndReceiveMdio(1, i, 14, 0);
-            }
-
-            for (int i = 1; i < 5; i++)
-            {
-                _sendAndReceiveMdio(1, i, 13, 7);
-                _sendAndReceiveMdio(1, i, 14, 60);
-                _sendAndReceiveMdio(1, i, 13, 16391);
-                _sendAndReceiveMdio(2, i, 14, 0);
-            }
-
-            for (int i = 1; i < 5; i++)
-            {
-                _sendAndReceiveMdio(1, i, 0, 37184);
-            }
-
+            _sendAndReceiveMdio(1, port, register, data);
         }
 
         public void sendFilter()
